@@ -121,7 +121,11 @@ function SearchResults({
       ) : (
         <ScrollView className={"flex gap-2"}>
           {filteredResults?.map((result) => (
-            <ThemedText key={result.id}>{result.name}</ThemedText>
+            <ThemedText key={result.id}>
+              {result.media_type === MediaType.Movie
+                ? result.title
+                : result.name}
+            </ThemedText>
           ))}
         </ScrollView>
       )}
