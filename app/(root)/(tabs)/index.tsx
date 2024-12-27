@@ -12,6 +12,7 @@ import { MediaCard } from "@/components/media-card";
 import { getNumColumns } from "@/utils/get-column-width";
 import { ThemedText } from "@/components/themed-text";
 import { Error } from "@/components/error";
+import { ThemedView } from "@/components/themed-view";
 
 export default function Index() {
   const {
@@ -42,8 +43,8 @@ export default function Index() {
   const movies = data.pages.flatMap((page) => page.results);
 
   return (
-    <View className={"bg-black-200 h-full py-3"}>
-      <Text className={"font-rubik-bold text-3xl text-accent-100 px-7 pb-4"}>
+    <ThemedView>
+      <Text className={"font-rubik-bold text-3xl text-accent-100 px-2 pb-4"}>
         Discover
       </Text>
       <FlashList
@@ -65,6 +66,6 @@ export default function Index() {
           ) : null
         }
       />
-    </View>
+    </ThemedView>
   );
 }

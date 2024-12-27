@@ -1,13 +1,10 @@
-import { Text } from "react-native";
+import { Text, TextProps } from "react-native";
 import React from "react";
 
-type ThemedTextProps = {
-  children: string;
-  className?: string;
-};
-
-export function ThemedText({ children, className }: ThemedTextProps) {
+export function ThemedText({ children, className, ...props }: TextProps) {
   return (
-    <Text className={`text-white font-rubik ${className}`}>{children}</Text>
+    <Text className={`text-white font-rubik ${className}`} {...props}>
+      {children}
+    </Text>
   );
 }
