@@ -1,24 +1,32 @@
 import {
-  Pressable,
-  ScrollView,
   Text,
   TouchableOpacity,
-  View,
-  Image,
   useWindowDimensions,
+  View,
 } from "react-native";
 import { useDiscoverMovie } from "@/hooks/use-discover-movie";
 import { Loading } from "@/components/loading";
-import { POSTER_SIZE } from "@/constants/tmdb";
+import { MEDIA_CARD_PADDING, MEDIA_CARD_WIDTH } from "@/constants/tmdb";
 import { FlashList } from "@shopify/flash-list";
-import { ThemedText } from "@/components/themed-text";
 import { MediaCard } from "@/components/media-card";
 import { getNumColumns } from "@/utils/get-column-width";
 
 export default function Index() {
-  const { data, isLoading, isError, refetch } = useDiscoverMovie();
-  const { width } = useWindowDimensions();
-  const numColumns = getNumColumns(width, 100, 10);
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useDiscoverMovie();
+  const { width: screenWidth } = useWindowDimensions();
+  const numColumns = getNumColumns(
+    screenWidth,
+    MEDIA_CARD_WIDTH,
+    MEDIA_CARD_PADDING,
+  );
 
   if (isLoading) {
     return <Loading />;
@@ -35,17 +43,32 @@ export default function Index() {
     );
   }
 
+  // Flatten all pages' results into a single array
+  const movies = data.pages.flatMap((page) => page.results);
+
   return (
     <View className={"bg-black-200 h-full py-3"}>
       <Text className={"font-rubik-bold text-3xl text-accent-100 px-7 pb-4"}>
         Discover
       </Text>
       <FlashList
-        data={data.results}
+        data={movies}
         renderItem={({ item }) => <MediaCard {...item} />}
         numColumns={numColumns}
         estimatedItemSize={100}
-        fadingEdgeLength={50}
+        onEndReached={() => {
+          if (hasNextPage) {
+            fetchNextPage();
+          }
+        }}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={() =>
+          isFetchingNextPage ? (
+            <View className="py-4">
+              <Loading />
+            </View>
+          ) : null
+        }
       />
     </View>
   );
