@@ -1,14 +1,19 @@
-import { View, Text, TextInput, ScrollView } from "react-native";
+import { ScrollView, TextInput, View } from "react-native";
 import React, { useCallback, useEffect } from "react";
 import { ThemedView } from "@/components/themed-view";
 import { debounce } from "@/utils/debounce";
 import { axiosInstance } from "@/lib/api-client";
-import { MultiSearchResponse, MultiSearchResult } from "@/types/multi-search";
+import {
+  MediaType,
+  MultiSearchResponse,
+  MultiSearchResult,
+} from "@/types/multi-search";
 import { ThemedText } from "@/components/themed-text";
 import { Loading } from "@/components/loading";
 import { Error } from "@/components/error";
 import InitialSearchState from "@/components/initial-search-state";
 import NoSearchResults from "@/components/no-search-results";
+import { SearchCategories } from "@/components/search-categories";
 
 export default function Explore() {
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -83,23 +88,41 @@ function SearchResults({
   query: string;
   isSearching: boolean;
 }) {
+  const [currentMediaType, setCurrentMediaType] = React.useState<MediaType>(
+    MediaType.Movie,
+  );
+
+  const filteredResults = results?.filter(
+    (result) => result.media_type === currentMediaType,
+  );
+
+  const updateMediaType = useCallback((mediaType: MediaType) => {
+    setCurrentMediaType(mediaType);
+  }, []);
+
   if (isSearching) {
     return <Loading />;
   }
 
-  if (results?.length === 0 && query) {
+  if (filteredResults?.length === 0 && query) {
     return <NoSearchResults />;
   }
 
-  if (results === null || results.length === 0) {
+  if (filteredResults === null || filteredResults?.length === 0) {
     return <InitialSearchState />;
   }
 
   return (
-    <View className={"flex gap-2"}>
-      {results.map((result) => (
-        <ThemedText key={result.id}>{result.name}</ThemedText>
-      ))}
-    </View>
+    <>
+      <SearchCategories
+        handleUpdateMediaType={updateMediaType}
+        currentMediaType={currentMediaType}
+      />
+      <ScrollView className={"flex gap-2"}>
+        {filteredResults?.map((result) => (
+          <ThemedText key={result.id}>{result.name}</ThemedText>
+        ))}
+      </ScrollView>
+    </>
   );
 }

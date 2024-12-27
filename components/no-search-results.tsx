@@ -2,7 +2,6 @@ import { View, Text } from "react-native";
 import React from "react";
 import { ThemedText } from "@/components/themed-text";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Button } from "@/components/button";
 
 export default function NoSearchResults() {
   return (
