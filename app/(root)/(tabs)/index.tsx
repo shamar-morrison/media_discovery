@@ -10,6 +10,8 @@ import { MEDIA_CARD_PADDING, MEDIA_CARD_WIDTH } from "@/constants/tmdb";
 import { FlashList } from "@shopify/flash-list";
 import { MediaCard } from "@/components/media-card";
 import { getNumColumns } from "@/utils/get-column-width";
+import { ThemedText } from "@/components/themed-text";
+import { Error } from "@/components/error";
 
 export default function Index() {
   const {
@@ -33,14 +35,7 @@ export default function Index() {
   }
 
   if (isError || !data) {
-    return (
-      <View className="flex-1 flex items-center justify-center">
-        <Text>There was an error. Please try again.</Text>
-        <TouchableOpacity onPress={() => refetch()}>
-          <Text>Retry</Text>
-        </TouchableOpacity>
-      </View>
-    );
+    return <Error onRetry={refetch} />;
   }
 
   // Flatten all pages' results into a single array
