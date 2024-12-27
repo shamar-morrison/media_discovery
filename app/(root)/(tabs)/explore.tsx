@@ -104,11 +104,7 @@ function SearchResults({
     return <Loading />;
   }
 
-  if (filteredResults?.length === 0 && query) {
-    return <NoSearchResults />;
-  }
-
-  if (filteredResults === null || filteredResults?.length === 0) {
+  if (!query) {
     return <InitialSearchState />;
   }
 
@@ -118,11 +114,17 @@ function SearchResults({
         handleUpdateMediaType={updateMediaType}
         currentMediaType={currentMediaType}
       />
-      <ScrollView className={"flex gap-2"}>
-        {filteredResults?.map((result) => (
-          <ThemedText key={result.id}>{result.name}</ThemedText>
-        ))}
-      </ScrollView>
+      {filteredResults?.length === 0 ? (
+        <ThemedText className="text-center mt-4">
+          No {currentMediaType}s found for "{query}"
+        </ThemedText>
+      ) : (
+        <ScrollView className={"flex gap-2"}>
+          {filteredResults?.map((result) => (
+            <ThemedText key={result.id}>{result.name}</ThemedText>
+          ))}
+        </ScrollView>
+      )}
     </>
   );
 }
