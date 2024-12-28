@@ -30,11 +30,11 @@ export function MediaCard({
         <ThemedImage
           style={{
             width: "100%",
-            height: 140,
+            height: 145,
             borderRadius: 8,
           }}
           className={"rounded-xl"}
-          contentFit={"fill"}
+          contentFit={"cover"}
           source={createMediaImageLink(POSTER_SIZE, posterPath)}
         />
         <View className={"flex"}>

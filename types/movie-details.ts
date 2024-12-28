@@ -27,8 +27,30 @@ export interface MovieDetailsResponse {
   vote_count: number;
   videos: Videos;
   images: Images;
+  credits: Credits;
 }
 
+export interface Credits {
+  cast: Cast[];
+  crew: Cast[];
+}
+
+export interface Cast {
+  adult: boolean;
+  gender: number;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: null | string;
+  cast_id?: number;
+  character?: string;
+  credit_id: string;
+  order?: number;
+  department?: string;
+  job?: string;
+}
 export interface BelongsToCollection {
   id: number;
   name: string;

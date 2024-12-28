@@ -1,10 +1,7 @@
-import { Text, View } from "react-native";
 import React from "react";
 import { useLocalSearchParams } from "expo-router";
 import { useGetMovieDetails } from "@/hooks/use-get-movie-details";
 import { Loading } from "@/components/loading";
-import { createMediaImageLink } from "@/utils/create-media-image-link";
-import { ThemedImage } from "@/components/themed-image";
 import { Error } from "@/components/error";
 import { ThemedScrollView } from "@/components/themed-scroll-view";
 import { MediaType } from "@/types/multi-search";

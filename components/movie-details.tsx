@@ -11,8 +11,7 @@ import PlayTrailerButton from "@/components/play-trailer-button";
 import { Section } from "@/components/section";
 import { FlashList } from "@shopify/flash-list";
 import { Video } from "@/components/video";
-
-interface MovieDetailsProps extends MovieDetailsResponse {}
+import { PersonCard } from "@/components/person-card";
 
 export default function MovieDetails({
   title,
@@ -21,7 +20,8 @@ export default function MovieDetails({
   backdrop_path,
   overview,
   videos,
-}: MovieDetailsProps) {
+  credits,
+}: MovieDetailsResponse) {
   return (
     <View>
       <View>
@@ -68,7 +68,7 @@ export default function MovieDetails({
 
       <Section title={"About"}>
         <ThemedText
-          className={"pt-3 text-black-50 leading-[1.50rem] text-[1.025rem]"}
+          className={"pt-3 text-black-50 leading-[1.50rem]"}
           numberOfLines={5}
         >
           {overview}
@@ -77,7 +77,7 @@ export default function MovieDetails({
 
       <Section title={"Videos"}>
         {videos.results.length === 0 && (
-          <ThemedText>No videos found</ThemedText>
+          <ThemedText className={"mt-4"}>No videos found</ThemedText>
         )}
         {videos.results.length > 0 && (
           <FlashList
@@ -89,6 +89,22 @@ export default function MovieDetails({
             renderItem={({ item }) => (
               <Video type={item.type} name={item.name} videoKey={item.key} />
             )}
+          />
+        )}
+      </Section>
+
+      <Section title={"Cast"}>
+        {credits.cast.length === 0 && (
+          <ThemedText className={"mt-4"}>No cast found</ThemedText>
+        )}
+        {credits.cast.length > 0 && (
+          <FlashList
+            estimatedItemSize={100}
+            className={"mt-4"}
+            data={credits.cast}
+            canCancelContentTouches={false}
+            horizontal={true}
+            renderItem={({ item }) => <PersonCard {...item} />}
           />
         )}
       </Section>
