@@ -1,0 +1,72 @@
+import { View } from "react-native";
+import React from "react";
+import { MovieDetailsResponse } from "@/types/movie-details";
+import { ThemedImage } from "@/components/themed-image";
+import { createMediaImageLink } from "@/utils/create-media-image-link";
+import { ThemedText } from "@/components/themed-text";
+import { formatDate } from "@/utils/format-date";
+import { formatMinutes } from "@/utils/format-minutes";
+import AddToWatchlistButton from "@/components/add-to-watchlist-button";
+import PlayTrailerButton from "@/components/play-trailer-button";
+import { Section } from "@/components/section";
+
+interface MovieDetailsProps extends MovieDetailsResponse {}
+
+export default function MovieDetails({
+  title,
+  release_date,
+  runtime,
+  backdrop_path,
+  overview,
+}: MovieDetailsProps) {
+  return (
+    <View>
+      <View>
+        <View className="bg-black h-[400px] w-screen absolute z-10 opacity-60" />
+        <ThemedImage
+          source={createMediaImageLink("w1280", backdrop_path)}
+          style={{ width: "100%", height: 400 }}
+          contentFit={"cover"}
+          cachePolicy={"memory"}
+        />
+
+        <View
+          className={
+            "absolute bottom-[40px] left-1/2 transform -translate-x-1/2 flex justify-center z-10 px-4"
+          }
+        >
+          <ThemedText
+            className={"font-rubik-extrabold text-3xl text-center"}
+            numberOfLines={3}
+          >
+            {title}
+          </ThemedText>
+          <View className={"flex gap-2 mt-2 justify-center"}>
+            <View className={"flex flex-row justify-center"}>
+              <ThemedText className={"text-center"}>
+                {formatDate(release_date)}
+              </ThemedText>
+              <ThemedText className={"text-center"}> • </ThemedText>
+              <ThemedText className={"text-center"}>
+                {formatMinutes(runtime)}
+              </ThemedText>
+            </View>
+            <View className={"flex gap-2 justify-center px-4"}>
+              <View className="flex-1">
+                <AddToWatchlistButton />
+              </View>
+              <View className="flex-1">
+                <PlayTrailerButton />
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+      <Section title={"About"}>
+        <ThemedText className={"pt-3 text-black-50"} numberOfLines={5}>
+          {overview}
+        </ThemedText>
+      </Section>
+    </View>
+  );
+}

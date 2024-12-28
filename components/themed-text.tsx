@@ -3,7 +3,7 @@ import React from "react";
 
 export function ThemedText({ children, className, ...props }: TextProps) {
   return (
-    <Text className={`text-white font-rubik ${className}`} {...props}>
+    <Text className={`leading-5 text-white font-rubik ${className}`} {...props}>
       {children}
     </Text>
   );

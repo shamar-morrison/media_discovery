@@ -7,15 +7,25 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
 import { createMediaImageLink } from "@/utils/create-media-image-link";
 import { ThemedImage } from "@/components/themed-image";
+import { MediaType } from "@/types/multi-search";
+
+type MediaCardProps = {
+  title: string;
+  rating: number;
+  posterPath: string;
+  id: number;
+  mediaType: MediaType;
+};
 
 export function MediaCard({
-  poster_path,
+  posterPath,
   title,
-  vote_average,
+  rating,
   id,
-}: DiscoverMovieResult) {
+  mediaType,
+}: MediaCardProps) {
   return (
-    <Link href={`/details/${id}`}>
+    <Link href={`/details/${id}?mediaType=${mediaType}`}>
       <View className={`w-[120px] px-2 rounded-xl`}>
         <ThemedImage
           style={{
@@ -25,7 +35,7 @@ export function MediaCard({
           }}
           className={"rounded-xl"}
           contentFit={"fill"}
-          source={createMediaImageLink(POSTER_SIZE, poster_path)}
+          source={createMediaImageLink(POSTER_SIZE, posterPath)}
         />
         <View className={"flex"}>
           <Text
@@ -37,7 +47,7 @@ export function MediaCard({
           <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
             <Ionicons name={"star"} size={12} color={"#ffd500"} />
             <ThemedText className={"text-sm text-[#ffd500]"}>
-              {vote_average.toFixed(1)}
+              {rating.toFixed(1)}
             </ThemedText>
           </View>
         </View>

@@ -13,6 +13,7 @@ import { getNumColumns } from "@/utils/get-column-width";
 import { ThemedText } from "@/components/themed-text";
 import { Error } from "@/components/error";
 import { ThemedView } from "@/components/themed-view";
+import { MediaType } from "@/types/multi-search";
 
 export default function Index() {
   const {
@@ -49,7 +50,15 @@ export default function Index() {
       </Text>
       <FlashList
         data={movies}
-        renderItem={({ item }) => <MediaCard {...item} />}
+        renderItem={({ item }) => (
+          <MediaCard
+            posterPath={item.poster_path}
+            rating={item.vote_average}
+            title={item.title}
+            id={item.id}
+            mediaType={MediaType.Movie}
+          />
+        )}
         numColumns={numColumns}
         estimatedItemSize={100}
         onEndReached={() => {

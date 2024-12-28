@@ -5,17 +5,14 @@ import { MediaType, MultiSearchResult } from "@/types/multi-search";
 
 const categories = [
   {
-    id: 1,
     type: MediaType.Movie,
     name: "Movies",
   },
   {
-    id: 2,
     type: MediaType.Tv,
     name: "TV Shows",
   },
   {
-    id: 3,
     type: MediaType.Person,
     name: "People",
   },
@@ -33,7 +30,7 @@ export function SearchCategories({
       {categories.map((category) => (
         <TouchableOpacity
           onPress={() => handleUpdateMediaType(category.type)}
-          key={category.id}
+          key={category.type}
           className={`border-[0.4px] border-accent-100 rounded-lg px-4 py-1 ${
             category.type === currentMediaType
               ? "bg-primary-300 text-white border-transparent"
