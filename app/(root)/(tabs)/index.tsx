@@ -45,7 +45,9 @@ export default function Index() {
 
   return (
     <ThemedView>
-      <Text className={"font-rubik-bold text-3xl text-accent-100 px-2 pb-4"}>
+      <Text
+        className={"font-inter-semibold text-3xl text-accent-100 px-2 pb-4"}
+      >
         Discover
       </Text>
       <FlashList

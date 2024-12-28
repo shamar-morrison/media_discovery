@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "restate",
-    "slug": "restate",
+    "name": "Media Discovery",
+    "slug": "media-discovery",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -37,12 +37,9 @@
         "expo-font",
         {
           "fonts": [
-            "./assets/fonts/Rubik-Bold.ttf",
-            "./assets/fonts/Rubik-ExtraBold.ttf",
-            "./assets/fonts/Rubik-Light.ttf",
-            "./assets/fonts/Rubik-Medium.ttf",
-            "./assets/fonts/Rubik-Regular.ttf",
-            "./assets/fonts/Rubik-SemiBold.ttf"
+            "./assets/fonts/Inter-Medium.ttf",
+            "./assets/fonts/Inter-Regular.ttf",
+            "./assets/fonts/inter-SemiBold.ttf"
           ]
         }
       ]

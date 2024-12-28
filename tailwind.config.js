@@ -6,12 +6,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        rubik: ["Rubik-Regular", "sans-serif"],
-        "rubik-bold": ["Rubik-Bold", "sans-serif"],
-        "rubik-extrabold": ["Rubik-ExtraBold", "sans-serif"],
-        "rubik-medium": ["Rubik-Medium", "sans-serif"],
-        "rubik-semibold": ["Rubik-SemiBold", "sans-serif"],
-        "rubik-light": ["Rubik-Light", "sans-serif"],
+        inter: ["Inter-Regular", "sans-serif"],
+        "inter-medium": ["Inter-Medium", "sans-serif"],
+        "inter-semibold": ["Inter-SemiBold", "sans-serif"],
       },
       colors: {
         primary: {
@@ -24,7 +21,6 @@ module.exports = {
         },
         black: {
           DEFAULT: "#000000",
-          50: "#c61a1a",
           100: "#242426",
           200: "#1D1D1D",
         },

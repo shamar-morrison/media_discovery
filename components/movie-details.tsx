@@ -36,7 +36,7 @@ export default function MovieDetails({
           }
         >
           <ThemedText
-            className={"font-rubik-extrabold text-3xl text-center"}
+            className={"font-inter-semibold text-3xl text-center"}
             numberOfLines={3}
           >
             {title}
@@ -63,7 +63,10 @@ export default function MovieDetails({
         </View>
       </View>
       <Section title={"About"}>
-        <ThemedText className={"pt-3 text-black-50"} numberOfLines={5}>
+        <ThemedText
+          className={"pt-3 text-black-50 leading-[1.50rem] text-[1.025rem]"}
+          numberOfLines={5}
+        >
           {overview}
         </ThemedText>
       </Section>

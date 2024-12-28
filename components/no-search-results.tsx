@@ -13,7 +13,7 @@ export default function NoSearchResults() {
       <Ionicons name={"close"} size={80} color={"#fff"} />
       <ThemedText
         className={
-          "font-rubik-medium text-lg w-[250px] text-center text-accent-100"
+          "font-inter-medium text-lg w-[250px] text-center text-accent-100"
         }
       >
         No results found.

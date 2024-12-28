@@ -38,10 +38,7 @@ export function MediaCard({
           source={createMediaImageLink(POSTER_SIZE, posterPath)}
         />
         <View className={"flex"}>
-          <Text
-            className={"text-white text-md font-rubik-bold"}
-            numberOfLines={1}
-          >
+          <Text className={"text-white font-inter-semibold"} numberOfLines={1}>
             {title}
           </Text>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>

@@ -22,7 +22,7 @@ function TabIcon({
         resizeMode={"contain"}
       />
       <Text
-        className={`${focused ? "text-primary-300 font-rubik-medium" : "text-accent-100 font-rubik"} text-sm w-full text-center mt-1`}
+        className={`${focused ? "text-primary-300 font-inter-medium" : "text-accent-100 font-inter"} text-xs w-full text-center mt-1`}
       >
         {title}
       </Text>
