@@ -10,7 +10,7 @@ type SectionProps = {
 export function Section({ title, children }: SectionProps) {
   return (
     <View
-      className={"bg-black-100 px-3 py-6 my-4"}
+      className={"bg-black-100 px-4 py-6 my-4"}
       style={{
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },

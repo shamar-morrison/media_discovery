@@ -74,17 +74,17 @@ export interface SpokenLanguage {
 }
 
 export interface Videos {
-  results: Result[];
+  results: VideosResult[];
 }
 
-export interface Result {
+export interface VideosResult {
   iso_639_1: OriginalLanguage;
   iso_3166_1: OriginCountry;
   name: string;
   key: string;
   site: Site;
   size: number;
-  type: Type;
+  type: VideoType;
   official: boolean;
   published_at: Date;
   id: string;
@@ -94,7 +94,7 @@ export enum Site {
   YouTube = "YouTube",
 }
 
-export enum Type {
+export enum VideoType {
   Clip = "Clip",
   Featurette = "Featurette",
   Teaser = "Teaser",

@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import React from "react";
-import { MovieDetailsResponse } from "@/types/movie-details";
+import { MovieDetailsResponse, Site } from "@/types/movie-details";
 import { ThemedImage } from "@/components/themed-image";
 import { createMediaImageLink } from "@/utils/create-media-image-link";
 import { ThemedText } from "@/components/themed-text";
@@ -9,6 +9,8 @@ import { formatMinutes } from "@/utils/format-minutes";
 import AddToWatchlistButton from "@/components/add-to-watchlist-button";
 import PlayTrailerButton from "@/components/play-trailer-button";
 import { Section } from "@/components/section";
+import { FlashList } from "@shopify/flash-list";
+import { Video } from "@/components/video";
 
 interface MovieDetailsProps extends MovieDetailsResponse {}
 
@@ -18,6 +20,7 @@ export default function MovieDetails({
   runtime,
   backdrop_path,
   overview,
+  videos,
 }: MovieDetailsProps) {
   return (
     <View>
@@ -62,6 +65,7 @@ export default function MovieDetails({
           </View>
         </View>
       </View>
+
       <Section title={"About"}>
         <ThemedText
           className={"pt-3 text-black-50 leading-[1.50rem] text-[1.025rem]"}
@@ -69,6 +73,24 @@ export default function MovieDetails({
         >
           {overview}
         </ThemedText>
+      </Section>
+
+      <Section title={"Videos"}>
+        {videos.results.length === 0 && (
+          <ThemedText>No videos found</ThemedText>
+        )}
+        {videos.results.length > 0 && (
+          <FlashList
+            estimatedItemSize={100}
+            className={"mt-4"}
+            data={videos.results.filter((video) => video.site === Site.YouTube)}
+            canCancelContentTouches={false}
+            horizontal={true}
+            renderItem={({ item }) => (
+              <Video type={item.type} name={item.name} videoKey={item.key} />
+            )}
+          />
+        )}
       </Section>
     </View>
   );

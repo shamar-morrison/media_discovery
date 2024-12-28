@@ -26,11 +26,11 @@ export function MediaCard({
 }: MediaCardProps) {
   return (
     <Link href={`/details/${id}?mediaType=${mediaType}`}>
-      <View className={`w-[120px] px-2 rounded-xl`}>
+      <View className={`w-[130px] px-2 rounded-xl`}>
         <ThemedImage
           style={{
             width: "100%",
-            height: 150,
+            height: 140,
             borderRadius: 8,
           }}
           className={"rounded-xl"}
