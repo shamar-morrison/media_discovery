@@ -27,7 +27,10 @@ export function PersonCard({ name, character, profile_path }: Cast) {
         source={useAppropriateImage()}
       />
       <View className={"flex"}>
-        <Text className={"text-white font-inter-semibold"} numberOfLines={1}>
+        <Text
+          className={"text-white font-inter-semibold mt-1"}
+          numberOfLines={1}
+        >
           {name}
         </Text>
         <Text

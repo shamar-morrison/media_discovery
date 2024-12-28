@@ -11,7 +11,7 @@ export const useGetMovieDetails = (id: string) => {
     queryFn: async () => {
       try {
         const res = await axiosInstance.get<MovieDetailsResponse>(
-          `/movie/${id}?append_to_response=videos,images,credits`,
+          `/movie/${id}?append_to_response=videos,images,credits,similar`,
         );
         return res.data;
       } catch (error) {

@@ -12,6 +12,8 @@ import { Section } from "@/components/section";
 import { FlashList } from "@shopify/flash-list";
 import { Video } from "@/components/video";
 import { PersonCard } from "@/components/person-card";
+import { MediaCard } from "@/components/media-card";
+import { MediaType } from "@/types/multi-search";
 
 export default function MovieDetails({
   title,
@@ -21,6 +23,7 @@ export default function MovieDetails({
   overview,
   videos,
   credits,
+  similar,
 }: MovieDetailsResponse) {
   return (
     <View>
@@ -105,6 +108,30 @@ export default function MovieDetails({
             canCancelContentTouches={false}
             horizontal={true}
             renderItem={({ item }) => <PersonCard {...item} />}
+          />
+        )}
+      </Section>
+
+      <Section title={"More Like This"}>
+        {similar.results.length === 0 && (
+          <ThemedText className={"mt-4"}>No similar movies found</ThemedText>
+        )}
+        {similar.results.length > 0 && (
+          <FlashList
+            estimatedItemSize={100}
+            className={"mt-4"}
+            data={similar.results}
+            canCancelContentTouches={false}
+            horizontal={true}
+            renderItem={({ item }) => (
+              <MediaCard
+                posterPath={item.poster_path}
+                rating={item.vote_average}
+                title={item.title}
+                id={item.id}
+                mediaType={MediaType.Movie}
+              />
+            )}
           />
         )}
       </Section>
