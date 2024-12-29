@@ -34,11 +34,24 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SafeAreaView className="h-full bg-black-200">
+      <SafeAreaView
+        className="bg-black-200"
+        style={{ backgroundColor: "#1d1d1d", flex: 1, height: "100%" }}
+      >
         <StatusBar style="light" />
-        <Stack
-          screenOptions={{ headerShown: false, animation: "slide_from_right" }}
-        />
+        <View style={{ flex: 1, backgroundColor: "#1d1d1d" }}>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: {
+                backgroundColor: "#1d1d1d",
+              },
+              // Disable the default animation
+              animation: "none",
+              presentation: "card",
+            }}
+          />
+        </View>
       </SafeAreaView>
     </QueryClientProvider>
   );

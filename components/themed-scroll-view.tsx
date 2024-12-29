@@ -7,7 +7,7 @@ export function ThemedScrollView({
   ...props
 }: ScrollViewProps) {
   return (
-    <ScrollView className={"bg-black-200 h-full"} {...props}>
+    <ScrollView className={"flex-1 bg-black-200 h-full"} {...props}>
       {children}
     </ScrollView>
   );

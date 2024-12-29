@@ -14,7 +14,12 @@
         "LSApplicationQueriesSchemes": ["youtube"]
       }
     },
+    "backgroundColor": "#1D1D1D",
+    "androidNavigationBar": {
+      "backgroundColor": "#1D1D1D"
+    },
     "android": {
+      "backgroundColor": "#1D1D1D",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
