@@ -15,6 +15,7 @@ import { PersonCard } from "@/components/person-card";
 import { MediaCard } from "@/components/media-card";
 import { MediaType } from "@/types/multi-search";
 import { SimilarMovieCard } from "@/components/similar-movie-card";
+import { format } from "date-fns";
 
 export default function MovieDetails({
   title,
@@ -51,7 +52,7 @@ export default function MovieDetails({
           <View className={"flex gap-2 mt-2 justify-center"}>
             <View className={"flex flex-row justify-center"}>
               <ThemedText className={"text-center"}>
-                {formatDate(release_date)}
+                {format(release_date, "MMM. dd, yyyy")}
               </ThemedText>
               <ThemedText className={"text-center"}> • </ThemedText>
               <ThemedText className={"text-center"}>
