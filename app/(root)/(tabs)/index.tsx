@@ -81,7 +81,7 @@ export default function Index() {
             </View>
           );
         }}
-        numColumns={3}
+        numColumns={numColumns}
         estimatedItemSize={100}
         onEndReached={() => {
           if (hasNextPage) {

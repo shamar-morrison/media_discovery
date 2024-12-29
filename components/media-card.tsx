@@ -67,7 +67,7 @@ export function MediaCard({
           <ThemedText className={"text-sm opacity-50"}> • </ThemedText>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
             <Ionicons name={"star"} size={12} color={"#ffd500"} />
-            <ThemedText className={"text-sm text-gold"}>
+            <ThemedText className={"text-sm"} style={{ color: "#ffd500" }}>
               {rating.toFixed(1)}
             </ThemedText>
           </View>
