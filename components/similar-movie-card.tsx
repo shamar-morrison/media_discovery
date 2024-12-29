@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { Text, View } from "react-native";
 import React from "react";
 import { ThemedImage } from "@/components/themed-image";
 import { createMediaImageLink } from "@/utils/create-media-image-link";
@@ -7,7 +7,7 @@ import { MediaType } from "@/types/multi-search";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ThemedText } from "@/components/themed-text";
 import { Link } from "expo-router";
-import { formatDate } from "date-fns";
+import { getYear } from "date-fns";
 
 type SimilarMovieCardProps = {
   posterPath: string;
@@ -49,7 +49,7 @@ export function SimilarMovieCard({
           </Text>
           <View className="flex flex-row items-center">
             <ThemedText className={"text-sm opacity-50"}>
-              {formatDate(release_date, "yyyy")}
+              {getYear(release_date)}
             </ThemedText>
             <ThemedText className={"text-sm opacity-50"}> • </ThemedText>
             <View

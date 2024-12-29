@@ -2,13 +2,12 @@ import { Text, View } from "react-native";
 import React from "react";
 import { POSTER_SIZE } from "@/constants/tmdb";
 import { ThemedText } from "@/components/themed-text";
-import { DiscoverMovieResult } from "@/types/discover-movie";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
 import { createMediaImageLink } from "@/utils/create-media-image-link";
 import { ThemedImage } from "@/components/themed-image";
 import { MediaType } from "@/types/multi-search";
-import { formatDate } from "date-fns";
+import { getYear } from "date-fns";
 
 type MediaCardProps = {
   title: string;
@@ -62,7 +61,7 @@ export function MediaCard({
         </Text>
         <View className="flex flex-row items-center">
           <ThemedText className={"text-sm opacity-50"}>
-            {formatDate(release_date, "yyyy")}
+            {getYear(release_date)}
           </ThemedText>
           <ThemedText className={"text-sm opacity-50"}> • </ThemedText>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
