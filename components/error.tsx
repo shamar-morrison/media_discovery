@@ -16,7 +16,7 @@ export function Error({
   return (
     <View className="bg-black-200 h-full">
       <View className="flex flex-1 items-center gap-5 justify-center">
-        <ThemedText className={"font-inter-medium text-xl"}>
+        <ThemedText className={"font-inter-medium text-xl text-center"}>
           {message}
         </ThemedText>
         <Button onPress={onRetry} className={""}>
