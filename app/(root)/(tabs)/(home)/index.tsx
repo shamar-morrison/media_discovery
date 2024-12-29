@@ -11,6 +11,7 @@ import { MediaType } from "@/types/multi-search";
 
 const PADDING_SIZE = 4;
 
+// Discover Screen (Home)
 export default function Index() {
   const {
     data,

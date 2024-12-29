@@ -7,7 +7,7 @@ import { ThemedScrollView } from "@/components/themed-scroll-view";
 import { MediaType } from "@/types/multi-search";
 import MovieDetails from "@/components/movie-details";
 
-export default function MediaDetails() {
+export function MediaDetails() {
   const { mediaId, mediaType } = useLocalSearchParams<{
     mediaId: string;
     mediaType: MediaType;

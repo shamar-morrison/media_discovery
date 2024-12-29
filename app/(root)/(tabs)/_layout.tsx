@@ -45,12 +45,12 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="(home)"
         options={{
           title: "Home",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon icon={icons.home} title={"Home"} focused={focused} />
+            <TabIcon icon={icons.home} title={"Discover"} focused={focused} />
           ),
         }}
       />
@@ -76,13 +76,13 @@ export default function TabsLayout() {
       />
 
       {/* Non Tabs Screens */}
-      <Tabs.Screen
-        name="(screens)/details/[mediaId]"
-        options={{
-          headerShown: false,
-          href: null, // this prevents the tab from showing up in the bottom tab bar
-        }}
-      />
+      {/*<Tabs.Screen*/}
+      {/*  name="(shared-screens)/details/[mediaId]"*/}
+      {/*  options={{*/}
+      {/*    headerShown: false,*/}
+      {/*    href: null, // this prevents the tab from showing up in the bottom tab bar*/}
+      {/*  }}*/}
+      {/*/>*/}
     </Tabs>
   );
 }
