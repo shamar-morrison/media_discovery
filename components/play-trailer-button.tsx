@@ -2,10 +2,28 @@ import React from "react";
 import { ThemedText } from "@/components/themed-text";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Button } from "@/components/button";
+import { ToastAndroid } from "react-native";
+import { openYoutube } from "@/utils/open-youtube";
 
-export default function PlayTrailerButton() {
+export default function PlayTrailerButton({
+  videoId,
+}: {
+  videoId: string | undefined;
+}) {
+  const handlePlayTrailer = async (videoId: string | undefined) => {
+    if (!videoId) {
+      ToastAndroid.show("No trailer found", ToastAndroid.SHORT);
+      return;
+    }
+    try {
+      await openYoutube(videoId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <Button variant={"outline"}>
+    <Button variant={"outline"} onPress={() => handlePlayTrailer(videoId)}>
       <Ionicons name={"play"} size={20} color={"#fff"} />
       <ThemedText>Play Trailer</ThemedText>
     </Button>

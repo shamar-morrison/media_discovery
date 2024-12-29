@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import React from "react";
-import { MovieDetailsResponse, Site } from "@/types/movie-details";
+import { MovieDetailsResponse, Site, VideoType } from "@/types/movie-details";
 import { ThemedImage } from "@/components/themed-image";
 import { createMediaImageLink } from "@/utils/create-media-image-link";
 import { ThemedText } from "@/components/themed-text";
@@ -50,7 +50,7 @@ export default function MovieDetails({
           <View className={"flex gap-2 mt-2 justify-center"}>
             <View className={"flex flex-row justify-center"}>
               <ThemedText className={"text-center"}>
-                {format(release_date, "MMM. dd, yyyy")}
+                {release_date ? format(release_date, "MMM. dd, yyyy") : "N/A"}
               </ThemedText>
               <ThemedText className={"text-center"}> • </ThemedText>
               <ThemedText className={"text-center"}>
@@ -62,7 +62,15 @@ export default function MovieDetails({
                 <AddToWatchlistButton />
               </View>
               <View className="flex-1">
-                <PlayTrailerButton />
+                <PlayTrailerButton
+                  videoId={
+                    videos.results.find(
+                      (video) =>
+                        video.site === Site.YouTube &&
+                        video.type === VideoType.Trailer,
+                    )?.key
+                  }
+                />
               </View>
             </View>
           </View>

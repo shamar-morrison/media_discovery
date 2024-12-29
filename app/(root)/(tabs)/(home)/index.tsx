@@ -5,6 +5,7 @@ import {
   HORIZONTAL_PADDING,
   MEDIA_CARD_PADDING,
   MEDIA_CARD_WIDTH,
+  NUM_COLUMNS,
 } from "@/utils/constants";
 import { FlashList } from "@shopify/flash-list";
 import { MediaCard } from "@/components/media-card";
@@ -28,12 +29,6 @@ export default function Index() {
     fetchNextPage,
     isFetchingNextPage,
   } = useDiscoverMovie();
-  const { width: screenWidth } = useWindowDimensions();
-  const numColumns = getNumColumns(
-    screenWidth,
-    MEDIA_CARD_WIDTH,
-    MEDIA_CARD_PADDING,
-  );
 
   if (isLoading) {
     return <Loading />;
@@ -71,7 +66,7 @@ export default function Index() {
             </RenderItemWrapper>
           );
         }}
-        numColumns={numColumns}
+        numColumns={NUM_COLUMNS}
         estimatedItemSize={100}
         onEndReached={() => {
           if (hasNextPage) {

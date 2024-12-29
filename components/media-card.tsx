@@ -14,7 +14,7 @@ type MediaCardProps = {
   rating: number;
   posterPath: string;
   id: number;
-  release_date: Date;
+  release_date: Date | undefined;
   mediaType: MediaType;
   containerWidth?: number;
   containerHeight?: number;
@@ -61,7 +61,7 @@ export function MediaCard({
         </Text>
         <View className="flex flex-row items-center">
           <ThemedText className={"text-sm opacity-50"}>
-            {getYear(release_date)}
+            {release_date ? getYear(release_date) : "N/A"}
           </ThemedText>
           <ThemedText className={"text-sm opacity-50"}> • </ThemedText>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>

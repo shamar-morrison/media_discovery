@@ -6,6 +6,11 @@ import { SearchCategories } from "@/components/search-categories";
 import { ThemedText } from "@/components/themed-text";
 import { ScrollView } from "react-native";
 import { MediaCard } from "@/components/media-card";
+import { RenderItemWrapper } from "@/components/render-item-wrapper";
+import { itemWidth } from "@/utils/get-item-width";
+import { FlashList } from "@shopify/flash-list";
+import { MovieDetailsResponse } from "@/types/movie-details";
+import { NUM_COLUMNS } from "@/utils/constants";
 
 export function SearchResults({
   results,
@@ -47,24 +52,35 @@ export function SearchResults({
           No {currentMediaType}s found for "{query}"
         </ThemedText>
       ) : (
-        <ScrollView className={"flex gap-2"}>
-          {filteredResultsByMediaType?.map((result) => (
-            <ThemedText key={result.id}>
-              {result.media_type === MediaType.Movie ? (
-                <MediaCard
-                  posterPath={result.poster_path ?? ""}
-                  rating={result.vote_average ?? 0}
-                  release_date={result.release_date ?? new Date()}
-                  title={result.title ?? "unknown"}
-                  id={result.id}
-                  mediaType={MediaType.Movie}
-                />
-              ) : (
-                result.name
-              )}
-            </ThemedText>
-          ))}
-        </ScrollView>
+        <FlashList
+          numColumns={NUM_COLUMNS}
+          data={filteredResultsByMediaType}
+          renderItem={({ item, index }) => {
+            if (
+              filteredResultsByMediaType?.[0].media_type === MediaType.Movie
+            ) {
+              const castedItem = item as unknown as MovieDetailsResponse;
+              return (
+                <RenderItemWrapper index={index}>
+                  <MediaCard
+                    containerHeight={165}
+                    posterPath={castedItem.poster_path}
+                    rating={castedItem.vote_average}
+                    release_date={castedItem.release_date}
+                    title={castedItem.title}
+                    id={castedItem.id}
+                    mediaType={MediaType.Movie}
+                    containerWidth={itemWidth}
+                  />
+                </RenderItemWrapper>
+              );
+            }
+            if (filteredResultsByMediaType?.[0].media_type === MediaType.Tv) {
+              return <ThemedText>TV</ThemedText>;
+            }
+            return <ThemedText>People</ThemedText>;
+          }}
+        />
       )}
     </>
   );
