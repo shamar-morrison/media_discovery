@@ -56,7 +56,7 @@ export function SimilarMovieCard({
               style={{ flexDirection: "row", alignItems: "center", gap: 3 }}
             >
               <Ionicons name={"star"} size={12} color={"#ffd500"} />
-              <ThemedText className={"text-sm color-[#ffd500]"}>
+              <ThemedText className={"text-sm text-gold"}>
                 {rating.toFixed(1)}
               </ThemedText>
             </View>

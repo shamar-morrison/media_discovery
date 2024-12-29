@@ -19,6 +19,9 @@ module.exports = {
         accent: {
           100: "#FBFBFD",
         },
+        gold: {
+          DEFAULT: "#FFD500",
+        },
         black: {
           DEFAULT: "#000000",
           100: "#242426",
