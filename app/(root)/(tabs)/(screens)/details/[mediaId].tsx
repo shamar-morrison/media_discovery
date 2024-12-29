@@ -8,12 +8,12 @@ import { MediaType } from "@/types/multi-search";
 import MovieDetails from "@/components/movie-details";
 
 export default function MediaDetails() {
-  const { id, mediaType } = useLocalSearchParams<{
-    id: string;
+  const { mediaId, mediaType } = useLocalSearchParams<{
+    mediaId: string;
     mediaType: MediaType;
   }>();
 
-  const { data, isLoading, isError, refetch } = useGetMovieDetails(id);
+  const { data, isLoading, isError, refetch } = useGetMovieDetails(mediaId);
 
   if (isLoading) {
     return <Loading />;

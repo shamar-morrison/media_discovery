@@ -77,7 +77,7 @@ export default function TabsLayout() {
 
       {/* Non Tabs Screens */}
       <Tabs.Screen
-        name="(screens)/details/[id]"
+        name="(screens)/details/[mediaId]"
         options={{
           headerShown: false,
           href: null, // this prevents the tab from showing up in the bottom tab bar
