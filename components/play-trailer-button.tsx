@@ -4,6 +4,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Button } from "@/components/button";
 import { ToastAndroid } from "react-native";
 import { openYoutube } from "@/utils/open-youtube";
+import { showToast } from "@/utils/toast";
 
 export default function PlayTrailerButton({
   videoId,
@@ -12,7 +13,7 @@ export default function PlayTrailerButton({
 }) {
   const handlePlayTrailer = async (videoId: string | undefined) => {
     if (!videoId) {
-      ToastAndroid.show("No trailer found", ToastAndroid.SHORT);
+      showToast("No trailer found");
       return;
     }
     try {

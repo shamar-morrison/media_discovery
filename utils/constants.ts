@@ -15,3 +15,6 @@ export const NUM_COLUMNS = getNumColumns(
   MEDIA_CARD_WIDTH,
   MEDIA_CARD_PADDING,
 );
+
+export const MOVIES_STORAGE_KEY = "movies";
+export const TV_SHOW_STORAGE_KEY = "tv";
