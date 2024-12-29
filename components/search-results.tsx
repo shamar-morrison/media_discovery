@@ -20,7 +20,7 @@ export function SearchResults({
     MediaType.Movie,
   );
 
-  const filteredResults = results?.filter(
+  const filteredResultsByMediaType = results?.filter(
     (result) => result.media_type === currentMediaType,
   );
 
@@ -42,13 +42,13 @@ export function SearchResults({
         handleUpdateMediaType={updateMediaType}
         currentMediaType={currentMediaType}
       />
-      {filteredResults?.length === 0 ? (
+      {filteredResultsByMediaType?.length === 0 ? (
         <ThemedText className="text-center mt-4">
           No {currentMediaType}s found for "{query}"
         </ThemedText>
       ) : (
         <ScrollView className={"flex gap-2"}>
-          {filteredResults?.map((result) => (
+          {filteredResultsByMediaType?.map((result) => (
             <ThemedText key={result.id}>
               {result.media_type === MediaType.Movie ? (
                 <MediaCard

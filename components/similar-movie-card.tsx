@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 import React from "react";
 import { ThemedImage } from "@/components/themed-image";
 import { createMediaImageLink } from "@/utils/create-media-image-link";
-import { POSTER_SIZE } from "@/constants/tmdb";
+import { POSTER_SIZE } from "@/utils/constants";
 import { MediaType } from "@/types/multi-search";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ThemedText } from "@/components/themed-text";

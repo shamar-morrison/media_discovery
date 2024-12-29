@@ -3,7 +3,7 @@ import React from "react";
 import { Cast } from "@/types/movie-details";
 import { ThemedImage } from "@/components/themed-image";
 import { createMediaImageLink } from "@/utils/create-media-image-link";
-import { POSTER_SIZE } from "@/constants/tmdb";
+import { POSTER_SIZE } from "@/utils/constants";
 import { blurhash } from "@/utils/blurhash";
 
 export function PersonCard({ name, character, profile_path }: Cast) {

@@ -1,13 +1,19 @@
 import { Text, useWindowDimensions, View, Dimensions } from "react-native";
 import { useDiscoverMovie } from "@/hooks/use-discover-movie";
 import { Loading } from "@/components/loading";
-import { MEDIA_CARD_PADDING, MEDIA_CARD_WIDTH } from "@/constants/tmdb";
+import {
+  HORIZONTAL_PADDING,
+  MEDIA_CARD_PADDING,
+  MEDIA_CARD_WIDTH,
+} from "@/utils/constants";
 import { FlashList } from "@shopify/flash-list";
 import { MediaCard } from "@/components/media-card";
-import { getNumColumns } from "@/utils/get-column-width";
+import { getNumColumns } from "@/utils/get-num-columns";
 import { Error } from "@/components/error";
 import { ThemedView } from "@/components/themed-view";
 import { MediaType } from "@/types/multi-search";
+import { RenderItemWrapper } from "@/components/render-item-wrapper";
+import { itemWidth } from "@/utils/get-item-width";
 
 const PADDING_SIZE = 4;
 
@@ -50,25 +56,8 @@ export default function Index() {
       <FlashList
         data={movies}
         renderItem={({ item, index }) => {
-          const isFirstInRow = index % numColumns === 0;
-          const isLastInRow = (index + 1) % numColumns === 0;
-          const horizontalPadding = 8;
-
-          // Calculate item width based on container width and padding
-          const itemWidth =
-            (Dimensions.get("window").width -
-              horizontalPadding * (numColumns - 1)) /
-            numColumns;
-
           return (
-            <View
-              style={{
-                paddingTop: 8,
-                paddingBottom: 8,
-                paddingLeft: isFirstInRow ? 0 : horizontalPadding / 2,
-                paddingRight: isLastInRow ? 0 : horizontalPadding / 2,
-              }}
-            >
+            <RenderItemWrapper index={index}>
               <MediaCard
                 containerHeight={165}
                 posterPath={item.poster_path}
@@ -79,7 +68,7 @@ export default function Index() {
                 mediaType={MediaType.Movie}
                 containerWidth={itemWidth}
               />
-            </View>
+            </RenderItemWrapper>
           );
         }}
         numColumns={numColumns}
