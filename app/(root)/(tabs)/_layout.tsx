@@ -55,7 +55,7 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="search"
+        name="(search)"
         options={{
           title: "Search",
           headerShown: false,
@@ -65,7 +65,7 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="(profile)"
         options={{
           title: "Profile",
           headerShown: false,
@@ -74,15 +74,6 @@ export default function TabsLayout() {
           ),
         }}
       />
-
-      {/* Non Tabs Screens */}
-      {/*<Tabs.Screen*/}
-      {/*  name="(shared-screens)/details/[mediaId]"*/}
-      {/*  options={{*/}
-      {/*    headerShown: false,*/}
-      {/*    href: null, // this prevents the tab from showing up in the bottom tab bar*/}
-      {/*  }}*/}
-      {/*/>*/}
     </Tabs>
   );
 }

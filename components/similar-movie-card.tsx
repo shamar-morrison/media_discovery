@@ -27,7 +27,7 @@ export function SimilarMovieCard({
   release_date,
 }: SimilarMovieCardProps) {
   return (
-    <Link href={`/details/${id}?mediaType=${mediaType}`}>
+    <Link href={`/${id}?mediaType=${mediaType}`}>
       <View className={"flex gap-2 w-32"}>
         <View className={`rounded-lg overflow-hidden w-full`}>
           <ThemedImage
