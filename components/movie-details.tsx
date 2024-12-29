@@ -102,6 +102,7 @@ export default function MovieDetails({
         )}
         {credits.cast.length > 0 && (
           <FlashList
+            showsHorizontalScrollIndicator={false}
             estimatedItemSize={100}
             className={"mt-4"}
             data={credits.cast}
@@ -125,6 +126,8 @@ export default function MovieDetails({
             horizontal={true}
             renderItem={({ item }) => (
               <MediaCard
+                containerHeight={165}
+                containerWidth={120}
                 posterPath={item.poster_path}
                 rating={item.vote_average}
                 title={item.title}

@@ -15,6 +15,9 @@ type MediaCardProps = {
   posterPath: string;
   id: number;
   mediaType: MediaType;
+  containerWidth?: number;
+  containerHeight?: number;
+  maintainAspectRatio?: boolean;
 };
 
 export function MediaCard({
@@ -23,30 +26,42 @@ export function MediaCard({
   rating,
   id,
   mediaType,
+  containerWidth = 140,
+  containerHeight,
+  maintainAspectRatio = true,
 }: MediaCardProps) {
+  const imageHeight = maintainAspectRatio
+    ? (containerHeight ?? containerWidth * 1.5)
+    : (containerHeight ?? containerWidth * 1.5);
+
   return (
     <Link href={`/details/${id}?mediaType=${mediaType}`}>
-      <View className={`w-[130px] px-2 rounded-xl`}>
+      <View
+        style={{ width: containerWidth }}
+        className={`rounded-xl overflow-hidden`}
+      >
         <ThemedImage
           style={{
             width: "100%",
-            height: 145,
-            borderRadius: 8,
+            height: imageHeight,
           }}
-          className={"rounded-xl"}
+          className={"w-full h-full"}
           contentFit={"cover"}
           source={createMediaImageLink(POSTER_SIZE, posterPath)}
         />
-        <View className={"flex"}>
-          <Text className={"text-white font-inter-semibold"} numberOfLines={1}>
-            {title}
-          </Text>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-            <Ionicons name={"star"} size={12} color={"#ffd500"} />
-            <ThemedText className={"text-sm text-[#ffd500]"}>
-              {rating.toFixed(1)}
-            </ThemedText>
-          </View>
+      </View>
+      <View className={"flex"}>
+        <Text
+          className={"text-white font-inter-semibold w-full"}
+          numberOfLines={1}
+        >
+          {title}
+        </Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+          <Ionicons name={"star"} size={12} color={"#ffd500"} />
+          <ThemedText className={"text-sm text-[#ffd500]"}>
+            {rating.toFixed(1)}
+          </ThemedText>
         </View>
       </View>
     </Link>
