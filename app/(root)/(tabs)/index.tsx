@@ -72,6 +72,7 @@ export default function Index() {
                 containerHeight={165}
                 posterPath={item.poster_path}
                 rating={item.vote_average}
+                release_date={item.release_date}
                 title={item.title}
                 id={item.id}
                 mediaType={MediaType.Movie}

@@ -8,12 +8,14 @@ import { Link } from "expo-router";
 import { createMediaImageLink } from "@/utils/create-media-image-link";
 import { ThemedImage } from "@/components/themed-image";
 import { MediaType } from "@/types/multi-search";
+import { formatDate } from "date-fns";
 
 type MediaCardProps = {
   title: string;
   rating: number;
   posterPath: string;
   id: number;
+  release_date: Date;
   mediaType: MediaType;
   containerWidth?: number;
   containerHeight?: number;
@@ -25,6 +27,7 @@ export function MediaCard({
   title,
   rating,
   id,
+  release_date,
   mediaType,
   containerWidth = 140,
   containerHeight,
@@ -46,22 +49,28 @@ export function MediaCard({
             height: imageHeight,
           }}
           className={"w-full h-full"}
-          contentFit={"cover"}
+          contentFit={"fill"}
           source={createMediaImageLink(POSTER_SIZE, posterPath)}
         />
       </View>
-      <View className={"flex"}>
+      <View className={"flex gap-0.5"}>
         <Text
           className={"text-white font-inter-semibold w-full"}
           numberOfLines={1}
         >
           {title}
         </Text>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-          <Ionicons name={"star"} size={12} color={"#ffd500"} />
-          <ThemedText className={"text-sm text-[#ffd500]"}>
-            {rating.toFixed(1)}
+        <View className="flex flex-row items-center">
+          <ThemedText className={"text-sm opacity-50"}>
+            {formatDate(release_date, "yyyy")}
           </ThemedText>
+          <ThemedText className={"text-sm opacity-50"}> • </ThemedText>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
+            <Ionicons name={"star"} size={12} color={"#ffd500"} />
+            <ThemedText className={"text-sm color-[#ffd500]"}>
+              {rating.toFixed(1)}
+            </ThemedText>
+          </View>
         </View>
       </View>
     </Link>

@@ -15,30 +15,32 @@ export function PersonCard({ name, character, profile_path }: Cast) {
   };
 
   return (
-    <View className={`w-[130px] px-2 rounded-xl`}>
-      <ThemedImage
-        style={{
-          width: "100%",
-          height: 140,
-          borderRadius: 8,
-        }}
-        className={"rounded-xl"}
-        contentFit={"cover"}
-        source={useAppropriateImage()}
-      />
-      <View className={"flex"}>
-        <Text
-          className={"text-white font-inter-semibold mt-1"}
-          numberOfLines={1}
-        >
-          {name}
-        </Text>
-        <Text
-          className={"text-white font-inter text-sm opacity-50"}
-          numberOfLines={1}
-        >
-          {character}
-        </Text>
+    <View className="flex gap-2 w-32">
+      <View className="rounded-lg overflow-hidden w-full">
+        <ThemedImage
+          style={{
+            width: "100%",
+            height: 155,
+            borderRadius: 5,
+          }}
+          className={"w-full h-full"}
+          contentFit={"cover"}
+          source={useAppropriateImage()}
+        />
+        <View className={"flex"}>
+          <Text
+            className={"text-white font-inter-semibold mt-1"}
+            numberOfLines={1}
+          >
+            {name}
+          </Text>
+          <Text
+            className={"text-white font-inter text-sm opacity-50"}
+            numberOfLines={1}
+          >
+            {character}
+          </Text>
+        </View>
       </View>
     </View>
   );

@@ -14,6 +14,7 @@ import { Video } from "@/components/video";
 import { PersonCard } from "@/components/person-card";
 import { MediaCard } from "@/components/media-card";
 import { MediaType } from "@/types/multi-search";
+import { SimilarMovieCard } from "@/components/similar-movie-card";
 
 export default function MovieDetails({
   title,
@@ -108,7 +109,15 @@ export default function MovieDetails({
             data={credits.cast}
             canCancelContentTouches={false}
             horizontal={true}
-            renderItem={({ item }) => <PersonCard {...item} />}
+            renderItem={({ item, index }) => {
+              const isLastItem = index === credits.cast.length - 1;
+
+              return (
+                <View className={`${!isLastItem ? "mr-3" : ""}`}>
+                  <PersonCard {...item} />
+                </View>
+              );
+            }}
           />
         )}
       </Section>
@@ -124,17 +133,22 @@ export default function MovieDetails({
             data={similar.results}
             canCancelContentTouches={false}
             horizontal={true}
-            renderItem={({ item }) => (
-              <MediaCard
-                containerHeight={165}
-                containerWidth={120}
-                posterPath={item.poster_path}
-                rating={item.vote_average}
-                title={item.title}
-                id={item.id}
-                mediaType={MediaType.Movie}
-              />
-            )}
+            renderItem={({ item, index }) => {
+              const isLastItem = index === similar.results.length - 1;
+
+              return (
+                <View className={`${!isLastItem ? "mr-3" : ""}`}>
+                  <SimilarMovieCard
+                    posterPath={item.poster_path}
+                    rating={item.vote_average}
+                    title={item.title}
+                    id={item.id}
+                    release_date={item.release_date}
+                    mediaType={MediaType.Movie}
+                  />
+                </View>
+              );
+            }}
           />
         )}
       </Section>
