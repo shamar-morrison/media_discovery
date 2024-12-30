@@ -16,7 +16,7 @@ export function Button({
   return (
     <TouchableOpacity
       {...props}
-      className={`text-white rounded-xl py-3 px-10 flex flex-row gap-1 items-center justify-center ${
+      className={`text-white rounded-xl h-[45px] w-[260px] py-3 px-10 flex flex-row gap-1 items-center justify-center ${
         variant === "default" ? defaultStyles : outlineStyles
       } ${className}`}
     >

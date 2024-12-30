@@ -1,9 +1,9 @@
 import { MediaType } from "@/types/multi-search";
 
 export interface AddToWatchlistProps {
-  posterPath: string;
+  poster_path: string;
   title: string;
-  rating: number;
+  vote_average: number;
   id: number;
   mediaType: MediaType;
   release_date: Date | undefined;

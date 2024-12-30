@@ -3,16 +3,16 @@ import { Button } from "@/components/button";
 import { ThemedText } from "@/components/themed-text";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { showToast } from "@/utils/toast";
-import { MediaType } from "@/types/multi-search";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MOVIES_STORAGE_KEY } from "@/utils/constants";
 import { FontAwesome } from "@expo/vector-icons";
 import { AddToWatchlistProps } from "@/types/add-to-watchlist";
+import { useFocusEffect } from "@react-navigation/native";
 
 export function AddToWatchlistButton({
-  posterPath,
+  poster_path,
   title,
-  rating,
+  vote_average,
   id,
   release_date,
   mediaType,
@@ -20,6 +20,19 @@ export function AddToWatchlistButton({
   const [icon, setIcon] = useState<"add" | "close">("add");
   const [isInWatchlist, setIsInWatchlist] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  // useFocusEffect(() => {
+  //   // check if the movie is already in the watchlist
+  //   (async () => {
+  //     const movies = await AsyncStorage.getItem(MOVIES_STORAGE_KEY);
+  //     const moviesArray =
+  //       movies !== null ? JSON.parse(movies) : ([] as AddToWatchlistProps[]);
+  //
+  //     setIsInWatchlist(
+  //       moviesArray.find((movie: AddToWatchlistProps) => movie.id === id),
+  //     );
+  //   })();
+  // });
 
   useEffect(() => {
     setIsLoading(true);
@@ -86,12 +99,12 @@ export function AddToWatchlistButton({
         ...(moviesArray.length > 0 ? moviesArray : []),
         {
           id,
-          posterPath,
+          poster_path,
           title,
-          rating,
+          vote_average,
           release_date,
           mediaType,
-        },
+        } as AddToWatchlistProps,
       ];
 
       await AsyncStorage.setItem(

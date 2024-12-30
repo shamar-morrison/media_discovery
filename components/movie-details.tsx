@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { MovieDetailsResponse, Site, VideoType } from "@/types/movie-details";
 import { ThemedImage } from "@/components/themed-image";
 import { createMediaImageLink } from "@/utils/create-media-image-link";
@@ -14,6 +14,10 @@ import { PersonCard } from "@/components/person-card";
 import { MediaType } from "@/types/multi-search";
 import { SimilarMovieCard } from "@/components/similar-movie-card";
 import { format } from "date-fns";
+import { useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MOVIES_STORAGE_KEY } from "@/utils/constants";
+import { AddToWatchlistProps } from "@/types/add-to-watchlist";
 
 export default function MovieDetails({
   title,
@@ -28,6 +32,8 @@ export default function MovieDetails({
   poster_path,
   vote_average,
 }: MovieDetailsResponse) {
+  const [isInWatchlist, setIsInWatchlist] = useState(false);
+
   return (
     <View>
       <View>
@@ -64,8 +70,8 @@ export default function MovieDetails({
               <View className="flex-1">
                 <AddToWatchlistButton
                   title={title}
-                  posterPath={poster_path}
-                  rating={vote_average}
+                  poster_path={poster_path}
+                  vote_average={vote_average}
                   id={id}
                   release_date={release_date}
                   mediaType={MediaType.Movie}
@@ -92,7 +98,7 @@ export default function MovieDetails({
           className={"pt-3 text-black-50 leading-[1.50rem]"}
           numberOfLines={5}
         >
-          {overview}
+          {overview || "No overview found"}
         </ThemedText>
       </Section>
 
@@ -156,8 +162,8 @@ export default function MovieDetails({
               return (
                 <View className={`${!isLastItem ? "mr-3" : ""}`}>
                   <SimilarMovieCard
-                    posterPath={item.poster_path}
-                    rating={item.vote_average}
+                    poster_path={item.poster_path}
+                    vote_average={item.vote_average}
                     title={item.title}
                     id={item.id}
                     release_date={item.release_date}

@@ -10,18 +10,18 @@ import { Link } from "expo-router";
 import { getYear } from "date-fns";
 
 type SimilarMovieCardProps = {
-  posterPath: string;
+  poster_path: string;
   title: string;
-  rating: number;
+  vote_average: number;
   id: number;
   mediaType: MediaType;
-  release_date: Date;
+  release_date: Date | undefined;
 };
 
 export function SimilarMovieCard({
-  posterPath,
+  poster_path,
   title,
-  rating,
+  vote_average,
   id,
   mediaType,
   release_date,
@@ -37,7 +37,7 @@ export function SimilarMovieCard({
             }}
             className={"w-full h-full"}
             contentFit={"fill"}
-            source={createMediaImageLink(POSTER_SIZE, posterPath)}
+            source={createMediaImageLink(POSTER_SIZE, poster_path)}
           />
         </View>
         <View className={"flex"}>
@@ -49,7 +49,7 @@ export function SimilarMovieCard({
           </Text>
           <View className="flex flex-row items-center">
             <ThemedText className={"text-sm opacity-50"}>
-              {getYear(release_date)}
+              {release_date ? getYear(release_date) : "N/A"}
             </ThemedText>
             <ThemedText className={"text-sm opacity-50"}> • </ThemedText>
             <View
@@ -57,7 +57,7 @@ export function SimilarMovieCard({
             >
               <Ionicons name={"star"} size={12} color={"#ffd500"} />
               <ThemedText className={"text-sm"} style={{ color: "#ffd500" }}>
-                {rating.toFixed(1)}
+                {vote_average?.toFixed(1)}
               </ThemedText>
             </View>
           </View>
