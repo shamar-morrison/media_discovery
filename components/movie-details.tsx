@@ -64,8 +64,8 @@ export default function MovieDetails({
                 {formatMinutes(runtime)}
               </ThemedText>
             </View>
-            <View className={"flex gap-2 justify-center px-4"}>
-              <View className="flex-1">
+            <View className="flex flex-col items-center w-full gap-4">
+              <View className="w-[265px] h-[40px]">
                 <AddToWatchlistButton
                   title={title}
                   poster_path={poster_path}
@@ -75,7 +75,7 @@ export default function MovieDetails({
                   mediaType={MediaType.Movie}
                 />
               </View>
-              <View className="flex-1">
+              <View className="w-[265px] h-[40px]">
                 <PlayTrailerButton
                   videoId={
                     videos.results.find(
