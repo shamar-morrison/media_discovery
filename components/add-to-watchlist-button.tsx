@@ -7,15 +7,7 @@ import { MediaType } from "@/types/multi-search";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MOVIES_STORAGE_KEY } from "@/utils/constants";
 import { FontAwesome } from "@expo/vector-icons";
-
-interface Props {
-  posterPath: string;
-  title: string;
-  rating: number;
-  id: number;
-  mediaType: MediaType;
-  release_date: Date | undefined;
-}
+import { AddToWatchlistProps } from "@/types/add-to-watchlist";
 
 export function AddToWatchlistButton({
   posterPath,
@@ -24,7 +16,7 @@ export function AddToWatchlistButton({
   id,
   release_date,
   mediaType,
-}: Props) {
+}: AddToWatchlistProps) {
   const [icon, setIcon] = useState<"add" | "close">("add");
   const [isInWatchlist, setIsInWatchlist] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,9 +27,11 @@ export function AddToWatchlistButton({
       try {
         const movies = await AsyncStorage.getItem(MOVIES_STORAGE_KEY);
         const moviesArray =
-          movies !== null ? JSON.parse(movies) : ([] as Props[]);
+          movies !== null ? JSON.parse(movies) : ([] as AddToWatchlistProps[]);
 
-        setIsInWatchlist(moviesArray.find((movie: Props) => movie.id === id));
+        setIsInWatchlist(
+          moviesArray.find((movie: AddToWatchlistProps) => movie.id === id),
+        );
       } catch (error: any) {
         showToast("Error loading movie from watchlist: " + error.message);
       } finally {
@@ -54,11 +48,11 @@ export function AddToWatchlistButton({
     }
   }, [isInWatchlist]);
 
-  const removeFromWatchlist = async (moviesArray: Props[]) => {
+  const removeFromWatchlist = async (moviesArray: AddToWatchlistProps[]) => {
     setIsLoading(true);
     try {
       const updatedMoviesArray = moviesArray.filter(
-        (movie: Props) => movie.id !== id,
+        (movie: AddToWatchlistProps) => movie.id !== id,
       );
       await AsyncStorage.setItem(
         MOVIES_STORAGE_KEY,
@@ -79,9 +73,9 @@ export function AddToWatchlistButton({
       // check if the movie is already in the watchlist
       const movies = await AsyncStorage.getItem(MOVIES_STORAGE_KEY);
       const moviesArray =
-        movies !== null ? JSON.parse(movies) : ([] as Props[]);
+        movies !== null ? JSON.parse(movies) : ([] as AddToWatchlistProps[]);
 
-      if (moviesArray.find((movie: Props) => movie.id === id)) {
+      if (moviesArray.find((movie: AddToWatchlistProps) => movie.id === id)) {
         // movie is already in the watchlist, remove it
         await removeFromWatchlist(moviesArray);
         return;
