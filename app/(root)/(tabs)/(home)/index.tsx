@@ -15,6 +15,7 @@ import { ThemedView } from "@/components/themed-view";
 import { MediaType } from "@/types/multi-search";
 import { RenderItemWrapper } from "@/components/render-item-wrapper";
 import { itemWidth } from "@/utils/get-item-width";
+import { ScreenTitle } from "@/components/screen-title";
 
 const PADDING_SIZE = 4;
 
@@ -43,11 +44,7 @@ export default function Index() {
 
   return (
     <ThemedView>
-      <Text
-        className={"font-inter-semibold text-3xl text-accent-100 px-2 pb-4"}
-      >
-        Discover
-      </Text>
+      <ScreenTitle>Discover</ScreenTitle>
       <FlashList
         data={movies}
         renderItem={({ item, index }) => {

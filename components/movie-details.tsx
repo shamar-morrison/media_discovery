@@ -5,7 +5,7 @@ import { ThemedImage } from "@/components/themed-image";
 import { createMediaImageLink } from "@/utils/create-media-image-link";
 import { ThemedText } from "@/components/themed-text";
 import { formatMinutes } from "@/utils/format-minutes";
-import AddToWatchlistButton from "@/components/add-to-watchlist-button";
+import { AddToWatchlistButton } from "@/components/add-to-watchlist-button";
 import PlayTrailerButton from "@/components/play-trailer-button";
 import { Section } from "@/components/section";
 import { FlashList } from "@shopify/flash-list";
@@ -24,6 +24,9 @@ export default function MovieDetails({
   videos,
   credits,
   similar,
+  id,
+  poster_path,
+  vote_average,
 }: MovieDetailsResponse) {
   return (
     <View>
@@ -59,7 +62,14 @@ export default function MovieDetails({
             </View>
             <View className={"flex gap-2 justify-center px-4"}>
               <View className="flex-1">
-                <AddToWatchlistButton />
+                <AddToWatchlistButton
+                  title={title}
+                  posterPath={poster_path}
+                  rating={vote_average}
+                  id={id}
+                  release_date={release_date}
+                  mediaType={MediaType.Movie}
+                />
               </View>
               <View className="flex-1">
                 <PlayTrailerButton
