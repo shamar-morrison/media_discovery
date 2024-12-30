@@ -3,25 +3,24 @@ import { Section } from "@/components/section";
 import { ScreenTitle } from "@/components/screen-title";
 import { ThemedText } from "@/components/themed-text";
 import { View } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { MOVIES_STORAGE_KEY } from "@/utils/constants";
 import { useFocusEffect } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
 import { SimilarMovieCard } from "@/components/similar-movie-card";
 import { MediaType } from "@/types/multi-search";
 import { AddToWatchlistProps } from "@/types/add-to-watchlist";
 import { showToast } from "@/utils/toast";
+import { useWatchlistStore } from "@/store/watchlist-store";
 
 export default function Profile() {
   const [movies, setMovies] = useState<AddToWatchlistProps[]>([]);
   // const [tvShows, setTvShows] = useState<any[]>([]);
 
+  const watchlist = useWatchlistStore((state) => state.watchlist);
+
   useFocusEffect(() => {
     (async () => {
       try {
-        const movies = await AsyncStorage.getItem(MOVIES_STORAGE_KEY);
-        const moviesArray = movies !== null ? JSON.parse(movies) : [];
-        setMovies(moviesArray);
+        setMovies(watchlist);
       } catch (error: any) {
         showToast("Error loading movies from watchlist: " + error.message);
       }
