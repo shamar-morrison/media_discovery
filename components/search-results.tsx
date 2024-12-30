@@ -52,6 +52,7 @@ export function SearchResults({
         </ThemedText>
       ) : (
         <FlashList
+          estimatedItemSize={15}
           numColumns={NUM_COLUMNS}
           data={filteredResultsByMediaType}
           renderItem={({ item, index }) => {
