@@ -43,48 +43,46 @@ export default function MovieDetails({
           cachePolicy={"memory"}
         />
 
-        <View
-          className={
-            "absolute bottom-[40px] left-1/2 transform -translate-x-1/2 flex justify-center z-10 px-4"
-          }
-        >
-          <ThemedText
-            className={"font-inter-semibold text-3xl text-center"}
-            numberOfLines={3}
-          >
-            {title}
-          </ThemedText>
-          <View className={"flex gap-2 mt-2 justify-center"}>
-            <View className={"flex flex-row justify-center"}>
-              <ThemedText className={"text-center"}>
-                {release_date ? format(release_date, "MMM. dd, yyyy") : "N/A"}
-              </ThemedText>
-              <ThemedText className={"text-center"}> • </ThemedText>
-              <ThemedText className={"text-center"}>
-                {formatMinutes(runtime)}
-              </ThemedText>
-            </View>
-            <View className="flex flex-col items-center w-full gap-4">
-              <View className="w-[265px] h-[40px]">
-                <AddToWatchlistButton
-                  title={title}
-                  poster_path={poster_path}
-                  vote_average={vote_average}
-                  id={id}
-                  release_date={release_date}
-                  mediaType={MediaType.Movie}
-                />
+        <View className="absolute bottom-[40px] w-full px-4 z-10">
+          <View className="flex items-center">
+            <ThemedText
+              className="font-inter-semibold text-3xl text-center"
+              numberOfLines={3}
+            >
+              {title}
+            </ThemedText>
+            <View className="flex gap-2 mt-2 justify-center">
+              <View className="flex flex-row justify-center">
+                <ThemedText className="text-center">
+                  {release_date ? format(release_date, "MMM. dd, yyyy") : "N/A"}
+                </ThemedText>
+                <ThemedText className="text-center"> • </ThemedText>
+                <ThemedText className="text-center">
+                  {formatMinutes(runtime)}
+                </ThemedText>
               </View>
-              <View className="w-[265px] h-[40px]">
-                <PlayTrailerButton
-                  videoId={
-                    videos.results.find(
-                      (video) =>
-                        video.site === Site.YouTube &&
-                        video.type === VideoType.Trailer,
-                    )?.key
-                  }
-                />
+              <View className="flex flex-col items-center w-full gap-4">
+                <View className="w-[265px] h-[40px]">
+                  <AddToWatchlistButton
+                    title={title}
+                    poster_path={poster_path}
+                    vote_average={vote_average}
+                    id={id}
+                    release_date={release_date}
+                    mediaType={MediaType.Movie}
+                  />
+                </View>
+                <View className="w-[265px] h-[40px]">
+                  <PlayTrailerButton
+                    videoId={
+                      videos.results.find(
+                        (video) =>
+                          video.site === Site.YouTube &&
+                          video.type === VideoType.Trailer,
+                      )?.key
+                    }
+                  />
+                </View>
               </View>
             </View>
           </View>
