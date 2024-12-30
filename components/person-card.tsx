@@ -4,6 +4,7 @@ import { Cast } from "@/types/movie-details";
 import { ThemedImage } from "@/components/themed-image";
 import { createMediaImageLink } from "@/utils/create-media-image-link";
 import { POSTER_SIZE } from "@/utils/constants";
+import { useAppropriateImage } from "@/utils/use-appropriate-image";
 
 export function PersonCard({ name, character, profile_path }: Cast) {
   return (
@@ -17,9 +18,7 @@ export function PersonCard({ name, character, profile_path }: Cast) {
           }}
           className={"w-full h-full"}
           contentFit={"cover"}
-          source={
-            profile_path ? createMediaImageLink(POSTER_SIZE, profile_path) : ""
-          }
+          source={useAppropriateImage(profile_path)}
         />
         <View className={"flex"}>
           <Text

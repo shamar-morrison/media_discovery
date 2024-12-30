@@ -32,8 +32,6 @@ export default function MovieDetails({
   poster_path,
   vote_average,
 }: MovieDetailsResponse) {
-  const [isInWatchlist, setIsInWatchlist] = useState(false);
-
   return (
     <View>
       <View>
@@ -151,7 +149,7 @@ export default function MovieDetails({
         )}
         {similar.results.length > 0 && (
           <FlashList
-            estimatedItemSize={100}
+            estimatedItemSize={10}
             className={"mt-4"}
             data={similar.results}
             canCancelContentTouches={false}

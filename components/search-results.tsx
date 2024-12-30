@@ -4,7 +4,6 @@ import { Loading } from "@/components/loading";
 import InitialSearchState from "@/components/initial-search-state";
 import { SearchCategories } from "@/components/search-categories";
 import { ThemedText } from "@/components/themed-text";
-import { ScrollView } from "react-native";
 import { MediaCard } from "@/components/media-card";
 import { RenderItemWrapper } from "@/components/render-item-wrapper";
 import { itemWidth } from "@/utils/get-item-width";

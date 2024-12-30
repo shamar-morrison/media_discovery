@@ -8,6 +8,7 @@ import { createMediaImageLink } from "@/utils/create-media-image-link";
 import { ThemedImage } from "@/components/themed-image";
 import { MediaType } from "@/types/multi-search";
 import { getYear } from "date-fns";
+import { useAppropriateImage } from "@/utils/use-appropriate-image";
 
 type MediaCardProps = {
   title: string;
@@ -49,9 +50,7 @@ export function MediaCard({
           }}
           className={"w-full h-full"}
           contentFit={"fill"}
-          source={
-            posterPath ? createMediaImageLink(POSTER_SIZE, posterPath) : ""
-          }
+          source={useAppropriateImage(posterPath)}
         />
       </View>
       <View className={"flex gap-0.5"}>

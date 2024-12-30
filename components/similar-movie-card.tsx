@@ -8,6 +8,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { ThemedText } from "@/components/themed-text";
 import { Link } from "expo-router";
 import { getYear } from "date-fns";
+import { useAppropriateImage } from "@/utils/use-appropriate-image";
 
 type SimilarMovieCardProps = {
   poster_path: string;
@@ -37,7 +38,7 @@ export function SimilarMovieCard({
             }}
             className={"w-full h-full"}
             contentFit={"fill"}
-            source={createMediaImageLink(POSTER_SIZE, poster_path)}
+            source={useAppropriateImage(poster_path)}
           />
         </View>
         <View className={"flex"}>
