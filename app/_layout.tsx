@@ -6,8 +6,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useWatchlistStore } from "@/store/watchlist-store";
 
 export default function RootLayout() {
+  useEffect(() => {
+    useWatchlistStore.getState().initialize();
+  }, []);
+
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
