@@ -6,7 +6,6 @@ import { showToast } from "@/utils/toast";
 import { MediaType } from "@/types/multi-search";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MOVIES_STORAGE_KEY } from "@/utils/constants";
-import { Loading } from "@/components/loading";
 import { FontAwesome } from "@expo/vector-icons";
 
 interface Props {
@@ -26,7 +25,7 @@ export function AddToWatchlistButton({
   release_date,
   mediaType,
 }: Props) {
-  const [icon, setIcon] = useState<"add" | "remove">("add");
+  const [icon, setIcon] = useState<"add" | "close">("add");
   const [isInWatchlist, setIsInWatchlist] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,13 +48,13 @@ export function AddToWatchlistButton({
 
   useEffect(() => {
     if (isInWatchlist) {
-      setIcon("remove");
+      setIcon("close");
     } else {
       setIcon("add");
     }
   }, [isInWatchlist]);
 
-  const removeFromWatchlist = async (moviesArray: any) => {
+  const removeFromWatchlist = async (moviesArray: Props[]) => {
     setIsLoading(true);
     try {
       const updatedMoviesArray = moviesArray.filter(
@@ -75,6 +74,7 @@ export function AddToWatchlistButton({
   };
 
   const handleAddToWatchlist = async () => {
+    setIsLoading(true);
     try {
       // check if the movie is already in the watchlist
       const movies = await AsyncStorage.getItem(MOVIES_STORAGE_KEY);
@@ -109,6 +109,8 @@ export function AddToWatchlistButton({
       setIsInWatchlist(true);
     } catch (error: any) {
       showToast("Error adding movie to watchlist: " + error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
