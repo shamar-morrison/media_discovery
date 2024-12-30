@@ -18,6 +18,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MOVIES_STORAGE_KEY } from "@/utils/constants";
 import { AddToWatchlistProps } from "@/types/add-to-watchlist";
+import { Badge } from "@/components/badge";
 
 export default function MovieDetails({
   title,
@@ -31,6 +32,7 @@ export default function MovieDetails({
   id,
   poster_path,
   vote_average,
+  genres,
 }: MovieDetailsResponse) {
   return (
     <View>
@@ -96,6 +98,13 @@ export default function MovieDetails({
         >
           {overview || "No overview found"}
         </ThemedText>
+        {genres.length > 0 && (
+          <View className={"mt-2 flex flex-row flex-wrap gap-2"}>
+            {genres.map((genre) => (
+              <Badge key={genre.id} text={genre.name} />
+            ))}
+          </View>
+        )}
       </Section>
 
       <Section title={"Videos"}>
