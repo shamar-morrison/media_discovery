@@ -49,7 +49,9 @@ export function MediaCard({
           }}
           className={"w-full h-full"}
           contentFit={"fill"}
-          source={createMediaImageLink(POSTER_SIZE, posterPath)}
+          source={
+            posterPath ? createMediaImageLink(POSTER_SIZE, posterPath) : ""
+          }
         />
       </View>
       <View className={"flex gap-0.5"}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Button } from "@/components/button";
 import { ThemedText } from "@/components/themed-text";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -34,7 +34,7 @@ export function AddToWatchlistButton({
   //   })();
   // });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setIsLoading(true);
     (async () => {
       try {
