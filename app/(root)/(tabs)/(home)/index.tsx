@@ -11,8 +11,6 @@ import { RenderItemWrapper } from "@/components/render-item-wrapper";
 import { itemWidth } from "@/utils/get-item-width";
 import { ScreenTitle } from "@/components/screen-title";
 
-const PADDING_SIZE = 4;
-
 // Discover Screen (Home)
 export default function Index() {
   const {

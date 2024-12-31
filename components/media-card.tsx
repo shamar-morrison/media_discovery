@@ -1,10 +1,8 @@
 import { Text, View } from "react-native";
 import React from "react";
-import { POSTER_SIZE } from "@/utils/constants";
 import { ThemedText } from "@/components/themed-text";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
-import { createMediaImageLink } from "@/utils/create-media-image-link";
 import { ThemedImage } from "@/components/themed-image";
 import { MediaType } from "@/types/multi-search";
 import { getYear } from "date-fns";

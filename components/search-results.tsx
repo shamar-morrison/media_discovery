@@ -8,8 +8,9 @@ import { MediaCard } from "@/components/media-card";
 import { RenderItemWrapper } from "@/components/render-item-wrapper";
 import { itemWidth } from "@/utils/get-item-width";
 import { FlashList } from "@shopify/flash-list";
-import { MovieDetailsResponse } from "@/types/movie-details";
 import { NUM_COLUMNS } from "@/utils/constants";
+import { DiscoverTvShowResult } from "@/types/discover-tv-show";
+import { DiscoverMovieResult } from "@/types/discover-movie";
 
 export function SearchResults({
   results,
@@ -59,7 +60,7 @@ export function SearchResults({
             if (
               filteredResultsByMediaType?.[0].media_type === MediaType.Movie
             ) {
-              const castedItem = item as unknown as MovieDetailsResponse;
+              const castedItem = item as unknown as DiscoverMovieResult;
               return (
                 <RenderItemWrapper index={index}>
                   <MediaCard
@@ -76,7 +77,21 @@ export function SearchResults({
               );
             }
             if (filteredResultsByMediaType?.[0].media_type === MediaType.Tv) {
-              return <ThemedText>TV</ThemedText>;
+              const castedItem = item as unknown as DiscoverTvShowResult;
+              return (
+                <RenderItemWrapper index={index}>
+                  <MediaCard
+                    containerHeight={165}
+                    posterPath={castedItem.poster_path}
+                    rating={castedItem.vote_average}
+                    release_date={castedItem.first_air_date}
+                    title={castedItem.name}
+                    id={castedItem.id}
+                    mediaType={MediaType.Movie}
+                    containerWidth={itemWidth}
+                  />
+                </RenderItemWrapper>
+              );
             }
             return <ThemedText>People</ThemedText>;
           }}
