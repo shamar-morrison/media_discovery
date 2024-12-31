@@ -150,7 +150,7 @@ export default function MovieDetails({
         title={"More Like This"}
         id={id}
         mediaType={MediaType.Movie}
-        showSeeMore={similar.results.length > 0}
+        showSeeAll={similar.results.length > 0}
         mediaTitle={title}
       >
         {similar.results.length === 0 && (

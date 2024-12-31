@@ -33,6 +33,6 @@ export interface MultiSearchResult {
 
 export enum MediaType {
   Movie = "movie",
-  // Person = "person",
+  Person = "person",
   Tv = "tv",
 }

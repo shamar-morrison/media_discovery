@@ -9,7 +9,7 @@ type SectionProps = {
   title: string;
   mediaTitle?: string;
   children?: React.ReactNode;
-  showSeeMore?: boolean;
+  showSeeAll?: boolean;
   mediaType?: MediaType;
   id?: number;
 };
@@ -18,7 +18,7 @@ export function Section({
   title,
   mediaTitle,
   children,
-  showSeeMore,
+  showSeeAll,
   mediaType,
   id,
 }: SectionProps) {
@@ -40,7 +40,7 @@ export function Section({
             {title}
           </ThemedText>
         </View>
-        {showSeeMore && id && mediaType && (
+        {showSeeAll && id && mediaType && (
           <View className="flex flex-row gap-1 items-center">
             <Link
               href={{
@@ -49,7 +49,7 @@ export function Section({
               }}
               className={"text-white/50 font-inter"}
             >
-              See More
+              See All
             </Link>
             <Ionicons
               className={"relative top-0.5"}

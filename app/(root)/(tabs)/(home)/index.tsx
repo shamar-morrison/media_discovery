@@ -1,15 +1,9 @@
-import { Text, useWindowDimensions, View, Dimensions } from "react-native";
+import { View } from "react-native";
 import { useDiscoverMovie } from "@/hooks/use-discover-movie";
 import { Loading } from "@/components/loading";
-import {
-  HORIZONTAL_PADDING,
-  MEDIA_CARD_PADDING,
-  MEDIA_CARD_WIDTH,
-  NUM_COLUMNS,
-} from "@/utils/constants";
+import { NUM_COLUMNS } from "@/utils/constants";
 import { FlashList } from "@shopify/flash-list";
 import { MediaCard } from "@/components/media-card";
-import { getNumColumns } from "@/utils/get-num-columns";
 import { Error } from "@/components/error";
 import { ThemedView } from "@/components/themed-view";
 import { MediaType } from "@/types/multi-search";
@@ -69,9 +63,6 @@ export default function Index() {
           if (hasNextPage) {
             fetchNextPage();
           }
-        }}
-        contentContainerStyle={{
-          padding: PADDING_SIZE, // Add padding around the entire list content
         }}
         onEndReachedThreshold={0.5}
         ListFooterComponent={() =>
