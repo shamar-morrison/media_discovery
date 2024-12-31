@@ -7,6 +7,7 @@ import { MediaType } from "@/types/multi-search";
 
 type SectionProps = {
   title: string;
+  mediaTitle?: string;
   children?: React.ReactNode;
   showSeeMore?: boolean;
   mediaType?: MediaType;
@@ -15,6 +16,7 @@ type SectionProps = {
 
 export function Section({
   title,
+  mediaTitle,
   children,
   showSeeMore,
   mediaType,
@@ -32,7 +34,7 @@ export function Section({
       }}
     >
       <View className="flex flex-row justify-between">
-        <View className={"flex flex-row gap-2"}>
+        <View className={"flex flex-row gap-2 items-center"}>
           <View className={"h-6 w-2 rounded-lg bg-primary-300"} />
           <ThemedText className={"text-2xl font-inter-medium"}>
             {title}
@@ -43,7 +45,7 @@ export function Section({
             <Link
               href={{
                 pathname: "/similar/[similarId]",
-                params: { similarId: id, mediaType: mediaType },
+                params: { similarId: id, mediaType, mediaTitle },
               }}
               className={"text-white/50 font-inter"}
             >

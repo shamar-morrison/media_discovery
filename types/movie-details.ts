@@ -28,10 +28,10 @@ export interface MovieDetailsResponse {
   videos: Videos;
   images: Images;
   credits: Credits;
-  similar: Similar;
+  similar: TSimilar;
 }
 
-export interface Similar {
+export interface TSimilar {
   page: number;
   results: SimilarMoviesResult[];
   total_pages: number;

@@ -150,7 +150,8 @@ export default function MovieDetails({
         title={"More Like This"}
         id={id}
         mediaType={MediaType.Movie}
-        showSeeMore
+        showSeeMore={similar.results.length > 0}
+        mediaTitle={title}
       >
         {similar.results.length === 0 && (
           <ThemedText className={"mt-4"}>No similar movies found</ThemedText>
