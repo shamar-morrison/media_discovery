@@ -38,7 +38,12 @@ export function MediaCard({
     : (containerHeight ?? containerWidth * 1.5);
 
   return (
-    <Link href={`/${id}?mediaType=${mediaType}`}>
+    <Link
+      href={{
+        pathname: "/[mediaId]",
+        params: { mediaId: id, mediaType },
+      }}
+    >
       <View
         style={{ width: containerWidth }}
         className={`rounded-xl overflow-hidden`}

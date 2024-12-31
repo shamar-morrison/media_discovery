@@ -1,5 +1,6 @@
 {
   "expo": {
+    "jsEngine": "hermes",
     "name": "Media Discovery",
     "slug": "media-discovery",
     "version": "1.0.0",

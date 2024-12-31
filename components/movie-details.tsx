@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { MovieDetailsResponse, Site, VideoType } from "@/types/movie-details";
 import { ThemedImage } from "@/components/themed-image";
 import { createMediaImageLink } from "@/utils/create-media-image-link";
@@ -14,10 +14,6 @@ import { PersonCard } from "@/components/person-card";
 import { MediaType } from "@/types/multi-search";
 import { SimilarMovieCard } from "@/components/similar-movie-card";
 import { format } from "date-fns";
-import { useFocusEffect } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { MOVIES_STORAGE_KEY } from "@/utils/constants";
-import { AddToWatchlistProps } from "@/types/add-to-watchlist";
 import { Badge } from "@/components/badge";
 
 export default function MovieDetails({
@@ -150,7 +146,12 @@ export default function MovieDetails({
         )}
       </Section>
 
-      <Section title={"More Like This"}>
+      <Section
+        title={"More Like This"}
+        id={id}
+        mediaType={MediaType.Movie}
+        showSeeMore
+      >
         {similar.results.length === 0 && (
           <ThemedText className={"mt-4"}>No similar movies found</ThemedText>
         )}
