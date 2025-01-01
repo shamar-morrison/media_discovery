@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import React from "react";
 import { TvShowDetailsResponse } from "@/types/tv-show-details";
-import { ThemedText } from "@/components/themed-text";
+import { MediaBackdrop } from "@/components/media-backdrop";
 
 export function TvShowDetails({
   name,
@@ -12,16 +12,23 @@ export function TvShowDetails({
   first_air_date,
   genres,
   id,
+  videos,
+  episode_run_time,
 }: TvShowDetailsResponse) {
   return (
     <View>
-      <ThemedText>name: {name}</ThemedText>
-      <ThemedText>overview: {overview}</ThemedText>
-      <ThemedText>backdrop_path: {backdrop_path}</ThemedText>
-      <ThemedText>poster_path: {poster_path}</ThemedText>
-      <ThemedText>vote_average: {vote_average}</ThemedText>
-
-      <ThemedText>id: {id}</ThemedText>
+      <View>
+        <MediaBackdrop
+          id={id}
+          poster_path={poster_path}
+          backdrop_path={backdrop_path}
+          title={name}
+          vote_average={vote_average}
+          release_date={first_air_date}
+          runtime={episode_run_time}
+          videos={videos}
+        />
+      </View>
     </View>
   );
 }
