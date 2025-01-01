@@ -1,12 +1,11 @@
 import { View } from "react-native";
-import React from "react";
 import { MovieDetailsResponse, Site, VideoType } from "@/types/movie-details";
 import { ThemedImage } from "@/components/themed-image";
 import { createMediaImageLink } from "@/utils/create-media-image-link";
 import { ThemedText } from "@/components/themed-text";
 import { formatMinutes } from "@/utils/format-minutes";
 import { AddToWatchlistButton } from "@/components/add-to-watchlist-button";
-import PlayTrailerButton from "@/components/play-trailer-button";
+import { PlayTrailerButton } from "@/components/play-trailer-button";
 import { Section } from "@/components/section";
 import { FlashList } from "@shopify/flash-list";
 import { Video } from "@/components/video";

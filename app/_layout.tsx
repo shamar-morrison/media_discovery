@@ -40,7 +40,6 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaView
-        className="bg-black-200"
         style={{ backgroundColor: "#1d1d1d", flex: 1, height: "100%" }}
       >
         <StatusBar style="light" />

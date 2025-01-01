@@ -2,11 +2,10 @@ import React from "react";
 import { ThemedText } from "@/components/themed-text";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Button } from "@/components/button";
-import { ToastAndroid } from "react-native";
 import { openYoutube } from "@/utils/open-youtube";
 import { showToast } from "@/utils/toast";
 
-export default function PlayTrailerButton({
+export function PlayTrailerButton({
   videoId,
 }: {
   videoId: string | undefined;
