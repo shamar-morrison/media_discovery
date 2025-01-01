@@ -1,5 +1,5 @@
 import { MediaType, MultiSearchResult } from "@/types/multi-search";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { Loading } from "@/components/loading";
 import InitialSearchState from "@/components/initial-search-state";
 import { SearchCategories } from "@/components/search-categories";
@@ -21,7 +21,7 @@ export function SearchResults({
   query: string;
   isSearching: boolean;
 }) {
-  const [currentMediaType, setCurrentMediaType] = React.useState<MediaType>(
+  const [currentMediaType, setCurrentMediaType] = useState<MediaType>(
     MediaType.Movie,
   );
 

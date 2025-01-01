@@ -37,7 +37,7 @@ export default function Profile() {
         {movies.length > 0 && (
           <FlashList
             showsHorizontalScrollIndicator={false}
-            estimatedItemSize={100}
+            estimatedItemSize={watchlist.length + 5}
             className={"mt-4"}
             data={movies}
             canCancelContentTouches={false}

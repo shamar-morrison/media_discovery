@@ -15,10 +15,9 @@ export function MediaDetails() {
     mediaType: MediaType;
   }>();
 
-  const { data, isLoading, isError, refetch } = useGetMediaDetails(
-    mediaId,
-    mediaType,
-  );
+  const { data, isLoading, isError, refetch } = useGetMediaDetails<
+    typeof mediaType
+  >(mediaId, mediaType);
 
   if (isLoading) {
     return <Loading />;

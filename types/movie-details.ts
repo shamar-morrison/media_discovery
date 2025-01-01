@@ -54,6 +54,7 @@ export interface SimilarMoviesResult {
   vote_average: number;
   vote_count: number;
 }
+
 export interface Credits {
   cast: Cast[];
   crew: Cast[];
@@ -75,6 +76,7 @@ export interface Cast {
   department?: string;
   job?: string;
 }
+
 export interface BelongsToCollection {
   id: number;
   name: string;

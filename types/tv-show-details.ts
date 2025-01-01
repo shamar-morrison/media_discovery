@@ -1,4 +1,4 @@
-import { Videos } from "@/types/movie-details";
+import { Credits, Genre, Videos } from "@/types/movie-details";
 
 export interface TvShowDetailsResponse {
   adult: boolean;
@@ -46,30 +46,6 @@ export interface CreatedBy {
   original_name: string;
   gender: number;
   profile_path: string;
-}
-
-export interface Credits {
-  cast: Cast[];
-  crew: any[];
-}
-
-export interface Cast {
-  adult: boolean;
-  gender: number;
-  id: number;
-  known_for_department: string;
-  name: string;
-  original_name: string;
-  popularity: number;
-  profile_path: string;
-  character: string;
-  credit_id: string;
-  order: number;
-}
-
-export interface Genre {
-  id: number;
-  name: string;
 }
 
 export interface Images {

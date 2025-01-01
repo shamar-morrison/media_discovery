@@ -1,19 +1,14 @@
 import { View } from "react-native";
-import { MovieDetailsResponse, Site, VideoType } from "@/types/movie-details";
-import { ThemedImage } from "@/components/themed-image";
-import { createMediaImageLink } from "@/utils/create-media-image-link";
+import { MovieDetailsResponse, Site } from "@/types/movie-details";
 import { ThemedText } from "@/components/themed-text";
-import { formatMinutes } from "@/utils/format-minutes";
-import { AddToWatchlistButton } from "@/components/add-to-watchlist-button";
-import { PlayTrailerButton } from "@/components/play-trailer-button";
 import { Section } from "@/components/section";
 import { FlashList } from "@shopify/flash-list";
 import { Video } from "@/components/video";
 import { PersonCard } from "@/components/person-card";
 import { MediaType } from "@/types/multi-search";
 import { SimilarMovieCard } from "@/components/similar-movie-card";
-import { format } from "date-fns";
 import { Badge } from "@/components/badge";
+import { MediaBackdrop } from "@/components/media-backdrop";
 
 export function MovieDetails({
   title,
@@ -32,58 +27,16 @@ export function MovieDetails({
   return (
     <View>
       <View>
-        <View className="bg-black h-[400px] w-screen absolute z-10 opacity-60" />
-        <ThemedImage
-          source={createMediaImageLink("w1280", backdrop_path)}
-          style={{ width: "100%", height: 400 }}
-          contentFit={"cover"}
-          cachePolicy={"memory"}
+        <MediaBackdrop
+          id={id}
+          poster_path={poster_path}
+          backdrop_path={backdrop_path}
+          title={title}
+          vote_average={vote_average}
+          release_date={release_date}
+          runtime={runtime}
+          videos={videos}
         />
-
-        <View className="absolute bottom-[40px] w-full px-4 z-10">
-          <View className="flex items-center">
-            <ThemedText
-              className="font-inter-semibold text-3xl text-center"
-              numberOfLines={3}
-            >
-              {title}
-            </ThemedText>
-            <View className="flex gap-2 mt-2 justify-center">
-              <View className="flex flex-row justify-center">
-                <ThemedText className="text-center">
-                  {release_date ? format(release_date, "MMM. dd, yyyy") : "N/A"}
-                </ThemedText>
-                <ThemedText className="text-center"> • </ThemedText>
-                <ThemedText className="text-center">
-                  {formatMinutes(runtime)}
-                </ThemedText>
-              </View>
-              <View className="flex flex-col items-center w-full gap-4">
-                <View className="w-[265px] h-[40px]">
-                  <AddToWatchlistButton
-                    title={title}
-                    poster_path={poster_path}
-                    vote_average={vote_average}
-                    id={id}
-                    release_date={release_date}
-                    mediaType={MediaType.Movie}
-                  />
-                </View>
-                <View className="w-[265px] h-[40px]">
-                  <PlayTrailerButton
-                    videoId={
-                      videos.results.find(
-                        (video) =>
-                          video.site === Site.YouTube &&
-                          video.type === VideoType.Trailer,
-                      )?.key
-                    }
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
       </View>
 
       <Section title={"About"}>
@@ -108,7 +61,7 @@ export function MovieDetails({
         )}
         {videos.results.length > 0 && (
           <FlashList
-            estimatedItemSize={100}
+            estimatedItemSize={videos.results.length}
             className={"mt-4"}
             data={videos.results.filter((video) => video.site === Site.YouTube)}
             canCancelContentTouches={false}
@@ -157,7 +110,7 @@ export function MovieDetails({
         )}
         {similar.results.length > 0 && (
           <FlashList
-            estimatedItemSize={10}
+            estimatedItemSize={similar.results.length}
             className={"mt-4"}
             data={similar.results}
             canCancelContentTouches={false}

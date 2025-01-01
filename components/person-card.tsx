@@ -1,10 +1,8 @@
 import { Text, View } from "react-native";
 import React from "react";
-import { Cast } from "@/types/movie-details";
 import { ThemedImage } from "@/components/themed-image";
-import { createMediaImageLink } from "@/utils/create-media-image-link";
-import { POSTER_SIZE } from "@/utils/constants";
 import { useAppropriateImage } from "@/utils/use-appropriate-image";
+import { Cast } from "@/types/movie-details";
 
 export function PersonCard({ name, character, profile_path }: Cast) {
   return (
