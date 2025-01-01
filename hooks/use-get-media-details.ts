@@ -5,21 +5,23 @@ import { MovieDetailsResponse } from "@/types/movie-details";
 import { MediaType } from "@/types/multi-search";
 import { TvShowDetailsResponse } from "@/types/tv-show-details";
 
-type QueryResult = {
-  movie: MovieDetailsResponse;
-  tv: TvShowDetailsResponse;
-}[MediaType.Movie | MediaType.Tv];
+type QueryResult<T extends MediaType> = T extends MediaType.Movie
+  ? MovieDetailsResponse
+  : TvShowDetailsResponse;
 
-export const useGetMediaDetails = (id: string, mediaType: MediaType) => {
+export const useGetMediaDetails = <T extends MediaType>(
+  id: string,
+  mediaType: T,
+) => {
   const notifyOnChangeProps = useFocusNotifyOnChangeProps();
 
-  return useQuery<QueryResult>({
+  return useQuery<QueryResult<T>>({
     notifyOnChangeProps,
     queryKey: ["media-details", id, mediaType],
     queryFn: () =>
       mediaType === MediaType.Movie
-        ? getMovieDetails(id)
-        : getTvShowDetails(id),
+        ? (getMovieDetails(id) as Promise<QueryResult<T>>)
+        : (getTvShowDetails(id) as Promise<QueryResult<T>>),
   });
 };
 
