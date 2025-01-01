@@ -1,11 +1,13 @@
-import React from "react";
 import { useLocalSearchParams } from "expo-router";
-import { useGetMovieDetails } from "@/hooks/use-get-movie-details";
+import { useGetMediaDetails } from "@/hooks/use-get-media-details";
 import { Loading } from "@/components/loading";
 import { Error } from "@/components/error";
 import { ThemedScrollView } from "@/components/themed-scroll-view";
 import { MediaType } from "@/types/multi-search";
-import MovieDetails from "@/components/movie-details";
+import { MovieDetails } from "@/components/movie-details";
+import { TvShowDetails } from "@/components/tv-show-details";
+import { MovieDetailsResponse } from "@/types/movie-details";
+import { TvShowDetailsResponse } from "@/types/tv-show-details";
 
 export function MediaDetails() {
   const { mediaId, mediaType } = useLocalSearchParams<{
@@ -13,7 +15,10 @@ export function MediaDetails() {
     mediaType: MediaType;
   }>();
 
-  const { data, isLoading, isError, refetch } = useGetMovieDetails(mediaId);
+  const { data, isLoading, isError, refetch } = useGetMediaDetails(
+    mediaId,
+    mediaType,
+  );
 
   if (isLoading) {
     return <Loading />;
@@ -30,7 +35,12 @@ export function MediaDetails() {
 
   return (
     <ThemedScrollView>
-      {mediaType === MediaType.Movie && <MovieDetails {...data} />}
+      {mediaType === MediaType.Movie && (
+        <MovieDetails {...(data as MovieDetailsResponse)} />
+      )}
+      {mediaType === MediaType.Tv && (
+        <TvShowDetails {...(data as TvShowDetailsResponse)} />
+      )}
     </ThemedScrollView>
   );
 }

@@ -87,7 +87,7 @@ export function SearchResults({
                     release_date={castedItem.first_air_date}
                     title={castedItem.name}
                     id={castedItem.id}
-                    mediaType={MediaType.Movie}
+                    mediaType={MediaType.Tv}
                     containerWidth={itemWidth}
                   />
                 </RenderItemWrapper>

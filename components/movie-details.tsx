@@ -15,7 +15,7 @@ import { SimilarMovieCard } from "@/components/similar-movie-card";
 import { format } from "date-fns";
 import { Badge } from "@/components/badge";
 
-export default function MovieDetails({
+export function MovieDetails({
   title,
   release_date,
   runtime,

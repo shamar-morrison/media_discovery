@@ -37,6 +37,7 @@ export function MediaCard({
 
   return (
     <Link
+      onPress={() => console.log(mediaType)}
       href={{
         pathname: "/[mediaId]",
         params: { mediaId: id, mediaType },
