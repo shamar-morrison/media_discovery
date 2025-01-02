@@ -1,5 +1,4 @@
 import { View } from "react-native";
-import React from "react";
 import { ThemedText } from "@/components/themed-text";
 import { Button } from "@/components/button";
 import Ionicons from "@expo/vector-icons/Ionicons";

@@ -1,5 +1,4 @@
 import { TouchableOpacity, TouchableOpacityProps } from "react-native";
-import React from "react";
 
 interface ButtonProps extends TouchableOpacityProps {
   variant?: "default" | "outline";
