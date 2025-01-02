@@ -7,6 +7,10 @@ import { Badge } from "@/components/badge";
 import { FlashList } from "@shopify/flash-list";
 import { SeasonThumbnail } from "@/components/season-thumbnail";
 import { PersonCard } from "@/components/person-card";
+import { MediaType } from "@/types/multi-search";
+import { SimilarMediaCard } from "@/components/similar-media-card";
+import { Video } from "@/components/video";
+import { Site } from "@/types/movie-details";
 
 export function TvShowDetails({
   name,
@@ -21,6 +25,7 @@ export function TvShowDetails({
   episode_run_time,
   seasons,
   credits,
+  similar,
 }: TvShowDetailsResponse) {
   return (
     <View>
@@ -77,6 +82,24 @@ export function TvShowDetails({
         )}
       </Section>
 
+      <Section title={"Videos"}>
+        {videos.results.length === 0 && (
+          <ThemedText className={"mt-4"}>No videos found</ThemedText>
+        )}
+        {videos.results.length > 0 && (
+          <FlashList
+            estimatedItemSize={videos.results.length}
+            className={"mt-4"}
+            data={videos.results.filter((video) => video.site === Site.YouTube)}
+            canCancelContentTouches={false}
+            horizontal={true}
+            renderItem={({ item }) => (
+              <Video type={item.type} name={item.name} videoKey={item.key} />
+            )}
+          />
+        )}
+      </Section>
+
       <Section title={"Cast"}>
         {credits.cast.length === 0 && (
           <ThemedText className={"mt-4"}>No cast found</ThemedText>
@@ -95,6 +118,43 @@ export function TvShowDetails({
               return (
                 <View className={`${!isLastItem ? "mr-3" : ""}`}>
                   <PersonCard {...item} />
+                </View>
+              );
+            }}
+          />
+        )}
+      </Section>
+
+      <Section
+        title={"More Like This"}
+        showSeeAll
+        mediaTitle={name}
+        id={id}
+        mediaType={MediaType.Tv}
+      >
+        {similar.results.length === 0 && (
+          <ThemedText className={"mt-4"}>No similar shows found</ThemedText>
+        )}
+        {similar.results.length > 0 && (
+          <FlashList
+            estimatedItemSize={similar.results.length}
+            className={"mt-4"}
+            data={similar.results}
+            canCancelContentTouches={false}
+            horizontal={true}
+            renderItem={({ item, index }) => {
+              const isLastItem = index === similar.results.length - 1;
+
+              return (
+                <View className={`${!isLastItem ? "mr-3" : ""}`}>
+                  <SimilarMediaCard
+                    title={item.name}
+                    poster_path={item.poster_path}
+                    vote_average={item.vote_average}
+                    release_date={item.first_air_date}
+                    id={item.id}
+                    mediaType={MediaType.Tv}
+                  />
                 </View>
               );
             }}

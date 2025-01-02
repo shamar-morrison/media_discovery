@@ -1,4 +1,4 @@
-import { Dimensions, useWindowDimensions } from "react-native";
+import { Dimensions } from "react-native";
 import {
   HORIZONTAL_PADDING,
   MEDIA_CARD_PADDING,

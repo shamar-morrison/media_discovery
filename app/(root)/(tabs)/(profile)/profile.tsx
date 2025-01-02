@@ -5,7 +5,7 @@ import { ThemedText } from "@/components/themed-text";
 import { View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
-import { SimilarMovieCard } from "@/components/similar-movie-card";
+import { SimilarMediaCard } from "@/components/similar-media-card";
 import { MediaType } from "@/types/multi-search";
 import { AddToWatchlistProps } from "@/types/add-to-watchlist";
 import { showToast } from "@/utils/toast";
@@ -47,7 +47,7 @@ export default function Profile() {
 
               return (
                 <View className={`${!isLastItem ? "mr-3" : ""}`}>
-                  <SimilarMovieCard
+                  <SimilarMediaCard
                     poster_path={item.poster_path}
                     vote_average={item.vote_average}
                     title={item.title}

@@ -6,7 +6,7 @@ import { FlashList } from "@shopify/flash-list";
 import { Video } from "@/components/video";
 import { PersonCard } from "@/components/person-card";
 import { MediaType } from "@/types/multi-search";
-import { SimilarMovieCard } from "@/components/similar-movie-card";
+import { SimilarMediaCard } from "@/components/similar-media-card";
 import { Badge } from "@/components/badge";
 import { MediaBackdrop } from "@/components/media-backdrop";
 
@@ -120,7 +120,7 @@ export function MovieDetails({
 
               return (
                 <View className={`${!isLastItem ? "mr-3" : ""}`}>
-                  <SimilarMovieCard
+                  <SimilarMediaCard
                     poster_path={item.poster_path}
                     vote_average={item.vote_average}
                     title={item.title}

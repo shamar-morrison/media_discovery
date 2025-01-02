@@ -1,8 +1,5 @@
 import { Text, View } from "react-native";
-import React from "react";
 import { ThemedImage } from "@/components/themed-image";
-import { createMediaImageLink } from "@/utils/create-media-image-link";
-import { POSTER_SIZE } from "@/utils/constants";
 import { MediaType } from "@/types/multi-search";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ThemedText } from "@/components/themed-text";
@@ -10,7 +7,7 @@ import { Link } from "expo-router";
 import { getYear } from "date-fns";
 import { useAppropriateImage } from "@/utils/use-appropriate-image";
 
-type SimilarMovieCardProps = {
+type SimilarMediaCardProps = {
   poster_path: string;
   title: string;
   vote_average: number;
@@ -19,14 +16,14 @@ type SimilarMovieCardProps = {
   release_date: Date | undefined;
 };
 
-export function SimilarMovieCard({
+export function SimilarMediaCard({
   poster_path,
   title,
   vote_average,
   id,
   mediaType,
   release_date,
-}: SimilarMovieCardProps) {
+}: SimilarMediaCardProps) {
   return (
     <Link
       href={{
