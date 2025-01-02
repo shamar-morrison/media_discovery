@@ -1,9 +1,9 @@
 import { Text, TextProps } from "react-native";
 import React from "react";
 
-export function ThemedText({ children, ...props }: TextProps) {
+export function ThemedText({ children, className, ...props }: TextProps) {
   return (
-    <Text className={`text-white font-inter`} {...props}>
+    <Text className={`text-white font-inter ${className}`} {...props}>
       {children}
     </Text>
   );
