@@ -31,6 +31,11 @@ export interface MovieDetailsResponse {
   similar: TSimilar;
 }
 
+export interface Credits {
+  cast: Cast[];
+  crew: Cast[];
+}
+
 export interface TSimilar {
   page: number;
   results: SimilarMoviesResult[];
@@ -53,11 +58,6 @@ export interface SimilarMoviesResult {
   video: boolean;
   vote_average: number;
   vote_count: number;
-}
-
-export interface Credits {
-  cast: Cast[];
-  crew: Cast[];
 }
 
 export interface Cast {

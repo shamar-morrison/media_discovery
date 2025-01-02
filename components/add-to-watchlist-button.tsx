@@ -20,10 +20,12 @@ export function AddToWatchlistButton({
   const [_, setForceUpdate] = useState(0);
 
   // Only select the specific functions we need from the store
-  const isInWatchlist = useWatchlistStore((state) => state.isInWatchlist);
-  const addToWatchlist = useWatchlistStore((state) => state.addToWatchlist);
+  const isInWatchlist = useWatchlistStore((state) => state.isInMovieWatchlist);
+  const addToWatchlist = useWatchlistStore(
+    (state) => state.addToMovieWatchlist,
+  );
   const removeFromWatchlist = useWatchlistStore(
-    (state) => state.removeFromWatchlist,
+    (state) => state.removeFromMovieWatchlist,
   );
 
   // Force a re-render when the screen comes into focus
@@ -52,7 +54,7 @@ export function AddToWatchlistButton({
         await addToWatchlist(movieData);
       }
     } catch (error: any) {
-      showToast("Error updating watchlist: " + error.message);
+      showToast("Error updating movieWatchlist: " + error.message);
     } finally {
       setIsLoading(false);
     }
