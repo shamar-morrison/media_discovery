@@ -32,7 +32,7 @@ export function SecondaryMediaCard({
       }}
     >
       <View className={"flex gap-2 w-32"}>
-        <View className={`rounded-lg overflow-hidden w-full`}>
+        <View className={`rounded-lg overflow-hidden w-32`}>
           <ThemedImage
             style={{
               width: "100%",
@@ -43,7 +43,7 @@ export function SecondaryMediaCard({
             source={useAppropriateImage(poster_path)}
           />
         </View>
-        <View className={"flex"}>
+        <View className={"flex w-32"}>
           <Text
             className={"text-white font-inter-semibold w-full"}
             numberOfLines={1}

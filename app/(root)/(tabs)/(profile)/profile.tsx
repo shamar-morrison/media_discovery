@@ -2,7 +2,7 @@ import React from "react";
 import { Section } from "@/components/section";
 import { ScreenTitle } from "@/components/screen-title";
 import { ThemedText } from "@/components/themed-text";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { SecondaryMediaCard } from "@/components/secondary-media-card";
 import { MediaType } from "@/types/multi-search";
@@ -13,7 +13,7 @@ export default function Profile() {
   const tvShows = useWatchlistStore((state) => state.tvShows);
 
   return (
-    <View>
+    <ScrollView>
       <ScreenTitle style={{ padding: 8 }}>Watchlist</ScreenTitle>
 
       <Section title={"Movies"}>
@@ -79,6 +79,6 @@ export default function Profile() {
           />
         )}
       </Section>
-    </View>
+    </ScrollView>
   );
 }
