@@ -31,11 +31,13 @@ export function TvShowDetails({
   credits,
   similar,
   mediaType,
+  status,
 }: TvShowDetailsProps) {
   return (
     <View>
       <View>
         <MediaBackdrop
+          status={status}
           id={id}
           poster_path={poster_path}
           backdrop_path={backdrop_path}

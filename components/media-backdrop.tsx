@@ -10,6 +10,7 @@ import { MediaType } from "@/types/multi-search";
 import { PlayTrailerButton } from "@/components/play-trailer-button";
 import { Site, Videos, VideoType } from "@/types/movie-details";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Badge } from "@/components/badge";
 
 type BackdropProps = {
   backdrop_path: string;
@@ -21,6 +22,7 @@ type BackdropProps = {
   vote_average: number;
   videos: Videos;
   mediaType: MediaType;
+  status?: string;
 };
 
 export function MediaBackdrop({
@@ -33,6 +35,7 @@ export function MediaBackdrop({
   vote_average,
   videos,
   mediaType,
+  status,
 }: BackdropProps) {
   let time;
   if (Array.isArray(runtime)) {
@@ -43,6 +46,11 @@ export function MediaBackdrop({
   return (
     <>
       <View className="bg-black h-[400px] w-screen absolute z-10 opacity-70" />
+      {status === "Ended" && (
+        <View className="absolute top-3 left-3 z-30 opacity-50">
+          <Badge text={"Ended"} variant={"red"} />
+        </View>
+      )}
       <ThemedImage
         source={createMediaImageLink("w1280", backdrop_path)}
         style={{ width: "100%", height: 400 }}

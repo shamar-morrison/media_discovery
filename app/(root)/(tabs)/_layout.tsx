@@ -1,7 +1,6 @@
-import { View, Text } from "react-native";
+import { Image, Text, View } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
-import { Image } from "react-native";
 import icons from "@/constants/icons";
 
 function TabIcon({
@@ -40,7 +39,9 @@ export default function TabsLayout() {
           position: "relative",
           minHeight: 70,
           shadowColor: "#000",
-          shadowOpacity: 0.9,
+          shadowOpacity: 1,
+          elevation: 10,
+          borderTopWidth: 0,
         },
       }}
     >
