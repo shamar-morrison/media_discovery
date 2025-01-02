@@ -26,7 +26,6 @@ export default function Profile() {
             estimatedItemSize={movies.length}
             className={"mt-4"}
             data={movies}
-            canCancelContentTouches={false}
             horizontal={true}
             renderItem={({ item, index }) => {
               const isLastItem = index === movies.length - 1;
@@ -58,7 +57,6 @@ export default function Profile() {
             estimatedItemSize={movies.length}
             className={"mt-4"}
             data={tvShows}
-            canCancelContentTouches={false}
             horizontal={true}
             renderItem={({ item, index }) => {
               const isLastItem = index === tvShows.length - 1;

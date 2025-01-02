@@ -9,6 +9,7 @@ import { AddToWatchlistButton } from "@/components/add-to-watchlist-button";
 import { MediaType } from "@/types/multi-search";
 import { PlayTrailerButton } from "@/components/play-trailer-button";
 import { Site, Videos, VideoType } from "@/types/movie-details";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 type BackdropProps = {
   backdrop_path: string;
@@ -41,7 +42,7 @@ export function MediaBackdrop({
   }
   return (
     <>
-      <View className="bg-black h-[400px] w-screen absolute z-10 opacity-60" />
+      <View className="bg-black h-[400px] w-screen absolute z-10 opacity-70" />
       <ThemedImage
         source={createMediaImageLink("w1280", backdrop_path)}
         style={{ width: "100%", height: 400 }}
@@ -51,6 +52,14 @@ export function MediaBackdrop({
 
       <View className="absolute bottom-[40px] w-full px-4 z-10">
         <View className="flex items-center">
+          {vote_average && (
+            <View className={"flex flex-row gap-1 items-center mb-0.5"}>
+              <Ionicons name={"star"} size={12} color={"#ffd500"} />
+              <ThemedText className={"color-gold"}>
+                {vote_average.toFixed(1)}
+              </ThemedText>
+            </View>
+          )}
           <ThemedText
             className="font-inter-semibold text-3xl text-center"
             numberOfLines={3}
