@@ -16,7 +16,7 @@ type SimilarMediaCardProps = {
   release_date: Date | undefined;
 };
 
-export function SimilarMediaCard({
+export function SecondaryMediaCard({
   poster_path,
   title,
   vote_average,

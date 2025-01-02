@@ -8,9 +8,13 @@ import { FlashList } from "@shopify/flash-list";
 import { SeasonThumbnail } from "@/components/season-thumbnail";
 import { PersonCard } from "@/components/person-card";
 import { MediaType } from "@/types/multi-search";
-import { SimilarMediaCard } from "@/components/similar-media-card";
+import { SecondaryMediaCard } from "@/components/secondary-media-card";
 import { Video } from "@/components/video";
 import { Site } from "@/types/movie-details";
+
+interface TvShowDetailsProps extends TvShowDetailsResponse {
+  mediaType: MediaType;
+}
 
 export function TvShowDetails({
   name,
@@ -26,7 +30,8 @@ export function TvShowDetails({
   seasons,
   credits,
   similar,
-}: TvShowDetailsResponse) {
+  mediaType,
+}: TvShowDetailsProps) {
   return (
     <View>
       <View>
@@ -39,6 +44,7 @@ export function TvShowDetails({
           release_date={first_air_date}
           runtime={episode_run_time}
           videos={videos}
+          mediaType={mediaType}
         />
       </View>
 
@@ -147,7 +153,7 @@ export function TvShowDetails({
 
               return (
                 <View className={`${!isLastItem ? "mr-3" : ""}`}>
-                  <SimilarMediaCard
+                  <SecondaryMediaCard
                     title={item.name}
                     poster_path={item.poster_path}
                     vote_average={item.vote_average}

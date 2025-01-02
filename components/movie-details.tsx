@@ -6,9 +6,13 @@ import { FlashList } from "@shopify/flash-list";
 import { Video } from "@/components/video";
 import { PersonCard } from "@/components/person-card";
 import { MediaType } from "@/types/multi-search";
-import { SimilarMediaCard } from "@/components/similar-media-card";
+import { SecondaryMediaCard } from "@/components/secondary-media-card";
 import { Badge } from "@/components/badge";
 import { MediaBackdrop } from "@/components/media-backdrop";
+
+interface MovieDetailsProps extends MovieDetailsResponse {
+  mediaType: MediaType;
+}
 
 export function MovieDetails({
   title,
@@ -23,7 +27,8 @@ export function MovieDetails({
   poster_path,
   vote_average,
   genres,
-}: MovieDetailsResponse) {
+  mediaType,
+}: MovieDetailsProps) {
   return (
     <View>
       <View>
@@ -36,6 +41,7 @@ export function MovieDetails({
           release_date={release_date}
           runtime={runtime}
           videos={videos}
+          mediaType={mediaType}
         />
       </View>
 
@@ -120,7 +126,7 @@ export function MovieDetails({
 
               return (
                 <View className={`${!isLastItem ? "mr-3" : ""}`}>
-                  <SimilarMediaCard
+                  <SecondaryMediaCard
                     poster_path={item.poster_path}
                     vote_average={item.vote_average}
                     title={item.title}

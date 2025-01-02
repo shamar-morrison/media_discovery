@@ -35,10 +35,16 @@ export function MediaDetails() {
   return (
     <ThemedScrollView>
       {mediaType === MediaType.Movie && (
-        <MovieDetails {...(data as MovieDetailsResponse)} />
+        <MovieDetails
+          {...(data as MovieDetailsResponse)}
+          mediaType={mediaType}
+        />
       )}
       {mediaType === MediaType.Tv && (
-        <TvShowDetails {...(data as TvShowDetailsResponse)} />
+        <TvShowDetails
+          {...(data as TvShowDetailsResponse)}
+          mediaType={mediaType}
+        />
       )}
     </ThemedScrollView>
   );

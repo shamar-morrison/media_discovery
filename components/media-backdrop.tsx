@@ -19,6 +19,7 @@ type BackdropProps = {
   title: string;
   vote_average: number;
   videos: Videos;
+  mediaType: MediaType;
 };
 
 export function MediaBackdrop({
@@ -30,6 +31,7 @@ export function MediaBackdrop({
   title,
   vote_average,
   videos,
+  mediaType,
 }: BackdropProps) {
   let time;
   if (Array.isArray(runtime)) {
@@ -71,7 +73,7 @@ export function MediaBackdrop({
                   vote_average={vote_average}
                   id={id}
                   release_date={release_date}
-                  mediaType={MediaType.Movie}
+                  mediaType={mediaType}
                 />
               </View>
               <View className="w-[265px] h-[40px]">

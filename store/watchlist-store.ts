@@ -1,29 +1,37 @@
 import { create } from "zustand";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AddToWatchlistProps } from "@/types/add-to-watchlist";
-import { MOVIES_STORAGE_KEY } from "@/utils/constants";
+import { MOVIES_STORAGE_KEY, TV_SHOW_STORAGE_KEY } from "@/utils/constants";
 import { showToast } from "@/utils/toast";
+import { MediaType } from "@/types/multi-search";
 
 interface Media extends AddToWatchlistProps {}
 
 type WatchlistStore = {
-  watchlist: Media[];
+  movies: Media[];
+  tvShows: Media[];
   isLoading: boolean;
   initialize: () => Promise<void>;
-  addToWatchlist: (media: Media) => Promise<void>;
-  removeFromWatchlist: (mediaId: number) => Promise<void>;
-  isInWatchlist: (mediaId: number) => boolean;
+  addToWatchlist: (media: Media, mediaType: MediaType) => Promise<void>;
+  removeFromWatchlist: (mediaId: number, mediaType: MediaType) => Promise<void>;
+  isInWatchlist: (mediaId: number, mediaType: MediaType) => boolean;
 };
 
 export const useWatchlistStore = create<WatchlistStore>((set, get) => ({
-  watchlist: [],
+  movies: [],
+  tvShows: [],
   isLoading: true,
 
   initialize: async () => {
     try {
-      const stored = await AsyncStorage.getItem(MOVIES_STORAGE_KEY);
+      const [storedMovies, storedTvShows] = await Promise.all([
+        AsyncStorage.getItem(MOVIES_STORAGE_KEY),
+        AsyncStorage.getItem(TV_SHOW_STORAGE_KEY),
+      ]);
+
       set({
-        watchlist: stored ? JSON.parse(stored) : [],
+        movies: storedMovies ? JSON.parse(storedMovies) : [],
+        tvShows: storedTvShows ? JSON.parse(storedTvShows) : [],
         isLoading: false,
       });
     } catch (error) {
@@ -33,39 +41,52 @@ export const useWatchlistStore = create<WatchlistStore>((set, get) => ({
     }
   },
 
-  addToWatchlist: async (movie: Media) => {
+  addToWatchlist: async (media: Media, mediaType: MediaType) => {
     try {
-      const newWatchlist = [...get().watchlist, movie];
+      const listKey = mediaType === "movie" ? "movies" : "tvShows";
+      const newList = [...get()[listKey], media];
+
       await AsyncStorage.setItem(
-        MOVIES_STORAGE_KEY,
-        JSON.stringify(newWatchlist),
+        mediaType === MediaType.Movie
+          ? MOVIES_STORAGE_KEY
+          : TV_SHOW_STORAGE_KEY,
+        JSON.stringify(newList),
       );
-      set({ watchlist: newWatchlist });
-      showToast("Movie added to watchlist");
+
+      set({ [listKey]: newList });
+      showToast(
+        `${mediaType === "movie" ? "Movie" : "TV Show"} added to watchlist`,
+      );
     } catch (error) {
       showToast("Error adding to watchlist");
       console.error("Error adding to watchlist:", error);
     }
   },
 
-  removeFromWatchlist: async (mediaId: number) => {
+  removeFromWatchlist: async (mediaId: number, mediaType: MediaType) => {
     try {
-      const newWatchlist = get().watchlist.filter(
-        (media) => media.id !== mediaId,
-      );
+      const listKey = mediaType === "movie" ? "movies" : "tvShows";
+      const newList = get()[listKey].filter((media) => media.id !== mediaId);
+
       await AsyncStorage.setItem(
-        MOVIES_STORAGE_KEY,
-        JSON.stringify(newWatchlist),
+        mediaType === MediaType.Movie
+          ? MOVIES_STORAGE_KEY
+          : TV_SHOW_STORAGE_KEY,
+        JSON.stringify(newList),
       );
-      set({ watchlist: newWatchlist });
-      showToast("Movie removed from watchlist");
+
+      set({ [listKey]: newList });
+      showToast(
+        `${mediaType === "movie" ? "Movie" : "TV Show"} removed from watchlist`,
+      );
     } catch (error) {
       showToast("Error removing from watchlist");
       console.error("Error removing from watchlist:", error);
     }
   },
 
-  isInWatchlist: (mediaId: number) => {
-    return get().watchlist.some((media) => media.id === mediaId);
+  isInWatchlist: (mediaId: number, mediaType: MediaType) => {
+    const list = mediaType === "movie" ? get().movies : get().tvShows;
+    return list.some((media) => media.id === mediaId);
   },
 }));
