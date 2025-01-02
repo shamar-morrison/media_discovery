@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import React from "react";
 import { ThemedText } from "@/components/themed-text";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -41,23 +41,30 @@ export function Section({
           </ThemedText>
         </View>
         {showSeeAll && id && mediaType && (
-          <View className="flex flex-row gap-1 items-center">
+          <Pressable
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            className={"flex flex-row items-center"}
+            onPress={() => console.log("clicked")}
+          >
             <Link
               href={{
                 pathname: "/similar/[similarId]",
                 params: { similarId: id, mediaType, mediaTitle },
               }}
-              className={"text-white/50 font-inter"}
             >
-              See All
+              <View className="flex flex-row gap-1 items-center">
+                <ThemedText className={"text-white/50 font-inter"}>
+                  See All
+                </ThemedText>
+                <Ionicons
+                  className={"relative top-[0.4px]"}
+                  name={"arrow-forward"}
+                  size={13}
+                  color={"rgba(255,255,255,0.5)"}
+                />
+              </View>
             </Link>
-            <Ionicons
-              className={"relative top-0.5"}
-              name={"arrow-forward"}
-              size={13}
-              color={"rgba(255,255,255,0.5)"}
-            />
-          </View>
+          </Pressable>
         )}
       </View>
       {children}
