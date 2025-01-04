@@ -14,7 +14,7 @@ export function Watchlists() {
 
   return (
     <ThemedScrollView>
-      <Section title={"Movies"}>
+      <Section title={"Movies"} className={"bg-black-200"}>
         {movies.length === 0 && (
           <ThemedText className={"mt-5"}>No movies in watchlist</ThemedText>
         )}
@@ -45,7 +45,7 @@ export function Watchlists() {
         )}
       </Section>
 
-      <Section title={"TV Shows"}>
+      <Section title={"TV Shows"} className={"bg-black-200"}>
         {tvShows.length === 0 && (
           <ThemedText className={"mt-5"}>No TV shows in watchlist</ThemedText>
         )}

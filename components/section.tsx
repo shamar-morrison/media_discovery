@@ -4,6 +4,7 @@ import { ThemedText } from "@/components/themed-text";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
 import { MediaType } from "@/types/multi-search";
+import { ncn } from "@/utils/ncn";
 
 type SectionProps = {
   title: string;
@@ -12,6 +13,7 @@ type SectionProps = {
   showSeeAll?: boolean;
   mediaType?: MediaType;
   id?: number;
+  className?: string;
 };
 
 export function Section({
@@ -21,10 +23,14 @@ export function Section({
   showSeeAll,
   mediaType,
   id,
+  className,
 }: SectionProps) {
   return (
     <View
-      className={"bg-black-100 px-4 py-8 border-b-[0.5px] border-accent-100/10"}
+      className={ncn(
+        "bg-black-100 px-4 py-8 border-b-[0.5px] border-accent-100/10",
+        className,
+      )}
       style={{
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },

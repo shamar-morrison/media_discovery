@@ -1,5 +1,5 @@
-import { View, Text, ScrollView, ScrollViewProps } from "react-native";
-import React from "react";
+import { ScrollView, ScrollViewProps } from "react-native";
+import { ncn } from "@/utils/ncn";
 
 export function ThemedScrollView({
   children,
@@ -7,7 +7,10 @@ export function ThemedScrollView({
   ...props
 }: ScrollViewProps) {
   return (
-    <ScrollView className={"flex-1 bg-black-200 h-full"} {...props}>
+    <ScrollView
+      className={ncn("flex-1 bg-black-200 h-full", className)}
+      {...props}
+    >
       {children}
     </ScrollView>
   );
