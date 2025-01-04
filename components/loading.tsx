@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 
 export function Loading() {

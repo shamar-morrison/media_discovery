@@ -26,7 +26,7 @@ export default function Profile() {
     >
       <Tab.Screen
         name="lists"
-        component={() => <Watchlists />}
+        component={Watchlists}
         options={{
           swipeEnabled: false,
           tabBarLabel: ({ focused }) => (

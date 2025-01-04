@@ -51,10 +51,7 @@ export function TvShowDetails({
       </View>
 
       <Section title={"About"}>
-        <ThemedText
-          className={"pt-3 text-black-50 leading-[1.50rem]"}
-          numberOfLines={5}
-        >
+        <ThemedText className={"pt-3 leading-[1.50rem]"} numberOfLines={5}>
           {overview || "No overview found"}
         </ThemedText>
         {genres.length > 0 && (

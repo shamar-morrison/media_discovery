@@ -1,4 +1,3 @@
-import React from "react";
 import { Section } from "@/components/section";
 import { ThemedText } from "@/components/themed-text";
 import { View } from "react-native";
