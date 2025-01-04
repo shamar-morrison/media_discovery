@@ -24,7 +24,7 @@ export function Section({
 }: SectionProps) {
   return (
     <View
-      className={"bg-black-100 px-4 py-6 border-b-[0.5px] border-accent-100/10"}
+      className={"bg-black-100 px-4 py-8 border-b-[0.5px] border-accent-100/10"}
       style={{
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },

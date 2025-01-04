@@ -1,20 +1,38 @@
-import { TouchableOpacity, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { Season } from "@/types/tv-show-details";
 import { ThemedText } from "@/components/themed-text";
 import { format } from "date-fns";
 import { ThemedImage } from "@/components/themed-image";
 import { createMediaImageLink } from "@/utils/create-media-image-link";
-import { showToast } from "@/utils/toast";
+import { router } from "expo-router";
+
+interface SeasonThumbnailProps extends Season {
+  seriesId: number;
+  seriesName: string;
+}
 
 export function SeasonThumbnail({
-  id,
   episode_count,
   name,
   poster_path,
   air_date,
-}: Season) {
+  seriesId,
+  season_number,
+  seriesName,
+}: SeasonThumbnailProps) {
   return (
-    <TouchableOpacity onPress={() => showToast(id.toString())}>
+    <Pressable
+      onPress={() =>
+        router.push({
+          pathname: "/season/[seasonNumber]",
+          params: {
+            seriesId: seriesId,
+            seasonNumber: season_number,
+            seriesName: seriesName,
+          },
+        })
+      }
+    >
       <View className={"w-32"}>
         <View
           className={
@@ -37,6 +55,6 @@ export function SeasonThumbnail({
           {episode_count} Episodes
         </ThemedText>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 }

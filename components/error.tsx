@@ -13,7 +13,7 @@ export function Error({
   message = "There was an error. Please try again.",
 }: ErrorProps) {
   return (
-    <View className="bg-black-200 h-full">
+    <View className="bg-black-200 h-full px-4">
       <View className="flex flex-1 items-center gap-5 justify-center">
         <ThemedText className={"font-inter-medium text-xl text-center"}>
           {message}

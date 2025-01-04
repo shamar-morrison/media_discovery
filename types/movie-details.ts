@@ -10,7 +10,7 @@ export interface MovieDetailsResponse {
   origin_country: OriginCountry[];
   original_language: OriginalLanguage;
   original_title: string;
-  overview: string;
+  overview: string | undefined;
   popularity: number;
   poster_path: string;
   production_companies: ProductionCompany[];

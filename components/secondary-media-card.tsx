@@ -7,7 +7,7 @@ import { Link } from "expo-router";
 import { getYear } from "date-fns";
 import { useAppropriateImage } from "@/utils/use-appropriate-image";
 
-type SimilarMediaCardProps = {
+type SecondaryMediaCardProps = {
   poster_path: string;
   title: string;
   vote_average: number;
@@ -23,7 +23,7 @@ export function SecondaryMediaCard({
   id,
   mediaType,
   release_date,
-}: SimilarMediaCardProps) {
+}: SecondaryMediaCardProps) {
   return (
     <Link
       href={{

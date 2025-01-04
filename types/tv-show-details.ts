@@ -21,7 +21,7 @@ export interface TvShowDetailsResponse {
   origin_country: string[];
   original_language: string;
   original_name: string;
-  overview: string;
+  overview: string | undefined;
   popularity: number;
   poster_path: string;
   production_companies: Network[];

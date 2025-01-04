@@ -24,7 +24,7 @@ export function TvShowDetails({
   vote_average,
   first_air_date,
   genres,
-  id,
+  id: seriesId,
   videos,
   episode_run_time,
   seasons,
@@ -38,7 +38,7 @@ export function TvShowDetails({
       <View>
         <MediaBackdrop
           status={status}
-          id={id}
+          id={seriesId}
           poster_path={poster_path}
           backdrop_path={backdrop_path}
           title={name}
@@ -82,7 +82,11 @@ export function TvShowDetails({
 
               return (
                 <View className={`${!isLastItem ? "mr-3" : ""}`}>
-                  <SeasonThumbnail {...item} />
+                  <SeasonThumbnail
+                    {...item}
+                    seriesId={seriesId}
+                    seriesName={name}
+                  />
                 </View>
               );
             }}
@@ -135,9 +139,9 @@ export function TvShowDetails({
 
       <Section
         title={"More Like This"}
-        showSeeAll
+        showSeeAll={similar.results.length > 0}
         mediaTitle={name}
-        id={id}
+        id={seriesId}
         mediaType={MediaType.Tv}
       >
         {similar.results.length === 0 && (
