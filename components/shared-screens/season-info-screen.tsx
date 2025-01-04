@@ -1,9 +1,10 @@
-import { View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useGetSeasonInfo } from "@/hooks/use-get-season-info";
 import { Loading } from "@/components/loading";
 import { Error } from "@/components/error";
-import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { ScreenTitle } from "@/components/screen-title";
+import { Text } from "react-native";
 
 export function SeasonInfoScreen() {
   const { seasonNumber, seriesId, seriesName } = useLocalSearchParams<{
@@ -33,12 +34,13 @@ export function SeasonInfoScreen() {
   }
 
   return (
-    <View>
-      <ThemedText>series id: {seriesId}</ThemedText>
-      <ThemedText>season number: {seasonNumber}</ThemedText>
-      <ThemedText>series name: {seriesName}</ThemedText>
-      <ThemedText>{data.name}</ThemedText>
-      <ThemedText>{data.overview || "No overview available"}</ThemedText>
-    </View>
+    <ThemedView className={"bg-black-100"}>
+      <Text
+        className={"font-inter-semibold opacity-50 text-white text-xl mb-2"}
+      >
+        {seriesName}
+      </Text>
+      <ScreenTitle>{data.name}</ScreenTitle>
+    </ThemedView>
   );
 }

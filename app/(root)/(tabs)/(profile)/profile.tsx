@@ -2,6 +2,7 @@ import { View } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { ThemedText } from "@/components/themed-text";
 import { Watchlists } from "@/components/screens/watchlists-screen";
+import { TabBarLabel } from "@/components/tab-bar-label";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -10,7 +11,6 @@ export default function Profile() {
     <Tab.Navigator
       screenOptions={{
         tabBarScrollEnabled: true,
-        // tabBarItemStyle: { width: 100 },
         tabBarLabelStyle: {
           fontSize: 14,
           fontWeight: "bold",
@@ -25,13 +25,24 @@ export default function Profile() {
       }}
     >
       <Tab.Screen
-        name="LISTS"
+        name="lists"
         component={Watchlists}
         options={{
           swipeEnabled: false,
+          tabBarLabel: ({ focused }) => (
+            <TabBarLabel focused={focused}>Lists</TabBarLabel>
+          ),
         }}
       />
-      <Tab.Screen name="PROGRESS" component={Foo} />
+      <Tab.Screen
+        name="progress"
+        component={Foo}
+        options={{
+          tabBarLabel: ({ focused }) => (
+            <TabBarLabel focused={focused}>Progress</TabBarLabel>
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }

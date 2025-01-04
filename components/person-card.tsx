@@ -1,5 +1,4 @@
 import { Text, View } from "react-native";
-import React from "react";
 import { ThemedImage } from "@/components/themed-image";
 import { useAppropriateImage } from "@/utils/use-appropriate-image";
 import { Cast } from "@/types/movie-details";
