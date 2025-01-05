@@ -5,6 +5,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
 import { MediaType } from "@/types/multi-search";
 import { ncn } from "@/utils/ncn";
+import { hitSlop } from "@/utils/hit-slop";
 
 type SectionProps = {
   title: string;
@@ -48,7 +49,7 @@ export function Section({
         </View>
         {showSeeAll && id && mediaType && (
           <Pressable
-            hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+            hitSlop={hitSlop}
             className={"flex flex-row items-center"}
             onPress={() => console.log("clicked")}
           >

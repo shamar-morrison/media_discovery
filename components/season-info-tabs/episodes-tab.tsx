@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import { Episode } from "@/types/season-details";
 import { ThemedText } from "@/components/themed-text";
 import { FlashList } from "@shopify/flash-list";
@@ -6,6 +6,7 @@ import { useAppropriateImage } from "@/utils/use-appropriate-image";
 import { ThemedImage } from "@/components/themed-image";
 import { format } from "date-fns";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { hitSlop } from "@/utils/hit-slop";
 
 export function EpisodesTab({ episodes }: { episodes: Episode[] }) {
   if (episodes.length === 0) {
@@ -73,9 +74,13 @@ function EpisodeCard({
         </ThemedText>
         <ThemedText className={"text-sm opacity-50"}>{runtime} mins</ThemedText>
       </View>
-      <View className={"ml-4"}>
-        <Ionicons name={"checkmark-outline"} size={20} color={"#fff"} />
-      </View>
+      <Pressable className={"ml-4"} hitSlop={hitSlop}>
+        <Ionicons
+          name={"checkmark-circle-outline"}
+          size={25}
+          color={"rgba(255,255,255,0.22)"}
+        />
+      </Pressable>
     </View>
   );
 }
