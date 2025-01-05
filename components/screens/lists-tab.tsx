@@ -7,7 +7,7 @@ import { MediaType } from "@/types/multi-search";
 import { useWatchlistStore } from "@/store/watchlist-store";
 import { ThemedScrollView } from "@/components/themed-scroll-view";
 
-export function Watchlists() {
+export function ListsTab() {
   const movies = useWatchlistStore((state) => state.movies);
   const tvShows = useWatchlistStore((state) => state.tvShows);
 

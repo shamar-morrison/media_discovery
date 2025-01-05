@@ -46,7 +46,7 @@ export function MovieDetails({
       </View>
 
       <Section title={"About"}>
-        <ThemedText className={"pt-3 text-accent-100/90 leading-[1.50rem]"}>
+        <ThemedText className={"pt-3 text-accent-100/85 leading-[1.50rem]"}>
           {overview || "No overview found"}
         </ThemedText>
         {genres.length > 0 && (

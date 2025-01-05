@@ -1,32 +1,18 @@
 import { View } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { ThemedText } from "@/components/themed-text";
-import { Watchlists } from "@/components/screens/watchlists-screen";
+import { ListsTab } from "@/components/screens/lists-tab";
 import { TabBarLabel } from "@/components/tab-bar-label";
+import { tabStyles } from "@/styles/tab-styles";
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function Profile() {
   return (
-    <Tab.Navigator
-      screenOptions={{
-        tabBarScrollEnabled: true,
-        tabBarLabelStyle: {
-          fontSize: 14,
-          fontWeight: "bold",
-        },
-        tabBarIndicatorStyle: {
-          backgroundColor: "rgba(255,255,255,0.85)",
-        },
-        tabBarActiveTintColor: "rgba(255,255,255,0.85)",
-        tabBarInactiveTintColor: "rgba(255,255,255,0.48)",
-        tabBarStyle: { backgroundColor: "#242426" },
-        sceneStyle: { backgroundColor: "#1d1d1d" },
-      }}
-    >
+    <Tab.Navigator screenOptions={tabStyles}>
       <Tab.Screen
         name="lists"
-        component={Watchlists}
+        component={ListsTab}
         options={{
           swipeEnabled: false,
           tabBarLabel: ({ focused }) => (

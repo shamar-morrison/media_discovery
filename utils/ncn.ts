@@ -2,14 +2,14 @@ import clsx, { type ClassValue } from "clsx";
 
 /**
  * Combines the provided class values into a single string for use with NativeWind,
- * handling React Native's styling limitations and all style properties appropriately.
+ * handling React Native's styling limitations including arbitrary values.
  *
  * @example
  * const styles = nativeClassNames(
- *   'border-b-2 border-white',
- *   'border-b-4 border-black'
+ *   'text-[20px] border-b-[4px] text-center',
+ *   'text-[16px] border-b-2'
  * );
- * // Result: 'border-b-4 border-black'
+ * // Result: 'text-[16px] border-b-2 text-center'
  *
  * @param inputs - The classes to combine
  * @returns A string of space-separated class names, with conflicts resolved
@@ -42,10 +42,13 @@ export function nativeClassNames(...inputs: ClassValue[]): string {
 
   // Text alignment values
   const alignments = ["left", "center", "right", "justify"];
-  // Text sizes
+  // Standard text sizes
   const sizes = ["xs", "sm", "base", "lg", "xl", "2xl", "3xl", "4xl", "5xl"];
   // Text decorations
   const decorations = ["underline", "line-through", "no-underline"];
+
+  // Function to check if a class uses arbitrary value syntax
+  const hasArbitraryValue = (className: string) => /\[.*\]/.test(className);
 
   // Process each class
   classes.forEach((className) => {
@@ -63,13 +66,14 @@ export function nativeClassNames(...inputs: ClassValue[]): string {
       if (alignments.includes(parts[1])) {
         textProps.align.set("align", className);
       }
-      // Handle text sizes
+      // Handle text sizes (including arbitrary values)
       else if (
         sizes.some(
           (size) =>
             className === `text-${size}` ||
             className.startsWith(`text-${size}/`),
-        )
+        ) ||
+        hasArbitraryValue(className)
       ) {
         textProps.size.set("size", className);
       }
@@ -92,12 +96,8 @@ export function nativeClassNames(...inputs: ClassValue[]): string {
         // Just 'border' class
         borderProps.all.set("width", className);
       } else if (parts[1] === "b") {
-        // border-b-{size} or border-b
-        if (parts.length === 2) {
-          borderProps.bottom.set("width", className);
-        } else {
-          borderProps.bottom.set("width", className);
-        }
+        // Handle arbitrary values for bottom border
+        borderProps.bottom.set("width", className);
       } else if (parts[1] === "t") {
         borderProps.top.set("width", className);
       } else if (parts[1] === "l") {
