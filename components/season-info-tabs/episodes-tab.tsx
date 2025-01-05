@@ -5,6 +5,7 @@ import { FlashList } from "@shopify/flash-list";
 import { useAppropriateImage } from "@/utils/use-appropriate-image";
 import { ThemedImage } from "@/components/themed-image";
 import { format } from "date-fns";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export function EpisodesTab({ episodes }: { episodes: Episode[] }) {
   if (episodes.length === 0) {
@@ -27,7 +28,7 @@ export function EpisodesTab({ episodes }: { episodes: Episode[] }) {
           />
         )}
         data={episodes}
-        renderItem={({ item, index }) => {
+        renderItem={({ item }) => {
           return (
             <View className={"p-4"}>
               <EpisodeCard {...item} />
@@ -60,7 +61,7 @@ function EpisodeCard({
           source={useAppropriateImage(still_path)}
         />
       </View>
-      <View className={"flex"}>
+      <View className={"flex basis-[100%]"}>
         <ThemedText
           className={"text-white font-inter-semibold w-full"}
           numberOfLines={1}
@@ -71,6 +72,9 @@ function EpisodeCard({
           {format(air_date, "MMM. dd, yyyy")}
         </ThemedText>
         <ThemedText className={"text-sm opacity-50"}>{runtime} mins</ThemedText>
+      </View>
+      <View className={"ml-4"}>
+        <Ionicons name={"checkmark-outline"} size={20} color={"#fff"} />
       </View>
     </View>
   );

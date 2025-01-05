@@ -1,7 +1,7 @@
 import { MaterialTopTabNavigationOptions } from "@react-navigation/material-top-tabs";
 
 export const tabStyles: MaterialTopTabNavigationOptions = {
-  tabBarScrollEnabled: true,
+  tabBarScrollEnabled: false,
   tabBarIndicatorStyle: {
     backgroundColor: "rgba(255,255,255,0.85)",
   },
