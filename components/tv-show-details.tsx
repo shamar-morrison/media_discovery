@@ -44,6 +44,7 @@ export function TvShowDetails({
   useEffect(() => {
     initialiseShow(
       seriesId,
+      name,
       seasons.map((season) => {
         return {
           seasonNumber: season.season_number,

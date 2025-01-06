@@ -10,6 +10,11 @@ type Episode = {
   watchedAt: string; // ISO date string
 };
 
+type LastWatchedEpisode = {
+  seasonNumber: number;
+  episodeNumber: number;
+};
+
 type Season = {
   seasonNumber: number;
   totalEpisodes: number;
@@ -17,12 +22,18 @@ type Season = {
 
 interface ShowProgress {
   showId: number;
+  showName: string;
   watchedEpisodes: Episode[];
   seasons: Season[];
-  lastWatchedEpisode?: {
-    seasonNumber: number;
-    episodeNumber: number;
-  };
+  lastWatchedEpisode?: LastWatchedEpisode;
+}
+
+export interface StartedShows {
+  showId: number;
+  showName: string;
+  lastWatchedEpisode?: LastWatchedEpisode;
+  totalWatchedEpisodes: number;
+  lastWatchedAt: string;
 }
 
 type WatchedEpisodesStore = {
@@ -47,13 +58,18 @@ type WatchedEpisodesStore = {
   ) => Promise<void>;
   unmarkEpisodeAsWatched: (showId: number, episodeId: number) => Promise<void>;
   getWatchedEpisodes: (showId: number) => Episode[];
+  getStartedShows: () => StartedShows[];
   getRemainingEpisodes: (showId: number, seasonNumber: number) => number;
   getTotalWatchedEpisodes: (showId: number) => number;
   getNextEpisodeToWatch: (showId: number) => {
     seasonNumber: number;
     episodeNumber: number;
   } | null;
-  initializeShow: (showId: number, seasons: Season[]) => Promise<void>;
+  initializeShow: (
+    showId: number,
+    showName: string,
+    seasons: Season[],
+  ) => Promise<void>;
 };
 
 export const useWatchedEpisodesStore = create<WatchedEpisodesStore>(
@@ -75,15 +91,25 @@ export const useWatchedEpisodesStore = create<WatchedEpisodesStore>(
       }
     },
 
-    initializeShow: async (showId: number, seasons: Season[]) => {
+    initializeShow: async (
+      showId: number,
+      showName: string,
+      seasons: Season[],
+    ) => {
       const shows = get().shows;
       if (!shows[showId]) {
+        const formattedSeasons = seasons.map((season) => ({
+          seasonNumber: season.seasonNumber,
+          totalEpisodes: season.totalEpisodes,
+        }));
+
         const updatedShows = {
           ...shows,
           [showId]: {
             showId,
+            showName,
             watchedEpisodes: [],
-            seasons,
+            seasons: formattedSeasons,
           },
         };
 
@@ -92,8 +118,23 @@ export const useWatchedEpisodesStore = create<WatchedEpisodesStore>(
           JSON.stringify(updatedShows),
         );
         set({ shows: updatedShows });
-        showToast("Show has been initialized");
       }
+    },
+
+    getStartedShows: () => {
+      const shows = get().shows;
+      return Object.entries(shows)
+        .filter(([_, show]) => show.watchedEpisodes.length > 0)
+        .map(([showId, show]) => ({
+          showId: Number(showId),
+          showName: show.showName,
+          lastWatchedEpisode: show.lastWatchedEpisode,
+          totalWatchedEpisodes: show.watchedEpisodes.length,
+          lastWatchedAt: [...show.watchedEpisodes].sort(
+            (a, b) =>
+              new Date(b.watchedAt).getTime() - new Date(a.watchedAt).getTime(),
+          )[0]?.watchedAt,
+        }));
     },
 
     isEpisodeWatched: async (
@@ -237,6 +278,20 @@ export const useWatchedEpisodesStore = create<WatchedEpisodesStore>(
         const updatedEpisodes = show.watchedEpisodes.filter(
           (episode) => episode.id !== episodeId,
         );
+
+        // If this was the last watched episode, we should remove the show's progress entirely
+        if (updatedEpisodes.length === 0) {
+          const { [showId]: removedShow, ...remainingShows } = shows;
+
+          await AsyncStorage.setItem(
+            WATCHED_EPISODES_STORAGE_KEY,
+            JSON.stringify(remainingShows),
+          );
+
+          set({ shows: remainingShows });
+          showToast("Episode unmarked as watched");
+          return;
+        }
 
         // Update last watched episode to be the most recent one
         const lastWatched = [...updatedEpisodes].sort(

@@ -155,7 +155,7 @@ function EpisodeCard({
                 id,
               );
             } else {
-              await handleUnmarkAsWatched(show_id, episode_number);
+              await handleUnmarkAsWatched(show_id, id);
             }
           }}
         >

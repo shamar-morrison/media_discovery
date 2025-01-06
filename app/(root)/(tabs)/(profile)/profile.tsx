@@ -15,7 +15,7 @@ export default function Profile() {
       <View className="p-4">
         <ScreenTitle>Profile</ScreenTitle>
       </View>
-      <Tab.Navigator screenOptions={tabStyles}>
+      <Tab.Navigator screenOptions={tabStyles} backBehavior={"none"}>
         <Tab.Screen
           name="lists"
           component={ListsTab}

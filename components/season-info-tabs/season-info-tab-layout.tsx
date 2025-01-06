@@ -23,7 +23,7 @@ export function SeasonInfoTabLayout({
     <Tab.Navigator
       screenOptions={tabStyles}
       initialRouteName={"episodes"}
-      backBehavior={"firstRoute"}
+      backBehavior={"none"}
     >
       <Tab.Screen
         name="overview"
