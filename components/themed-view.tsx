@@ -1,5 +1,4 @@
 import { View, ViewProps } from "react-native";
-import React from "react";
 import { ncn } from "@/utils/ncn";
 
 export function ThemedView({ children, className, ...props }: ViewProps) {
