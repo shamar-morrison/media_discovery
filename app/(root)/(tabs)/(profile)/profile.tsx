@@ -1,9 +1,8 @@
-import { View } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { ThemedText } from "@/components/themed-text";
 import { ListsTab } from "@/components/screens/lists-tab";
 import { TabBarLabel } from "@/components/tab-bar-label";
 import { tabStyles } from "@/styles/tab-styles";
+import { ProgressTab } from "@/components/screens/progress-tab";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -22,7 +21,7 @@ export default function Profile() {
       />
       <Tab.Screen
         name="progress"
-        component={Foo}
+        component={ProgressTab}
         options={{
           tabBarLabel: ({ focused }) => (
             <TabBarLabel focused={focused}>Progress</TabBarLabel>
@@ -30,21 +29,5 @@ export default function Profile() {
         }}
       />
     </Tab.Navigator>
-  );
-}
-
-export function Foo() {
-  return (
-    <View>
-      <ThemedText>Profile</ThemedText>
-    </View>
-  );
-}
-
-export function Bar() {
-  return (
-    <View>
-      <ThemedText>Bar</ThemedText>
-    </View>
   );
 }

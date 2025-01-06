@@ -11,6 +11,9 @@ import { MediaType } from "@/types/multi-search";
 import { SecondaryMediaCard } from "@/components/secondary-media-card";
 import { Video } from "@/components/video";
 import { Site } from "@/types/movie-details";
+import { useEffect } from "react";
+import { useWatchedEpisodesStore } from "@/store/watched-episodes-store";
+import { showToast } from "@/utils/toast";
 
 interface TvShowDetailsProps extends TvShowDetailsResponse {
   mediaType: MediaType;
@@ -33,6 +36,23 @@ export function TvShowDetails({
   mediaType,
   status,
 }: TvShowDetailsProps) {
+  const initialiseShow = useWatchedEpisodesStore(
+    (state) => state.initializeShow,
+  );
+
+  // initialise show
+  useEffect(() => {
+    initialiseShow(
+      seriesId,
+      seasons.map((season) => {
+        return {
+          seasonNumber: season.season_number,
+          totalEpisodes: season.episode_count,
+        };
+      }),
+    ).catch((er: any) => showToast("Failed to initialise show" + er.message));
+  }, []);
+
   return (
     <View>
       <View>

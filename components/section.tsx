@@ -1,5 +1,4 @@
 import { Pressable, View } from "react-native";
-import React from "react";
 import { ThemedText } from "@/components/themed-text";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
@@ -48,11 +47,7 @@ export function Section({
           </ThemedText>
         </View>
         {showSeeAll && id && mediaType && (
-          <Pressable
-            hitSlop={hitSlop}
-            className={"flex flex-row items-center"}
-            onPress={() => console.log("clicked")}
-          >
+          <Pressable hitSlop={hitSlop} className={"flex flex-row items-center"}>
             <Link
               href={{
                 pathname: "/similar/[similarId]",

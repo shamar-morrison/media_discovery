@@ -1,4 +1,4 @@
-import { Pressable, View } from "react-native";
+import { ActivityIndicator, Pressable, View } from "react-native";
 import { Episode } from "@/types/season-details";
 import { ThemedText } from "@/components/themed-text";
 import { FlashList } from "@shopify/flash-list";
@@ -7,8 +7,14 @@ import { ThemedImage } from "@/components/themed-image";
 import { format } from "date-fns";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { hitSlop } from "@/utils/hit-slop";
+import { useWatchedEpisodesStore } from "@/store/watched-episodes-store";
+import { useEffect, useState } from "react";
 
-export function EpisodesTab({ episodes }: { episodes: Episode[] }) {
+type EpisodesTabProps = {
+  episodes: Episode[];
+};
+
+export function EpisodesTab({ episodes }: EpisodesTabProps) {
   if (episodes.length === 0) {
     return (
       <View className={"flex-1 flex items-center justify-center"}>
@@ -48,7 +54,67 @@ function EpisodeCard({
   season_number,
   still_path,
   air_date,
+  show_id,
+  id,
 }: Episode) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasEpisodeBeenWatched, setHasEpisodeBeenWatched] = useState(false);
+
+  const isEpisodeWatched = useWatchedEpisodesStore(
+    (state) => state.isEpisodeWatched,
+  );
+  const markEpisodeAsWatched = useWatchedEpisodesStore(
+    (state) => state.markEpisodeAsWatched,
+  );
+  const unmarkEpisodeAsWatched = useWatchedEpisodesStore(
+    (state) => state.unmarkEpisodeAsWatched,
+  );
+
+  const handleUnmarkAsWatched = async (showId: number, episodeId: number) => {
+    setIsLoading(true);
+    try {
+      await unmarkEpisodeAsWatched(showId, episodeId);
+      setHasEpisodeBeenWatched(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleMarkAsWatched = async (
+    showId: number,
+    seasonNumber: number,
+    episodeNumber: number,
+    episodeId: number,
+  ) => {
+    setIsLoading(true);
+    try {
+      await markEpisodeAsWatched(
+        showId,
+        seasonNumber,
+        episodeNumber,
+        episodeId,
+      );
+      setHasEpisodeBeenWatched(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    (async () => {
+      try {
+        if (await isEpisodeWatched(show_id, season_number, episode_number)) {
+          setHasEpisodeBeenWatched(true);
+        }
+      } catch (e: any) {
+        console.log("Error getting if episode was watched");
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
+
   return (
     <View className={"flex gap-5 w-32 h-[62px] flex-row items-center my-3"}>
       <View className={`overflow-hidden w-full `}>
@@ -74,13 +140,36 @@ function EpisodeCard({
         </ThemedText>
         <ThemedText className={"text-sm opacity-50"}>{runtime} mins</ThemedText>
       </View>
-      <Pressable className={"ml-4"} hitSlop={hitSlop}>
-        <Ionicons
-          name={"checkmark-circle-outline"}
-          size={25}
-          color={"rgba(255,255,255,0.22)"}
-        />
-      </Pressable>
+      {isLoading ? (
+        <ActivityIndicator size={"small"} color={"#fff"} />
+      ) : (
+        <Pressable
+          className={"ml-4"}
+          hitSlop={hitSlop}
+          onPress={async () => {
+            if (!hasEpisodeBeenWatched) {
+              await handleMarkAsWatched(
+                show_id,
+                season_number,
+                episode_number,
+                id,
+              );
+            } else {
+              await handleUnmarkAsWatched(show_id, episode_number);
+            }
+          }}
+        >
+          <Ionicons
+            name={
+              hasEpisodeBeenWatched
+                ? "checkmark-circle"
+                : "checkmark-circle-outline"
+            }
+            size={25}
+            color={hasEpisodeBeenWatched ? "#fff" : "rgba(255,255,255,0.22)"}
+          />
+        </Pressable>
+      )}
     </View>
   );
 }

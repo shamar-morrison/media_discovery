@@ -3,10 +3,10 @@ import { Button } from "@/components/button";
 import { ThemedText } from "@/components/themed-text";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { showToast } from "@/utils/toast";
-import { FontAwesome } from "@expo/vector-icons";
 import { AddToWatchlistProps } from "@/types/add-to-watchlist";
 import { useWatchlistStore } from "@/store/watchlist-store";
 import { useFocusEffect } from "@react-navigation/native";
+import { ActivityIndicator } from "react-native";
 
 export function AddToWatchlistButton({
   poster_path,
@@ -64,12 +64,7 @@ export function AddToWatchlistButton({
   if (isLoading) {
     return (
       <Button disabled>
-        <FontAwesome
-          name={"spinner"}
-          size={20}
-          color={"#fff"}
-          className="animate-spin"
-        />
+        <ActivityIndicator size={"small"} color={"#fff"} />
       </Button>
     );
   }

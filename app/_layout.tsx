@@ -7,10 +7,12 @@ import { View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useWatchlistStore } from "@/store/watchlist-store";
+import { useWatchedEpisodesStore } from "@/store/watched-episodes-store";
 
 export default function RootLayout() {
   useEffect(() => {
     useWatchlistStore.getState().initialize();
+    useWatchedEpisodesStore.getState().initialize();
   }, []);
 
   const queryClient = new QueryClient({
