@@ -52,7 +52,6 @@ export default function RootLayout() {
               contentStyle: {
                 backgroundColor: "#1d1d1d",
               },
-              // Disable the default animation
               animation: "none",
               presentation: "card",
             }}

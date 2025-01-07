@@ -1,5 +1,5 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { ListsTab } from "@/components/screens/lists-tab";
+import { WatchlistsTab } from "@/components/screens/watchlists-tab";
 import { TabBarLabel } from "@/components/tab-bar-label";
 import { tabStyles } from "@/styles/tab-styles";
 import { ProgressTab } from "@/components/screens/progress-tab";
@@ -18,7 +18,7 @@ export default function Profile() {
       <Tab.Navigator screenOptions={tabStyles} backBehavior={"none"}>
         <Tab.Screen
           name="lists"
-          component={ListsTab}
+          component={WatchlistsTab}
           options={{
             swipeEnabled: false,
             tabBarLabel: ({ focused }) => (
