@@ -1,5 +1,5 @@
-import { View } from "react-native";
-import { useCallback, useState } from "react";
+import { Pressable, View } from "react-native";
+import React, { useCallback, useState } from "react";
 import {
   StartedShows,
   useWatchedEpisodesStore,
@@ -7,6 +7,7 @@ import {
 import { ThemedText } from "@/components/themed-text";
 import { useFocusEffect } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
+import { Separator } from "@/components/separator";
 
 export function ProgressTab() {
   const [_, setForceUpdate] = useState(0);
@@ -39,9 +40,7 @@ export function ProgressTab() {
 function TvShowProgressCard({
   showId,
   showName,
-  totalWatchedEpisodes,
   lastWatchedEpisode,
-  lastWatchedAt,
 }: Required<StartedShows>) {
   const getNextEpisodeToWatch = useWatchedEpisodesStore(
     (state) => state.getNextEpisodeToWatch,
@@ -49,25 +48,43 @@ function TvShowProgressCard({
 
   const nextEpisodeToWatch = getNextEpisodeToWatch(showId);
   return (
-    <View
-      className={"flex gap-3 rounded-xl bg-black-100 p-7 w-[90%] mx-auto h-60"}
-    >
-      <ThemedText
-        className={"font-inter-semibold opacity-30 text-2xl"}
-        numberOfLines={1}
+    <Pressable onPress={() => {}}>
+      <View
+        className={
+          "flex gap-3 rounded-xl bg-black-100 p-7 w-[90%] mx-auto h-60"
+        }
       >
-        {showName}
-      </ThemedText>
-      <ThemedText className={"text-sm opacity-50"}>
-        Last watched episode:
-      </ThemedText>
-      <View className="flex flex-row">
-        <ThemedText className={"text-2xl font-inter-semibold"}>
-          Season {lastWatchedEpisode.seasonNumber} Episode{" "}
-          {lastWatchedEpisode.episodeNumber || "Not found"}
+        <ThemedText
+          className={"font-inter-semibold opacity-30 text-2xl"}
+          numberOfLines={1}
+        >
+          {showName}
         </ThemedText>
+        <ThemedText className={"text-sm opacity-50 -mb-1"}>
+          Last watched episode:
+        </ThemedText>
+        <View className="flex flex-row">
+          <ThemedText className={"text-xl font-inter-semibold"}>
+            Season {lastWatchedEpisode.seasonNumber} Episode{" "}
+            {lastWatchedEpisode.episodeNumber || "Not found"}
+          </ThemedText>
+        </View>
+        <Separator />
+        {nextEpisodeToWatch === null && (
+          <ThemedText className={"text-sm"}>
+            You've finished this show 🎉
+          </ThemedText>
+        )}
+        {nextEpisodeToWatch?.seasonNumber && (
+          <>
+            <ThemedText className={"text-sm opacity-30"}>Next up:</ThemedText>
+            <ThemedText className={"opacity-50 font-inter-medium"}>
+              Season {nextEpisodeToWatch.seasonNumber} Episode{" "}
+              {nextEpisodeToWatch.episodeNumber}
+            </ThemedText>
+          </>
+        )}
       </View>
-      <ThemedText>{nextEpisodeToWatch?.episodeNumber}</ThemedText>
-    </View>
+    </Pressable>
   );
 }
