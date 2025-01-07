@@ -26,6 +26,7 @@ export function ProgressTab() {
     <View className={"h-full"}>
       <FlashList
         estimatedItemSize={startedShows.length}
+        ItemSeparatorComponent={() => <View className={"h-4 w-full"} />}
         data={startedShows}
         className={"mt-4"}
         canCancelContentTouches={false}
@@ -41,7 +42,7 @@ function TvShowProgressCard({
   totalWatchedEpisodes,
   lastWatchedEpisode,
   lastWatchedAt,
-}: StartedShows) {
+}: Required<StartedShows>) {
   const getNextEpisodeToWatch = useWatchedEpisodesStore(
     (state) => state.getNextEpisodeToWatch,
   );
@@ -51,17 +52,22 @@ function TvShowProgressCard({
     <View
       className={"flex gap-3 rounded-xl bg-black-100 p-7 w-[90%] mx-auto h-60"}
     >
-      <ThemedText className={"font-inter-semibold opacity-30 text-lg"}>
+      <ThemedText
+        className={"font-inter-semibold opacity-30 text-2xl"}
+        numberOfLines={1}
+      >
         {showName}
       </ThemedText>
+      <ThemedText className={"text-sm opacity-50"}>
+        Last watched episode:
+      </ThemedText>
       <View className="flex flex-row">
-        <ThemedText>{nextEpisodeToWatch?.episodeNumber}</ThemedText>
-        <ThemedText>{nextEpisodeToWatch?.episodeName}</ThemedText>
-        {/*<ThemedText className={"text-2xl font-inter-semibold"}>*/}
-        {/*  {lastWatchedEpisode?.seasonNumber}x*/}
-        {/*  {lastWatchedEpisode?.episodeNumber || "Not found"}*/}
-        {/*</ThemedText>*/}
+        <ThemedText className={"text-2xl font-inter-semibold"}>
+          Season {lastWatchedEpisode.seasonNumber} Episode{" "}
+          {lastWatchedEpisode.episodeNumber || "Not found"}
+        </ThemedText>
       </View>
+      <ThemedText>{nextEpisodeToWatch?.episodeNumber}</ThemedText>
     </View>
   );
 }

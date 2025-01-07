@@ -58,7 +58,7 @@ type WatchedEpisodesStore = {
   ) => Promise<void>;
   unmarkEpisodeAsWatched: (showId: number, episodeId: number) => Promise<void>;
   getWatchedEpisodes: (showId: number) => Episode[];
-  getStartedShows: () => StartedShows[];
+  getStartedShows: () => Required<StartedShows>[];
   getRemainingEpisodes: (showId: number, seasonNumber: number) => number;
   getTotalWatchedEpisodes: (showId: number) => number;
   getNextEpisodeToWatch: (showId: number) => {
@@ -125,16 +125,26 @@ export const useWatchedEpisodesStore = create<WatchedEpisodesStore>(
       const shows = get().shows;
       return Object.entries(shows)
         .filter(([_, show]) => show.watchedEpisodes.length > 0)
-        .map(([showId, show]) => ({
-          showId: Number(showId),
-          showName: show.showName,
-          lastWatchedEpisode: show.lastWatchedEpisode,
-          totalWatchedEpisodes: show.watchedEpisodes.length,
-          lastWatchedAt: [...show.watchedEpisodes].sort(
+        .map(([showId, show]) => {
+          // Since we filtered for shows with watched episodes,
+          // we can safely get the most recent one
+          const mostRecentEpisode = [...show.watchedEpisodes].sort(
             (a, b) =>
               new Date(b.watchedAt).getTime() - new Date(a.watchedAt).getTime(),
-          )[0]?.watchedAt,
-        }));
+          )[0];
+
+          return {
+            showId: Number(showId),
+            showName: show.showName,
+            lastWatchedEpisode: {
+              // No longer optional
+              seasonNumber: mostRecentEpisode.seasonNumber,
+              episodeNumber: mostRecentEpisode.episodeNumber,
+            },
+            totalWatchedEpisodes: show.watchedEpisodes.length,
+            lastWatchedAt: mostRecentEpisode.watchedAt,
+          };
+        });
     },
 
     isEpisodeWatched: async (
