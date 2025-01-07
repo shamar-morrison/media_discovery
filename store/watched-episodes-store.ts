@@ -137,7 +137,6 @@ export const useWatchedEpisodesStore = create<WatchedEpisodesStore>(
             showId: Number(showId),
             showName: show.showName,
             lastWatchedEpisode: {
-              // No longer optional
               seasonNumber: mostRecentEpisode.seasonNumber,
               episodeNumber: mostRecentEpisode.episodeNumber,
             },
