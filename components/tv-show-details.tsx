@@ -3,17 +3,16 @@ import { TvShowDetailsResponse } from "@/types/tv-show-details";
 import { MediaBackdrop } from "@/components/media-backdrop";
 import { Section } from "@/components/section";
 import { ThemedText } from "@/components/themed-text";
-import { Badge } from "@/components/badge";
 import { FlashList } from "@shopify/flash-list";
 import { SeasonThumbnail } from "@/components/season-thumbnail";
-import { PersonCard } from "@/components/person-card";
 import { MediaType } from "@/types/multi-search";
 import { SecondaryMediaCard } from "@/components/secondary-media-card";
-import { Video } from "@/components/video";
-import { Site } from "@/types/movie-details";
 import { useEffect } from "react";
 import { useWatchedEpisodesStore } from "@/store/watched-episodes-store";
 import { showToast } from "@/utils/toast";
+import { CastSection } from "@/components/cast-section";
+import { VideosSection } from "@/components/videos-section";
+import { AboutSection } from "@/components/about-section";
 
 interface TvShowDetailsProps extends TvShowDetailsResponse {
   mediaType: MediaType;
@@ -71,18 +70,7 @@ export function TvShowDetails({
         />
       </View>
 
-      <Section title={"About"}>
-        <ThemedText className={"pt-3 leading-[1.50rem]"} numberOfLines={5}>
-          {overview || "No overview found"}
-        </ThemedText>
-        {genres.length > 0 && (
-          <View className={"mt-2 flex flex-row flex-wrap gap-2"}>
-            {genres.map((genre) => (
-              <Badge key={genre.id} text={genre.name} />
-            ))}
-          </View>
-        )}
-      </Section>
+      <AboutSection overview={overview} genres={genres} />
 
       <Section title={"Seasons"}>
         {seasons.length === 0 && (
@@ -112,48 +100,9 @@ export function TvShowDetails({
         )}
       </Section>
 
-      <Section title={"Videos"}>
-        {videos.results.length === 0 && (
-          <ThemedText className={"mt-4"}>No videos found</ThemedText>
-        )}
-        {videos.results.length > 0 && (
-          <FlashList
-            estimatedItemSize={videos.results.length}
-            className={"mt-4"}
-            data={videos.results.filter((video) => video.site === Site.YouTube)}
-            canCancelContentTouches={false}
-            horizontal={true}
-            renderItem={({ item }) => (
-              <Video type={item.type} name={item.name} videoKey={item.key} />
-            )}
-          />
-        )}
-      </Section>
+      <VideosSection videos={videos} />
 
-      <Section title={"Cast"}>
-        {credits.cast.length === 0 && (
-          <ThemedText className={"mt-4"}>No cast found</ThemedText>
-        )}
-        {credits.cast.length > 0 && (
-          <FlashList
-            showsHorizontalScrollIndicator={false}
-            estimatedItemSize={130}
-            className={"mt-4"}
-            data={credits.cast}
-            canCancelContentTouches={false}
-            horizontal={true}
-            renderItem={({ item, index }) => {
-              const isLastItem = index === credits.cast.length - 1;
-
-              return (
-                <View className={`${!isLastItem ? "mr-3" : ""}`}>
-                  <PersonCard {...item} />
-                </View>
-              );
-            }}
-          />
-        )}
-      </Section>
+      <CastSection cast={credits.cast} />
 
       <Section
         title={"More Like This"}

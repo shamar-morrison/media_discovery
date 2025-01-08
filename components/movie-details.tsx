@@ -1,14 +1,14 @@
 import { View } from "react-native";
-import { MovieDetailsResponse, Site } from "@/types/movie-details";
+import { MovieDetailsResponse } from "@/types/movie-details";
 import { ThemedText } from "@/components/themed-text";
 import { Section } from "@/components/section";
 import { FlashList } from "@shopify/flash-list";
-import { Video } from "@/components/video";
-import { PersonCard } from "@/components/person-card";
 import { MediaType } from "@/types/multi-search";
 import { SecondaryMediaCard } from "@/components/secondary-media-card";
 import { Badge } from "@/components/badge";
 import { MediaBackdrop } from "@/components/media-backdrop";
+import { CastSection } from "@/components/cast-section";
+import { VideosSection } from "@/components/videos-section";
 
 interface MovieDetailsProps extends MovieDetailsResponse {
   mediaType: MediaType;
@@ -58,48 +58,9 @@ export function MovieDetails({
         )}
       </Section>
 
-      <Section title={"Videos"}>
-        {videos.results.length === 0 && (
-          <ThemedText className={"mt-4"}>No videos found</ThemedText>
-        )}
-        {videos.results.length > 0 && (
-          <FlashList
-            estimatedItemSize={videos.results.length}
-            className={"mt-4"}
-            data={videos.results.filter((video) => video.site === Site.YouTube)}
-            canCancelContentTouches={false}
-            horizontal={true}
-            renderItem={({ item }) => (
-              <Video type={item.type} name={item.name} videoKey={item.key} />
-            )}
-          />
-        )}
-      </Section>
+      <VideosSection videos={videos} />
 
-      <Section title={"Cast"}>
-        {credits.cast.length === 0 && (
-          <ThemedText className={"mt-4"}>No cast found</ThemedText>
-        )}
-        {credits.cast.length > 0 && (
-          <FlashList
-            showsHorizontalScrollIndicator={false}
-            estimatedItemSize={130}
-            className={"mt-4"}
-            data={credits.cast}
-            canCancelContentTouches={false}
-            horizontal={true}
-            renderItem={({ item, index }) => {
-              const isLastItem = index === credits.cast.length - 1;
-
-              return (
-                <View className={`${!isLastItem ? "mr-3" : ""}`}>
-                  <PersonCard {...item} />
-                </View>
-              );
-            }}
-          />
-        )}
-      </Section>
+      <CastSection cast={credits.cast} />
 
       <Section
         title={"More Like This"}
