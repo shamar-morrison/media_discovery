@@ -138,7 +138,11 @@ function EpisodeCard({
         <ThemedText className={"text-sm opacity-50"}>
           {format(air_date, "MMM. dd, yyyy")}
         </ThemedText>
-        <ThemedText className={"text-sm opacity-50"}>{runtime} mins</ThemedText>
+        {runtime && (
+          <ThemedText className={"text-sm opacity-50"}>
+            {runtime} mins
+          </ThemedText>
+        )}
       </View>
       {isLoading ? (
         <ActivityIndicator size={"small"} color={"#fff"} />

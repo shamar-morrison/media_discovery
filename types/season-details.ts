@@ -20,7 +20,7 @@ export interface Episode {
   name: string;
   overview: string;
   production_code: string;
-  runtime: number;
+  runtime: number | undefined;
   season_number: number;
   show_id: number;
   still_path: string;

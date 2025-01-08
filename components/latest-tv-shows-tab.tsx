@@ -31,12 +31,12 @@ export function LatestTvShowsTab() {
   }
 
   // Flatten all pages' results into a single array
-  const movies = data.pages.flatMap((page) => page.results);
+  const shows = data.pages.flatMap((page) => page.results);
 
   return (
     <ThemedView>
       <FlashList
-        data={movies}
+        data={shows}
         renderItem={({ item, index }) => {
           return (
             <RenderItemWrapper index={index}>
@@ -47,7 +47,7 @@ export function LatestTvShowsTab() {
                 release_date={item.first_air_date}
                 title={item.name}
                 id={item.id}
-                mediaType={MediaType.Movie}
+                mediaType={MediaType.Tv}
                 containerWidth={itemWidth}
               />
             </RenderItemWrapper>

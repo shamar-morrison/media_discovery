@@ -6,7 +6,7 @@ import { LatestTvShowsTab } from "@/components/latest-tv-shows-tab";
 
 const Tab = createMaterialTopTabNavigator();
 
-// Discover Screen (Home)
+// home screen
 export default function Index() {
   return (
     <Tab.Navigator screenOptions={tabStyles} backBehavior={"none"}>
@@ -23,6 +23,7 @@ export default function Index() {
         name="tv"
         component={LatestTvShowsTab}
         options={{
+          lazy: true,
           tabBarLabel: ({ focused }) => (
             <TabBarLabel focused={focused}>Latest TV Shows</TabBarLabel>
           ),
