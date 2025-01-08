@@ -20,7 +20,7 @@ export function WatchlistsTab() {
         {movies.length > 0 && (
           <FlashList
             showsHorizontalScrollIndicator={false}
-            estimatedItemSize={movies.length}
+            estimatedItemSize={150}
             className={"mt-4"}
             data={movies}
             horizontal={true}
@@ -51,7 +51,7 @@ export function WatchlistsTab() {
         {tvShows.length > 0 && (
           <FlashList
             showsHorizontalScrollIndicator={false}
-            estimatedItemSize={movies.length}
+            estimatedItemSize={150}
             className={"mt-4"}
             data={tvShows}
             horizontal={true}

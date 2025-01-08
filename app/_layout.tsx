@@ -3,7 +3,7 @@ import "./globals.css";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useWatchlistStore } from "@/store/watchlist-store";
@@ -36,7 +36,13 @@ export default function RootLayout() {
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-    return null;
+    return (
+      <View
+        className={"flex-1 h-full bg-black-200 items-center justify-center"}
+      >
+        <ActivityIndicator size={"large"} color={"#fff"} />
+      </View>
+    );
   }
 
   return (

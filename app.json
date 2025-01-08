@@ -1,19 +1,23 @@
 {
   "expo": {
     "jsEngine": "hermes",
-    "name": "Media Discovery",
-    "slug": "media-discovery",
+    "name": "Media Tracker",
+    "slug": "media-tracker",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/splash-icon.png",
     "scheme": "media-discovery",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "LSApplicationQueriesSchemes": ["youtube"]
-      }
+        "LSApplicationQueriesSchemes": [
+          "youtube",
+          "youtube"
+        ]
+      },
+      "bundleIdentifier": "com.shamar2000.mediatracker"
     },
     "backgroundColor": "#1D1D1D",
     "androidNavigationBar": {
@@ -22,9 +26,10 @@
     "android": {
       "backgroundColor": "#1D1D1D",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/images/splash-icon.png",
+        "backgroundColor": "#1D1D1D"
+      },
+      "package": "com.shamar2000.mediatracker"
     },
     "web": {
       "bundler": "metro",
@@ -37,9 +42,11 @@
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
-          "resizeMode": "cover",
-          "backgroundColor": "#1d1d1d",
-          "enableFullScreenImage_legacy": true
+          "resizeMode": "contain",
+          "backgroundColor": "#1D1D1D",
+          "dark": {
+            "backgroundColor": "#1D1D1D"
+          }
         }
       ],
       [

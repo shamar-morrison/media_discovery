@@ -137,7 +137,7 @@ export function TvShowDetails({
         {credits.cast.length > 0 && (
           <FlashList
             showsHorizontalScrollIndicator={false}
-            estimatedItemSize={credits.cast.length}
+            estimatedItemSize={130}
             className={"mt-4"}
             data={credits.cast}
             canCancelContentTouches={false}

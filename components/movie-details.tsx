@@ -83,7 +83,7 @@ export function MovieDetails({
         {credits.cast.length > 0 && (
           <FlashList
             showsHorizontalScrollIndicator={false}
-            estimatedItemSize={10}
+            estimatedItemSize={130}
             className={"mt-4"}
             data={credits.cast}
             canCancelContentTouches={false}
