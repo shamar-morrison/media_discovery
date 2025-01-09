@@ -7,8 +7,9 @@ import { useAppropriateImage } from "@/utils/use-appropriate-image";
 import { View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { format } from "date-fns";
-import { getAge } from "@/utils/get-age";
 import { PersonTabLayout } from "@/components/person-info-tabs/person-tab-layout";
+import { groupBy } from "@/utils/group-by";
+import { MovieCredits, TvShowCredits } from "@/types/combined-credits";
 
 export function PersonScreen() {
   const { personId } = useLocalSearchParams<{ personId: string }>();
@@ -28,6 +29,11 @@ export function PersonScreen() {
     );
   }
 
+  const filmography = groupBy(
+    data.credits.cast,
+    ({ media_type }) => media_type,
+  );
+
   return (
     <View className={"mt-4"}>
       <View className="flex items-center gap-3">
@@ -46,13 +52,21 @@ export function PersonScreen() {
             {data.details.name}
           </ThemedText>
           <ThemedText className={"text-center"}>
-            Born: {format(data.details.birthday, "MMM. dd, yyyy")} • Age:{" "}
-            {getAge(data.details.birthday)}
-          </ThemedText>
+            Born on {format(data.details.birthday, "MMM. dd, yyyy")}
+          </ThemedText>{" "}
+          {data.details.deathday && (
+            <ThemedText className={"text-center"}>
+              Died on {format(data.details.deathday, "MMM. dd, yyyy")}
+            </ThemedText>
+          )}
         </View>
       </View>
       <View className="mt-4 h-full">
-        <PersonTabLayout />
+        <PersonTabLayout
+          details={data.details.biography}
+          movies={filmography.movie as MovieCredits[]}
+          tvShows={filmography.tv as TvShowCredits[]}
+        />
       </View>
     </View>
   );

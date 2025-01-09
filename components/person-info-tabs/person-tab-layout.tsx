@@ -1,20 +1,34 @@
-import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { tabStyles } from "@/styles/tab-styles";
 import { PersonDetailsTab } from "@/components/person-info-tabs/person-details-tab";
 import { FilmographyMovies } from "@/components/person-info-tabs/filmography-movies";
 import { FilmographyTvShows } from "@/components/person-info-tabs/filmography-tv-shows";
 import { TabBarLabel } from "@/components/tab-bar-label";
+import { MovieCredits, TvShowCredits } from "@/types/combined-credits";
 
 const Tab = createMaterialTopTabNavigator();
 
-export function PersonTabLayout() {
-  const DetailsWrapper = () => <PersonDetailsTab />;
-  const MoviesWrapper = () => <FilmographyMovies />;
-  const TvShowsWrapper = () => <FilmographyTvShows />;
+type PersonTabLayoutProps = {
+  details: string;
+  movies: MovieCredits[];
+  tvShows: TvShowCredits[] | undefined;
+};
+
+export function PersonTabLayout({
+  details,
+  movies,
+  tvShows,
+}: PersonTabLayoutProps) {
+  const DetailsWrapper = () => <PersonDetailsTab details={details} />;
+  const MoviesWrapper = () => <FilmographyMovies movies={movies} />;
+  const TvShowsWrapper = () => <FilmographyTvShows tv={tvShows} />;
 
   return (
-    <Tab.Navigator screenOptions={tabStyles}>
+    <Tab.Navigator
+      screenOptions={tabStyles}
+      initialRouteName={"movies"}
+      backBehavior={"none"}
+    >
       <Tab.Screen
         name={"details"}
         component={DetailsWrapper}

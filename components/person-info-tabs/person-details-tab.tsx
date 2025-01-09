@@ -1,10 +1,10 @@
-import { Text, View } from "react-native";
-import React from "react";
+import { View } from "react-native";
+import { ThemedText } from "@/components/themed-text";
 
-export function PersonDetailsTab() {
+export function PersonDetailsTab({ details }: { details: string }) {
   return (
     <View>
-      <Text>PersonDetailsTab</Text>
+      <ThemedText className={"leading-7"}>{details}</ThemedText>
     </View>
   );
 }
