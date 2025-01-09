@@ -28,6 +28,7 @@ export function PersonTabLayout({
       screenOptions={tabStyles}
       initialRouteName={"movies"}
       backBehavior={"none"}
+      style={{ flex: 1 }}
     >
       <Tab.Screen
         name={"details"}

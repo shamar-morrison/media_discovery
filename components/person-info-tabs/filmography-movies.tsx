@@ -9,7 +9,7 @@ import { ThemedView } from "@/components/themed-view";
 
 export function FilmographyMovies({ movies }: { movies: MovieCredits[] }) {
   return (
-    <ThemedView>
+    <ThemedView style={{ flex: 1 }}>
       <FlashList
         data={movies}
         renderItem={({ item, index }) => {

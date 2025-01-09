@@ -25,7 +25,7 @@ export function FilmographyTvShows({
   }
 
   return (
-    <ThemedView>
+    <ThemedView style={{ flex: 1 }}>
       <FlashList
         data={tv}
         renderItem={({ item, index }) => {

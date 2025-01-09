@@ -35,7 +35,7 @@ export function PersonScreen() {
   );
 
   return (
-    <View className={"mt-4"}>
+    <View className={"mt-4 flex-1"}>
       <View className="flex items-center gap-3">
         <ThemedImage
           style={{
@@ -63,7 +63,7 @@ export function PersonScreen() {
           )}
         </View>
       </View>
-      <View className="mt-4 h-full">
+      <View className="mt-4 flex-1">
         <PersonTabLayout
           details={data.details.biography}
           movies={filmography.movie as MovieCredits[]}
