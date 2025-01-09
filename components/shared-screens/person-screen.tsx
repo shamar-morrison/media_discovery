@@ -51,9 +51,11 @@ export function PersonScreen() {
           <ThemedText className={"text-2xl font-inter-semibold"}>
             {data.details.name}
           </ThemedText>
-          <ThemedText className={"text-center"}>
-            Born on {format(data.details.birthday, "MMM. dd, yyyy")}
-          </ThemedText>{" "}
+          {data.details.birthday && (
+            <ThemedText className={"text-center"}>
+              Born on {format(data.details.birthday, "MMM. dd, yyyy")}
+            </ThemedText>
+          )}
           {data.details.deathday && (
             <ThemedText className={"text-center"}>
               Died on {format(data.details.deathday, "MMM. dd, yyyy")}

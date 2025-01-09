@@ -2,7 +2,7 @@ export interface PersonDetails {
   adult: boolean;
   also_known_as: string[];
   biography: string;
-  birthday: Date;
+  birthday: Date | null;
   deathday: Date | null;
   gender: number;
   homepage: string | null;
