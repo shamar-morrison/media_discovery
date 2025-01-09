@@ -16,7 +16,7 @@ export function FilmographyTvShows({
 }) {
   if (!tv || tv.length === 0) {
     return (
-      <View className={"items-center justify-center"}>
+      <View className={"flex items-center justify-center flex-1"}>
         <ThemedText className={"text-lg font-inter-semibold"}>
           No TV Shows found
         </ThemedText>

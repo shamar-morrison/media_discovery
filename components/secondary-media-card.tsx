@@ -46,12 +46,12 @@ export function SecondaryMediaCard({
             />
           </View>
           <View className={"flex w-32"}>
-            <Text
-              className={"text-white font-inter-semibold w-full"}
+            <ThemedText
+              className={"font-inter-semibold w-full"}
               numberOfLines={1}
             >
               {title}
-            </Text>
+            </ThemedText>
             <View className="flex flex-row items-center">
               <ThemedText className={"text-sm opacity-50"}>
                 {release_date ? getYear(release_date) : "N/A"}
