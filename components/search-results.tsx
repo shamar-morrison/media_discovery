@@ -11,6 +11,8 @@ import { FlashList } from "@shopify/flash-list";
 import { NUM_COLUMNS } from "@/utils/constants";
 import { DiscoverTvShowResult } from "@/types/discover-tv-show";
 import { DiscoverMovieResult } from "@/types/discover-movie";
+import { PersonDetails } from "@/types/person-details";
+import { PersonCard } from "@/components/person-card";
 
 export function SearchResults({
   results,
@@ -93,7 +95,12 @@ export function SearchResults({
                 </RenderItemWrapper>
               );
             }
-            return <ThemedText>People</ThemedText>;
+            const castedItem = item as unknown as PersonDetails;
+            return (
+              <RenderItemWrapper index={index}>
+                <PersonCard {...castedItem} credit_id={""} original_name={""} />
+              </RenderItemWrapper>
+            );
           }}
         />
       )}
