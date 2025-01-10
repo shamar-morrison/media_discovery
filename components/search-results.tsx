@@ -1,7 +1,7 @@
 import { MediaType, MultiSearchResult } from "@/types/multi-search";
 import React, { useCallback, useState } from "react";
 import { Loading } from "@/components/loading";
-import InitialSearchState from "@/components/initial-search-state";
+import { InitialSearchState } from "@/components/initial-search-state";
 import { SearchCategories } from "@/components/search-categories";
 import { ThemedText } from "@/components/themed-text";
 import { MediaCard } from "@/components/media-card";

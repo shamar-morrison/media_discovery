@@ -1,9 +1,8 @@
-import { View, Text } from "react-native";
-import React from "react";
+import { View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-export default function InitialSearchState() {
+export function InitialSearchState() {
   return (
     <View
       className={
