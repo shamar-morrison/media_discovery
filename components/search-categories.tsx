@@ -1,7 +1,8 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import React from "react";
 import { ThemedText } from "@/components/themed-text";
-import { MediaType, MultiSearchResult } from "@/types/multi-search";
+import { MediaType } from "@/types/multi-search";
+import { ncn } from "@/utils/ncn";
 
 const categories = [
   {
@@ -26,18 +27,21 @@ export function SearchCategories({
   currentMediaType: MediaType;
 }) {
   return (
-    <View className={"flex flex-row gap-2 my-4"}>
-      {categories.map((category) => (
+    <View className="my-4 flex-row">
+      {categories.map((category, i, array) => (
         <TouchableOpacity
           onPress={() => handleUpdateMediaType(category.type)}
           key={category.type}
-          className={`border-[0.4px] border-accent-100 rounded-lg px-4 py-1 ${
+          className={ncn(
+            `flex-1 border-[0.5px] mx-1 border-accent-100/20 rounded-lg px-4 py-2`,
             category.type === currentMediaType
               ? "bg-primary-300 text-white border-transparent"
-              : "bg-black-100 text-accent-100"
-          }`}
+              : "bg-black-100 text-accent-100",
+            i === array.length - 1 && "mx-0",
+            i === 0 && "mx-0",
+          )}
         >
-          <ThemedText>{category.name}</ThemedText>
+          <ThemedText className="text-center">{category.name}</ThemedText>
         </TouchableOpacity>
       ))}
     </View>
