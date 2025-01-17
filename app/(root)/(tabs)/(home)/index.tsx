@@ -6,6 +6,7 @@ import { LatestTvShowsTab } from "@/components/latest-tv-shows-tab";
 import React from "react";
 import { ScreenTitle } from "@/components/screen-title";
 import { View } from "react-native";
+import { DrawerMenuButton } from "@/components/drawer-menu-button";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -13,7 +14,8 @@ const Tab = createMaterialTopTabNavigator();
 export default function Index() {
   return (
     <>
-      <View className="px-4 pt-4">
+      <View className="flex flex-row px-4 pt-4 bg-black-200">
+        <DrawerMenuButton />
         <ScreenTitle>Discover</ScreenTitle>
       </View>
       <Tab.Navigator screenOptions={tabStyles} backBehavior={"none"}>
