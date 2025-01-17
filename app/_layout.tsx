@@ -8,6 +8,8 @@ import { StatusBar } from "expo-status-bar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useWatchlistStore } from "@/store/watchlist-store";
 import { useWatchedEpisodesStore } from "@/store/watched-episodes-store";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 console.log("");
 
@@ -49,23 +51,27 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SafeAreaView
-        style={{ backgroundColor: "#1d1d1d", flex: 1, height: "100%" }}
-      >
-        <StatusBar style="light" />
-        <View style={{ flex: 1, backgroundColor: "#1d1d1d" }}>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              contentStyle: {
-                backgroundColor: "#1d1d1d",
-              },
-              animation: "none",
-              presentation: "card",
-            }}
-          />
-        </View>
-      </SafeAreaView>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <BottomSheetModalProvider>
+          <SafeAreaView
+            style={{ backgroundColor: "#1d1d1d", flex: 1, height: "100%" }}
+          >
+            <StatusBar style="light" />
+            <View style={{ flex: 1, backgroundColor: "#1d1d1d" }}>
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                  contentStyle: {
+                    backgroundColor: "#1d1d1d",
+                  },
+                  animation: "none",
+                  presentation: "card",
+                }}
+              />
+            </View>
+          </SafeAreaView>
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
     </QueryClientProvider>
   );
 }
