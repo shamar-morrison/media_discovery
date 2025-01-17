@@ -1,5 +1,6 @@
-import { Image, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import React from "react";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export function TabIcon({
   focused,
@@ -7,17 +8,12 @@ export function TabIcon({
   title,
 }: {
   focused: boolean;
-  icon: any;
+  icon: React.ComponentProps<typeof Ionicons>["name"];
   title: string;
 }) {
   return (
-    <View className={"flex-1 mt-3 flex flex-col items-center"}>
-      <Image
-        className={"size-6"}
-        source={icon}
-        tintColor={focused ? "#0061FF" : "#FBFBFD"}
-        resizeMode={"contain"}
-      />
+    <View className={"h-full flex flex-col mt-4 items-center"}>
+      <Ionicons name={icon} size={20} color={focused ? "#0061FF" : "#FBFBFD"} />
       <Text
         className={`${focused ? "text-primary-300 font-inter-medium" : "text-accent-100 font-inter"} text-xs w-full text-center mt-1`}
       >

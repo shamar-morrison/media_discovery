@@ -1,6 +1,4 @@
-import React from "react";
 import { Tabs } from "expo-router";
-import icons from "@/constants/icons";
 import { TabIcon } from "@/components/tab-icon";
 
 export default function TabsLayout() {
@@ -11,7 +9,7 @@ export default function TabsLayout() {
         tabBarStyle: {
           backgroundColor: "#1D1D1D",
           position: "relative",
-          minHeight: 70,
+          minHeight: 60,
           shadowColor: "#000",
           shadowOpacity: 1,
           elevation: 10,
@@ -25,7 +23,7 @@ export default function TabsLayout() {
           title: "Home",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon icon={icons.home} title={"Discover"} focused={focused} />
+            <TabIcon icon={"home"} title={"Discover"} focused={focused} />
           ),
         }}
       />
@@ -35,7 +33,21 @@ export default function TabsLayout() {
           title: "Search",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon icon={icons.search} title={"Search"} focused={focused} />
+            <TabIcon icon={"search"} title={"Search"} focused={focused} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="(trending)"
+        options={{
+          title: "Trending",
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <TabIcon
+              icon={"trending-up"}
+              title={"Trending"}
+              focused={focused}
+            />
           ),
         }}
       />
@@ -45,7 +57,7 @@ export default function TabsLayout() {
           title: "Profile",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon icon={icons.person} title={"Profile"} focused={focused} />
+            <TabIcon icon={"person"} title={"Profile"} focused={focused} />
           ),
         }}
       />
