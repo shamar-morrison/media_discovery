@@ -9,6 +9,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useWatchlistStore } from "@/store/watchlist-store";
 import { useWatchedEpisodesStore } from "@/store/watched-episodes-store";
 
+console.log("");
+
 export default function RootLayout() {
   useEffect(() => {
     useWatchlistStore.getState().initialize();
