@@ -1,9 +1,4 @@
-interface Genre {
-  id: number;
-  name: string;
-}
-
-export const MOVIE_GENRES: { [key: string]: Genre } = {
+export const MOVIE_GENRES = {
   ACTION: { id: 28, name: "Action" },
   ADVENTURE: { id: 12, name: "Adventure" },
   ANIMATION: { id: 16, name: "Animation" },
@@ -25,7 +20,7 @@ export const MOVIE_GENRES: { [key: string]: Genre } = {
   WESTERN: { id: 37, name: "Western" },
 } as const;
 
-export const TV_GENRES: { [key: string]: Genre } = {
+export const TV_GENRES = {
   ACTION_ADVENTURE: { id: 10759, name: "Action & Adventure" },
   ANIMATION: { id: 16, name: "Animation" },
   COMEDY: { id: 35, name: "Comedy" },
