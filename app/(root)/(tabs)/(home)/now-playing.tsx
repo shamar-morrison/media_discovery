@@ -1,42 +1,28 @@
-import { View } from "react-native";
 import React from "react";
-import { useDiscoverMovie } from "@/hooks/use-discover-movie";
+import { useGetNowPlaying } from "@/hooks/use-get-now-playing";
 import { Loading } from "@/components/loading";
 import { Error } from "@/components/error";
-import { ThemedView } from "@/components/themed-view";
-import { FlashList } from "@shopify/flash-list";
 import { RenderItemWrapper } from "@/components/render-item-wrapper";
 import { MediaCard } from "@/components/media-card";
 import { MediaType } from "@/types/multi-search";
 import { itemWidth } from "@/utils/get-item-width";
 import { NUM_COLUMNS } from "@/utils/constants";
+import { ThemedView } from "@/components/themed-view";
+import { FlashList } from "@shopify/flash-list";
+import { ScreenTitle } from "@/components/screen-title";
 
-export function LatestMoviesTab() {
-  const {
-    data,
-    isLoading,
-    isError,
-    refetch,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
-  } = useDiscoverMovie();
+export default function NowPlaying() {
+  const { data, isLoading, isError, refetch } = useGetNowPlaying();
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  if (isLoading) return <Loading />;
 
-  if (isError || !data) {
-    return <Error onRetry={refetch} />;
-  }
-
-  // Flatten all pages' results into a single array
-  const movies = data.pages.flatMap((page) => page.results);
+  if (isError || !data) return <Error onRetry={refetch} />;
 
   return (
     <ThemedView>
+      <ScreenTitle>Now Playing in Theaters</ScreenTitle>
       <FlashList
-        data={movies}
+        data={data.results}
         renderItem={({ item, index }) => {
           return (
             <RenderItemWrapper index={index}>
@@ -55,19 +41,6 @@ export function LatestMoviesTab() {
         }}
         numColumns={NUM_COLUMNS}
         estimatedItemSize={160}
-        onEndReached={() => {
-          if (hasNextPage) {
-            fetchNextPage();
-          }
-        }}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={() =>
-          isFetchingNextPage ? (
-            <View className="py-4">
-              <Loading />
-            </View>
-          ) : null
-        }
       />
     </ThemedView>
   );

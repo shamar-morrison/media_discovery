@@ -1,10 +1,17 @@
-import { TouchableOpacity, View } from "react-native";
-import React, { useCallback, useRef } from "react";
+import { Pressable, TouchableOpacity, View } from "react-native";
+import React, { useCallback, useMemo, useRef } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { hitSlop } from "@/utils/hit-slop";
 import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import { ThemedText } from "@/components/themed-text";
 import { Sheet } from "@/components/nativewindui/Sheet";
+import { router } from "expo-router";
+
+type SheetItem = {
+  name: string;
+  icon: React.ComponentProps<typeof Ionicons>["name"];
+  route: string;
+};
 
 export function DrawerMenuButton() {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -13,8 +20,62 @@ export function DrawerMenuButton() {
     bottomSheetModalRef.current?.present();
   }, []);
 
+  const handleCloseSheetPress = useCallback(() => {
+    bottomSheetModalRef.current?.close();
+  }, []);
+
   const handleSheetChanges = useCallback((index: number) => {
     console.log("handleSheetChanges", index);
+  }, []);
+
+  const moviesSheetItems: SheetItem[] = useMemo(() => {
+    return [
+      {
+        name: "Popular",
+        icon: "sparkles",
+        route: "/popular-movies",
+      },
+      {
+        name: "Top Rated",
+        icon: "arrow-up-circle",
+        route: "/top-rated-movies",
+      },
+      {
+        name: "Genres",
+        icon: "list",
+        route: "/movie-genres",
+      },
+      {
+        name: "Now Playing",
+        icon: "play",
+        route: "/now-playing",
+      },
+    ];
+  }, []);
+
+  const tvShowsSheetItems: SheetItem[] = useMemo(() => {
+    return [
+      {
+        name: "Airing Today",
+        icon: "tv",
+        route: "/airing-today",
+      },
+      {
+        name: "Popular",
+        icon: "star",
+        route: "/popular-tv-shows",
+      },
+      {
+        name: "Genres",
+        icon: "list",
+        route: "/tv-genres",
+      },
+      {
+        name: "On The Air",
+        icon: "videocam",
+        route: "/on-the-air",
+      },
+    ];
   }, []);
 
   return (
@@ -32,19 +93,29 @@ export function DrawerMenuButton() {
             Movies
           </ThemedText>
           <View className={"flex flex-row flex-wrap gap-4"}>
-            <SheetItem name={"Popular"} icon={"sparkles"} />
-            <SheetItem name={"Top Rated"} icon={"arrow-up-circle"} />
-            <SheetItem name={"Genres"} icon={"list"} />
-            <SheetItem name={"Now Playing"} icon={"play"} />
+            {moviesSheetItems.map((item, i) => (
+              <SheetItem
+                key={i}
+                closeSheet={handleCloseSheetPress}
+                name={item.name}
+                icon={item.icon}
+                route={item.route}
+              />
+            ))}
           </View>
           <ThemedText className={"text-2xl font-inter-semibold mb-4 mt-8"}>
             TV Shows
           </ThemedText>
           <View className={"flex flex-row flex-wrap gap-4"}>
-            <SheetItem name={"Airing Today"} icon={"tv"} />
-            <SheetItem name={"Popular"} icon={"star"} />
-            <SheetItem name={"Genres"} icon={"list"} />
-            <SheetItem name={"On The Air"} icon={"videocam"} />
+            {tvShowsSheetItems.map((item, i) => (
+              <SheetItem
+                key={i}
+                closeSheet={handleCloseSheetPress}
+                name={item.name}
+                icon={item.icon}
+                route={item.route}
+              />
+            ))}
           </View>
         </BottomSheetView>
       </Sheet>
@@ -55,14 +126,29 @@ export function DrawerMenuButton() {
 function SheetItem({
   name,
   icon,
+  route,
+  closeSheet,
 }: {
   name: string;
   icon: React.ComponentProps<typeof Ionicons>["name"];
+  route: string;
+  closeSheet: () => void;
 }) {
+  const handleNavigation = () => {
+    router.push(route as any);
+    closeSheet();
+  };
+
   return (
-    <View className="flex flex-row gap-2 pl-5 items-center bg-primary-200/50 rounded-lg p-3 w-[47%]">
-      <Ionicons name={icon} size={24} color={"#fff"} />
-      <ThemedText>{name}</ThemedText>
-    </View>
+    <Pressable
+      hitSlop={{ top: 10, left: 10, bottom: 10, right: 10 }}
+      className="bg-primary-200/50 rounded-lg p-3 w-[47%]"
+      onPress={handleNavigation}
+    >
+      <View className={"flex flex-row gap-2 pl-2 items-center"}>
+        <Ionicons name={icon} size={24} color={"#fff"} />
+        <ThemedText>{name}</ThemedText>
+      </View>
+    </Pressable>
   );
 }
