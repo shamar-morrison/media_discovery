@@ -79,20 +79,17 @@ export function YearFilter({ onChange, initialYear }: YearFilterProps) {
   );
 
   return (
-    <View
+    <Pressable
+      onPress={handlePresentModalPress}
       className={"flex-1 py-3 px-4 rounded-lg bg-black-100"}
       hitSlop={hitSlop}
     >
-      <Pressable
-        onPress={handlePresentModalPress}
-        hitSlop={hitSlop}
-        className={"flex-row items-center justify-between"}
-      >
+      <View className={"flex-row items-center justify-between"}>
         <ThemedText numberOfLines={1} style={{ width: 65 }}>
           {selectedYear || "Year"}
         </ThemedText>
         <Ionicons name={"chevron-down"} size={12} color={"#fff"} />
-      </Pressable>
+      </View>
       <Sheet
         ref={bottomSheetModalRef}
         onChange={handleSheetChanges}
@@ -115,6 +112,6 @@ export function YearFilter({ onChange, initialYear }: YearFilterProps) {
           contentContainerStyle={{ paddingHorizontal: 24 }}
         />
       </Sheet>
-    </View>
+    </Pressable>
   );
 }

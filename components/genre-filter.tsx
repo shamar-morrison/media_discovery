@@ -3,7 +3,7 @@ import { ThemedText } from "@/components/themed-text";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { hitSlop } from "@/utils/hit-slop";
 import { useCallback, useMemo, useState } from "react";
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { BottomSheetVirtualizedList } from "@gorhom/bottom-sheet";
 import { Sheet, useSheetRef } from "@/components/nativewindui/Sheet";
 import { useHandleSheetChanges } from "@/utils/handle-sheet-changes";
 import { MOVIE_GENRES } from "@/types/genres";
@@ -52,21 +52,48 @@ export function GenreFilter({
     [onChange, handleCloseSheetPress],
   );
 
+  const genres = useMemo(() => {
+    return [{ id: undefined, name: "All" }, ...Object.values(MOVIE_GENRES)];
+  }, []);
+
+  const renderItem = useCallback(
+    ({ item }: { item: { id: number | undefined; name: string } }) => {
+      const isSelected =
+        item.id === selectedGenreId ||
+        (item.id === undefined && !selectedGenreId);
+
+      return (
+        <Pressable
+          onPress={() => handleGenreUpdate(item.id, item.name)}
+          className={"flex-1 py-4 flex-row items-center"}
+        >
+          <ThemedText>{item.name}</ThemedText>
+          {isSelected && (
+            <Ionicons
+              name={"checkmark-circle"}
+              size={22}
+              color={PRIMARY_BLUE}
+              className={"ml-3"}
+            />
+          )}
+        </Pressable>
+      );
+    },
+    [handleGenreUpdate, selectedGenreId],
+  );
+
   return (
-    <View
+    <Pressable
+      onPress={handlePresentModalPress}
       className={"flex-1 py-3 px-4 rounded-lg bg-black-100"}
       hitSlop={hitSlop}
     >
-      <Pressable
-        onPress={handlePresentModalPress}
-        hitSlop={hitSlop}
-        className={"flex-row items-center justify-between"}
-      >
+      <View className={"flex-row items-center justify-between"}>
         <ThemedText numberOfLines={1} style={{ width: 65 }}>
           {selectedGenreName || "Genre"}
         </ThemedText>
         <Ionicons name={"chevron-down"} size={12} color={"#fff"} />
-      </Pressable>
+      </View>
       <Sheet
         ref={bottomSheetModalRef}
         onChange={handleSheetChanges}
@@ -80,48 +107,15 @@ export function GenreFilter({
             Genres
           </ThemedText>
         </View>
-        <BottomSheetScrollView
-          className={"flex-1 px-6 py-4 max-h-[50vh] mb-8"}
-          persistentScrollbar={true}
-          showsVerticalScrollIndicator={true}
-        >
-          <Pressable
-            onPress={() => handleGenreUpdate(undefined, "All")}
-            className={"flex-1 py-4 flex-row items-center"}
-            key={"All"}
-          >
-            <ThemedText>All</ThemedText>
-            {selectedGenreName === "All" && (
-              <Ionicons
-                name={"checkmark-circle"}
-                size={22}
-                color={PRIMARY_BLUE}
-                className={"ml-3"}
-              />
-            )}
-          </Pressable>
-
-          {Object.entries(MOVIE_GENRES).map(([_, obj]) => {
-            return (
-              <Pressable
-                onPress={() => handleGenreUpdate(obj.id, obj.name)}
-                className={"flex-1 py-4 flex-row items-center"}
-                key={obj.name}
-              >
-                <ThemedText>{obj.name}</ThemedText>
-                {selectedGenreId === obj.id && (
-                  <Ionicons
-                    name={"checkmark-circle"}
-                    size={22}
-                    color={PRIMARY_BLUE}
-                    className={"ml-3"}
-                  />
-                )}
-              </Pressable>
-            );
-          })}
-        </BottomSheetScrollView>
+        <BottomSheetVirtualizedList
+          data={genres}
+          keyExtractor={(item) => item.name}
+          renderItem={renderItem}
+          getItemCount={(data) => data.length}
+          getItem={(data, index) => data[index]}
+          contentContainerStyle={{ paddingHorizontal: 24 }}
+        />
       </Sheet>
-    </View>
+    </Pressable>
   );
 }
