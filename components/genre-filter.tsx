@@ -5,26 +5,28 @@ import { hitSlop } from "@/utils/hit-slop";
 import { useCallback, useMemo, useState } from "react";
 import { BottomSheetVirtualizedList } from "@gorhom/bottom-sheet";
 import { Sheet, useSheetRef } from "@/components/nativewindui/Sheet";
-import { MOVIE_GENRES } from "@/types/genres";
+import { MOVIE_GENRES, TV_GENRES } from "@/types/genres";
 import { PRIMARY_BLUE } from "@/utils/constants";
+import { MediaType } from "@/types/multi-search";
 
 interface FilterProps {
   onChange: (genreId: number | undefined) => void;
   initialGenreId?: number;
+  type: MediaType.Movie | MediaType.Tv;
 }
 
-export function GenreFilter({
-  onChange,
-  initialGenreId = MOVIE_GENRES.ACTION.id,
-}: FilterProps) {
+export function GenreFilter({ onChange, initialGenreId, type }: FilterProps) {
   const [selectedGenreId, setSelectedGenreId] = useState<number | undefined>(
     initialGenreId,
   );
   const [selectedGenreName, setSelectedGenreName] = useState<
     string | undefined
   >(
-    Object.values(MOVIE_GENRES).find((genre) => genre.id === initialGenreId)
-      ?.name,
+    type === MediaType.Movie
+      ? Object.values(MOVIE_GENRES).find((genre) => genre.id === initialGenreId)
+          ?.name
+      : Object.values(TV_GENRES).find((genre) => genre.id === initialGenreId)
+          ?.name,
   );
   const [isClosing, setIsClosing] = useState(false);
 
@@ -60,8 +62,9 @@ export function GenreFilter({
   );
 
   const genres = useMemo(() => {
-    return [{ id: undefined, name: "All" }, ...Object.values(MOVIE_GENRES)];
-  }, []);
+    const genreList = type === MediaType.Movie ? MOVIE_GENRES : TV_GENRES;
+    return [{ id: undefined, name: "All" }, ...Object.values(genreList)];
+  }, [type]);
 
   const renderItem = useCallback(
     ({ item }: { item: { id: number | undefined; name: string } }) => {

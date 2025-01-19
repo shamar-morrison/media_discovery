@@ -2,10 +2,9 @@ import React, { useRef, useState } from "react";
 import { ScreenTitle } from "@/components/screen-title";
 import { View } from "react-native";
 import { GenreFilter } from "@/components/genre-filter";
-import { useDiscoverMovie } from "@/hooks/use-discover-movie";
 import { Loading } from "@/components/loading";
 import { Error } from "@/components/error";
-import { MOVIE_GENRES } from "@/types/genres";
+import { TV_GENRES } from "@/types/genres";
 import { RenderItemWrapper } from "@/components/render-item-wrapper";
 import { MediaCard } from "@/components/media-card";
 import { MediaType } from "@/types/multi-search";
@@ -15,10 +14,11 @@ import { FlashList } from "@shopify/flash-list";
 import { ThemedView } from "@/components/themed-view";
 import { YearFilter } from "@/components/year-filter";
 import { RatingFilter } from "@/components/rating-filter";
+import { useDiscoverTvShows } from "@/hooks/use-discover-tv-shows";
 
-export default function MovieGenres() {
+export default function TvGenres() {
   const [genreId, setGenreId] = useState<number | undefined>(
-    MOVIE_GENRES.ACTION.id,
+    TV_GENRES.DRAMA.id,
   );
   const [year, setYear] = useState<number | undefined>(undefined);
   const [rating, setRating] = useState<number | undefined>(undefined);
@@ -32,7 +32,7 @@ export default function MovieGenres() {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-  } = useDiscoverMovie({ genreId, year, rating });
+  } = useDiscoverTvShows({ genreId, year, rating });
 
   if (isLoading) {
     return <Loading />;
@@ -46,7 +46,7 @@ export default function MovieGenres() {
     listRef.current?.scrollToOffset({ offset: 0, animated: true });
 
   // Flatten all pages' results into a single array
-  const movies = data.pages.flatMap((page) => page.results);
+  const shows = data.pages.flatMap((page) => page.results);
 
   const handleGenreUpdate = (genreId: number | undefined) => {
     setGenreId(genreId);
@@ -56,13 +56,13 @@ export default function MovieGenres() {
   return (
     <View className={"flex-1"}>
       <View className={"p-4"}>
-        <ScreenTitle className={"pb-0"}>Movie Genres</ScreenTitle>
+        <ScreenTitle className={"pb-0"}>TV Show Genres</ScreenTitle>
       </View>
       <View className="flex-row gap-4 justify-between px-4">
         <GenreFilter
           onChange={handleGenreUpdate}
           initialGenreId={genreId}
-          type={MediaType.Movie}
+          type={MediaType.Tv}
         />
         <YearFilter
           onChange={(year) => {
@@ -81,8 +81,7 @@ export default function MovieGenres() {
       </View>
       <ThemedView>
         <FlashList
-          ref={listRef}
-          data={movies}
+          data={shows}
           renderItem={({ item, index }) => {
             return (
               <RenderItemWrapper index={index}>
@@ -90,17 +89,17 @@ export default function MovieGenres() {
                   containerHeight={165}
                   posterPath={item.poster_path}
                   rating={item.vote_average}
-                  release_date={item.release_date}
-                  title={item.title}
+                  release_date={item.first_air_date}
+                  title={item.name}
                   id={item.id}
-                  mediaType={MediaType.Movie}
+                  mediaType={MediaType.Tv}
                   containerWidth={itemWidth}
                 />
               </RenderItemWrapper>
             );
           }}
           numColumns={NUM_COLUMNS}
-          estimatedItemSize={160}
+          estimatedItemSize={100}
           onEndReached={() => {
             if (hasNextPage) {
               fetchNextPage();

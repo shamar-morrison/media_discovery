@@ -3,21 +3,45 @@ import { axiosInstance } from "@/lib/api-client";
 import { useFocusNotifyOnChangeProps } from "@/hooks/use-focus-notify-on-change-props";
 import { DiscoverTvShowResponse } from "@/types/discover-tv-show";
 
-export function useDiscoverTvShows() {
+interface DiscoverTvShowsParams {
+  genreId?: number;
+  year?: number;
+  rating?: number;
+}
+
+export function useDiscoverTvShows({
+  genreId,
+  year,
+  rating,
+}: DiscoverTvShowsParams = {}) {
   const notifyOnChangeProps = useFocusNotifyOnChangeProps();
 
+  const queryParams = new URLSearchParams();
+
+  if (genreId !== undefined) {
+    queryParams.append("with_genres", genreId.toString());
+  }
+
+  if (year !== undefined) {
+    // For TV shows, we use 'first_air_date_year' instead of 'primary_release_year'
+    queryParams.append("first_air_date_year", year.toString());
+  }
+
+  if (rating !== undefined) {
+    queryParams.append("vote_average.gte", rating.toString());
+  }
+
+  const url = `/discover/tv${queryParams.toString() ? `?${queryParams.toString()}` : ""}`;
+
   return useInfiniteQuery({
-    queryKey: ["discover-tv"],
+    queryKey: ["discover-tv", genreId, year, rating],
     queryFn: async ({ pageParam }) => {
       try {
-        const res = await axiosInstance.get<DiscoverTvShowResponse>(
-          "/discover/tv",
-          {
-            params: {
-              page: pageParam,
-            },
+        const res = await axiosInstance.get<DiscoverTvShowResponse>(url, {
+          params: {
+            page: pageParam,
           },
-        );
+        });
         return res.data;
       } catch (error) {
         console.log(error);
