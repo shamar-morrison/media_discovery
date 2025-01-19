@@ -3,7 +3,7 @@ import { ThemedText } from "@/components/themed-text";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { hitSlop } from "@/utils/hit-slop";
 import { useCallback, useMemo, useState } from "react";
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { BottomSheetVirtualizedList } from "@gorhom/bottom-sheet";
 import { Sheet, useSheetRef } from "@/components/nativewindui/Sheet";
 import { useHandleSheetChanges } from "@/utils/handle-sheet-changes";
 import { PRIMARY_BLUE } from "@/utils/constants";
@@ -44,11 +44,39 @@ export function YearFilter({ onChange, initialYear }: YearFilterProps) {
   // Generate years from current year to 1900
   const years = useMemo(() => {
     const currentYear = new Date().getFullYear();
-    return Array.from(
-      { length: currentYear - 1900 + 1 },
-      (_, i) => currentYear - i,
-    );
+    return [
+      "all",
+      ...Array.from(
+        { length: currentYear - 1900 + 1 },
+        (_, i) => currentYear - i,
+      ),
+    ];
   }, []);
+
+  const renderItem = useCallback(
+    ({ item }: { item: string | number }) => {
+      const isAll = item === "all";
+      const isSelected = isAll ? !selectedYear : selectedYear === item;
+
+      return (
+        <Pressable
+          onPress={() => handleYearUpdate(isAll ? undefined : (item as number))}
+          className={"flex-1 py-4 flex-row items-center"}
+        >
+          <ThemedText>{isAll ? "All Years" : item}</ThemedText>
+          {isSelected && (
+            <Ionicons
+              name={"checkmark-circle"}
+              size={22}
+              color={PRIMARY_BLUE}
+              className={"ml-3"}
+            />
+          )}
+        </Pressable>
+      );
+    },
+    [handleYearUpdate, selectedYear],
+  );
 
   return (
     <View
@@ -71,49 +99,21 @@ export function YearFilter({ onChange, initialYear }: YearFilterProps) {
         enableDynamicSizing={false}
         snapPoints={snapPoints}
       >
-        <BottomSheetScrollView
-          className={"flex-1 px-6 py-4 max-h-[50vh] mb-8"}
-          persistentScrollbar={true}
-          showsVerticalScrollIndicator={true}
-        >
+        <View className={"px-6 py-4"}>
           <ThemedText
-            className={"text-2xl font-inter-semibold mb-4 sticky top-0 left-0"}
+            className={"text-2xl font-inter-semibold sticky top-0 left-0"}
           >
             Year
           </ThemedText>
-          <Pressable
-            onPress={() => handleYearUpdate(undefined)}
-            className={"flex-1 py-4 flex-row items-center"}
-            key={"all"}
-          >
-            <ThemedText>All Years</ThemedText>
-            {!selectedYear && (
-              <Ionicons
-                name={"checkmark-circle"}
-                size={22}
-                color={PRIMARY_BLUE}
-                className={"ml-3"}
-              />
-            )}
-          </Pressable>
-          {years.map((year) => (
-            <Pressable
-              key={year}
-              onPress={() => handleYearUpdate(year)}
-              className={"flex-1 py-4 flex-row items-center"}
-            >
-              <ThemedText>{year}</ThemedText>
-              {selectedYear === year && (
-                <Ionicons
-                  name={"checkmark-circle"}
-                  size={22}
-                  color={PRIMARY_BLUE}
-                  className={"ml-3"}
-                />
-              )}
-            </Pressable>
-          ))}
-        </BottomSheetScrollView>
+        </View>
+        <BottomSheetVirtualizedList
+          data={years}
+          keyExtractor={(item) => item.toString()}
+          renderItem={renderItem}
+          getItemCount={(data) => data.length}
+          getItem={(data, index) => data[index]}
+          contentContainerStyle={{ paddingHorizontal: 24 }}
+        />
       </Sheet>
     </View>
   );

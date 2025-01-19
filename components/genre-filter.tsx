@@ -73,16 +73,18 @@ export function GenreFilter({
         enableDynamicSizing={false}
         snapPoints={snapPoints}
       >
+        <View className={"px-6 py-4"}>
+          <ThemedText
+            className={"text-2xl font-inter-semibold sticky top-0 left-0"}
+          >
+            Genres
+          </ThemedText>
+        </View>
         <BottomSheetScrollView
           className={"flex-1 px-6 py-4 max-h-[50vh] mb-8"}
           persistentScrollbar={true}
           showsVerticalScrollIndicator={true}
         >
-          <ThemedText
-            className={"text-2xl font-inter-semibold mb-4 sticky top-0 left-0"}
-          >
-            Genres
-          </ThemedText>
           <Pressable
             onPress={() => handleGenreUpdate(undefined, "All")}
             className={"flex-1 py-4 flex-row items-center"}

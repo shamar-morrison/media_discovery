@@ -3,7 +3,7 @@ import { ThemedText } from "@/components/themed-text";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { hitSlop } from "@/utils/hit-slop";
 import { useCallback, useMemo, useState } from "react";
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { BottomSheetVirtualizedList } from "@gorhom/bottom-sheet";
 import { Sheet, useSheetRef } from "@/components/nativewindui/Sheet";
 import { useHandleSheetChanges } from "@/utils/handle-sheet-changes";
 import { PRIMARY_BLUE } from "@/utils/constants";
@@ -42,8 +42,35 @@ export function RatingFilter({ onChange, initialRating }: RatingFilterProps) {
   );
 
   const ratings = useMemo(
-    () => [9, 8, 7, 6, 5, 4, 3, 2, 1].map((rating) => rating),
+    () => ["all", ...Array.from({ length: 9 }, (_, i) => 9 - i)],
     [],
+  );
+
+  const renderItem = useCallback(
+    ({ item }: { item: string | number }) => {
+      const isAll = item === "all";
+      const isSelected = isAll ? !selectedRating : selectedRating === item;
+
+      return (
+        <Pressable
+          onPress={() =>
+            handleRatingUpdate(isAll ? undefined : (item as number))
+          }
+          className={"flex-1 py-4 flex-row items-center"}
+        >
+          <ThemedText>{isAll ? "All Ratings" : `${item}+`}</ThemedText>
+          {isSelected && (
+            <Ionicons
+              name={"checkmark-circle"}
+              size={22}
+              color={PRIMARY_BLUE}
+              className={"ml-3"}
+            />
+          )}
+        </Pressable>
+      );
+    },
+    [handleRatingUpdate, selectedRating],
   );
 
   return (
@@ -67,49 +94,21 @@ export function RatingFilter({ onChange, initialRating }: RatingFilterProps) {
         enableDynamicSizing={false}
         snapPoints={snapPoints}
       >
-        <BottomSheetScrollView
-          className={"flex-1 px-6 py-4 max-h-[50vh] mb-8"}
-          persistentScrollbar={true}
-          showsVerticalScrollIndicator={true}
-        >
+        <View className={"px-6 py-4"}>
           <ThemedText
-            className={"text-2xl font-inter-semibold mb-4 sticky top-0 left-0"}
+            className={"text-2xl font-inter-semibold sticky top-0 left-0"}
           >
             Minimum Rating
           </ThemedText>
-          <Pressable
-            onPress={() => handleRatingUpdate(undefined)}
-            className={"flex-1 py-4 flex-row items-center"}
-            key={"all"}
-          >
-            <ThemedText>All Ratings</ThemedText>
-            {!selectedRating && (
-              <Ionicons
-                name={"checkmark-circle"}
-                size={22}
-                color={PRIMARY_BLUE}
-                className={"ml-3"}
-              />
-            )}
-          </Pressable>
-          {ratings.map((rating) => (
-            <Pressable
-              key={rating}
-              onPress={() => handleRatingUpdate(rating)}
-              className={"flex-1 py-4 flex-row items-center"}
-            >
-              <ThemedText>{rating}+ Stars</ThemedText>
-              {selectedRating === rating && (
-                <Ionicons
-                  name={"checkmark-circle"}
-                  size={22}
-                  color={PRIMARY_BLUE}
-                  className={"ml-3"}
-                />
-              )}
-            </Pressable>
-          ))}
-        </BottomSheetScrollView>
+        </View>
+        <BottomSheetVirtualizedList
+          data={ratings}
+          keyExtractor={(item) => item.toString()}
+          renderItem={renderItem}
+          getItemCount={(data) => data.length}
+          getItem={(data, index) => data[index]}
+          contentContainerStyle={{ paddingHorizontal: 24 }}
+        />
       </Sheet>
     </View>
   );
