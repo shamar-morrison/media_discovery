@@ -17,14 +17,17 @@ export function RatingFilter({ onChange, initialRating }: RatingFilterProps) {
   const [selectedRating, setSelectedRating] = useState<number | undefined>(
     initialRating,
   );
+  const [isClosing, setIsClosing] = useState(false);
 
   const bottomSheetModalRef = useSheetRef();
 
   const handlePresentModalPress = useCallback(() => {
+    if (isClosing) return;
     bottomSheetModalRef.current?.present();
-  }, []);
+  }, [isClosing]);
 
   const handleCloseSheetPress = useCallback(() => {
+    setIsClosing(true);
     bottomSheetModalRef.current?.close();
   }, []);
 

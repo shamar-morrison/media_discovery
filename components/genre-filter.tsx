@@ -5,7 +5,6 @@ import { hitSlop } from "@/utils/hit-slop";
 import { useCallback, useMemo, useState } from "react";
 import { BottomSheetVirtualizedList } from "@gorhom/bottom-sheet";
 import { Sheet, useSheetRef } from "@/components/nativewindui/Sheet";
-import { useHandleSheetChanges } from "@/utils/handle-sheet-changes";
 import { MOVIE_GENRES } from "@/types/genres";
 import { PRIMARY_BLUE } from "@/utils/constants";
 
@@ -27,20 +26,28 @@ export function GenreFilter({
     Object.values(MOVIE_GENRES).find((genre) => genre.id === initialGenreId)
       ?.name,
   );
+  const [isClosing, setIsClosing] = useState(false);
 
   const bottomSheetModalRef = useSheetRef();
 
   const handlePresentModalPress = useCallback(() => {
+    if (isClosing) return;
     bottomSheetModalRef.current?.present();
-  }, []);
+  }, [isClosing]);
 
   const handleCloseSheetPress = useCallback(() => {
+    setIsClosing(true);
     bottomSheetModalRef.current?.close();
   }, []);
 
   const snapPoints = useMemo(() => ["50%"], []);
 
-  const handleSheetChanges = useHandleSheetChanges();
+  const handleSheetChanges = useCallback((index: number) => {
+    if (index === -1) {
+      // Sheet is fully closed
+      setIsClosing(false);
+    }
+  }, []);
 
   const handleGenreUpdate = useCallback(
     (genreId: number | undefined, genreName: string | undefined) => {
