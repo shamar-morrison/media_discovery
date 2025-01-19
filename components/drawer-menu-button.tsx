@@ -54,26 +54,26 @@ export function DrawerMenuButton() {
 
   const tvShowsSheetItems: SheetItem[] = useMemo(() => {
     return [
-      {
-        name: "Airing Today",
-        icon: "tv",
-        route: "/airing-today",
-      },
-      {
-        name: "Popular",
-        icon: "star",
-        route: "/popular-tv-shows",
-      },
+      // {
+      //   name: "Airing Today",
+      //   icon: "tv",
+      //   route: "/airing-today",
+      // },
+      // {
+      //   name: "Popular",
+      //   icon: "star",
+      //   route: "/popular-tv-shows",
+      // },
       {
         name: "Genres",
         icon: "list",
         route: "/tv-genres",
       },
-      {
-        name: "On The Air",
-        icon: "videocam",
-        route: "/on-the-air",
-      },
+      // {
+      //   name: "On The Air",
+      //   icon: "videocam",
+      //   route: "/on-the-air",
+      // },
     ];
   }, []);
 
@@ -87,7 +87,7 @@ export function DrawerMenuButton() {
         <Ionicons name="menu" size={27} color="#fff" className={"mr-2"} />
       </TouchableOpacity>
       <Sheet ref={bottomSheetModalRef} onChange={handleSheetChanges}>
-        <BottomSheetView className={"flex-1 px-6 py-4 min-h-[50vh]"}>
+        <BottomSheetView className={"flex-1 px-6 py-4"}>
           <ThemedText className={"text-2xl font-inter-semibold mb-4"}>
             Movies
           </ThemedText>
@@ -113,6 +113,7 @@ export function DrawerMenuButton() {
                 name={item.name}
                 icon={item.icon}
                 route={item.route}
+                style={{ width: "100%" }}
               />
             ))}
           </View>
@@ -127,11 +128,13 @@ function SheetItem({
   icon,
   route,
   closeSheet,
+  style,
 }: {
   name: string;
   icon: React.ComponentProps<typeof Ionicons>["name"];
   route: string;
   closeSheet: () => void;
+  style?: React.ComponentProps<typeof Pressable>["style"];
 }) {
   const handleNavigation = () => {
     router.push(route as any);
@@ -143,6 +146,7 @@ function SheetItem({
       hitSlop={{ top: 10, left: 10, bottom: 10, right: 10 }}
       className="bg-primary-200/50 rounded-lg p-3 w-[47%]"
       onPress={handleNavigation}
+      style={style}
     >
       <View className={"flex flex-row gap-2 pl-2 items-center"}>
         <Ionicons name={icon} size={24} color={"#fff"} />
