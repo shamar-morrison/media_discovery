@@ -3,15 +3,37 @@ import { axiosInstance } from "@/lib/api-client";
 import { DiscoverMovieResponse } from "@/types/discover-movie";
 import { useFocusNotifyOnChangeProps } from "./use-focus-notify-on-change-props";
 
-export const useDiscoverMovie = (genreId?: number) => {
+interface DiscoverMovieParams {
+  genreId?: number;
+  year?: number;
+  rating?: number;
+}
+
+export const useDiscoverMovie = ({
+  genreId,
+  year,
+  rating,
+}: DiscoverMovieParams = {}) => {
   const notifyOnChangeProps = useFocusNotifyOnChangeProps();
 
-  const url = genreId
-    ? `/discover/movie?with_genres=${genreId}`
-    : "/discover/movie";
+  const queryParams = new URLSearchParams();
+
+  if (genreId !== undefined) {
+    queryParams.append("with_genres", genreId.toString());
+  }
+
+  if (year !== undefined) {
+    queryParams.append("primary_release_year", year.toString());
+  }
+
+  if (rating !== undefined) {
+    queryParams.append("vote_average.gte", rating.toString());
+  }
+
+  const url = `/discover/movie${queryParams.toString() ? `?${queryParams.toString()}` : ""}`;
 
   return useInfiniteQuery({
-    queryKey: ["discover-movie", genreId],
+    queryKey: ["discover-movie", genreId, year, rating],
     queryFn: async ({ pageParam }) => {
       try {
         const res = await axiosInstance.get<DiscoverMovieResponse>(url, {

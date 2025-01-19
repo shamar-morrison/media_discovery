@@ -1,8 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useRef, useState } from "react";
 import { ScreenTitle } from "@/components/screen-title";
-import { Pressable, View } from "react-native";
-import { ThemedText } from "@/components/themed-text";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { View } from "react-native";
 import { GenreFilter } from "@/components/genre-filter";
 import { useDiscoverMovie } from "@/hooks/use-discover-movie";
 import { Loading } from "@/components/loading";
@@ -15,11 +13,15 @@ import { itemWidth } from "@/utils/get-item-width";
 import { NUM_COLUMNS } from "@/utils/constants";
 import { FlashList } from "@shopify/flash-list";
 import { ThemedView } from "@/components/themed-view";
+import { YearFilter } from "@/components/year-filter";
+import { RatingFilter } from "@/components/rating-filter";
 
 export default function MovieGenres() {
   const [genreId, setGenreId] = useState<number | undefined>(
     MOVIE_GENRES.ACTION.id,
   );
+  const [year, setYear] = useState<number | undefined>(undefined);
+  const [rating, setRating] = useState<number | undefined>(undefined);
   const listRef = useRef<FlashList<any>>(null);
 
   const {
@@ -30,7 +32,7 @@ export default function MovieGenres() {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-  } = useDiscoverMovie(genreId);
+  } = useDiscoverMovie({ genreId, year, rating });
 
   if (isLoading) {
     return <Loading />;
@@ -55,22 +57,20 @@ export default function MovieGenres() {
       </View>
       <View className="flex-row gap-4 justify-between px-4">
         <GenreFilter onChange={handleGenreUpdate} initialGenreId={genreId} />
-        <Pressable
-          className={
-            "flex-1 flex-row items-center justify-between py-3 px-4 rounded-lg bg-black-100"
-          }
-        >
-          <ThemedText>Year</ThemedText>
-          <Ionicons name={"chevron-down"} size={12} color={"#fff"} />
-        </Pressable>
-        <Pressable
-          className={
-            "flex-1 flex-row items-center justify-between py-3 px-4 rounded-lg bg-black-100"
-          }
-        >
-          <ThemedText>Rating</ThemedText>
-          <Ionicons name={"chevron-down"} size={12} color={"#fff"} />
-        </Pressable>
+        <YearFilter
+          onChange={(year) => {
+            setYear(year);
+            listRef.current?.scrollToOffset({ offset: 0, animated: true });
+          }}
+          initialYear={year}
+        />
+        <RatingFilter
+          onChange={(rating) => {
+            setRating(rating);
+            listRef.current?.scrollToOffset({ offset: 0, animated: true });
+          }}
+          initialRating={rating}
+        />
       </View>
       <ThemedView>
         <FlashList
