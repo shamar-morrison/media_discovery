@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { ScreenTitle } from "@/components/screen-title";
 import { Pressable, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
@@ -20,7 +20,7 @@ export default function MovieGenres() {
   const [genreId, setGenreId] = useState<number | undefined>(
     MOVIE_GENRES.ACTION.id,
   );
-  const [initialScrollIndex, setInitialScrollIndex] = useState(0);
+  const listRef = useRef<FlashList<any>>(null);
 
   const {
     data,
@@ -45,7 +45,7 @@ export default function MovieGenres() {
 
   const handleGenreUpdate = (genreId: number | undefined) => {
     setGenreId(genreId);
-    setInitialScrollIndex(0);
+    listRef.current?.scrollToOffset({ offset: 0, animated: true });
   };
 
   return (
@@ -74,8 +74,8 @@ export default function MovieGenres() {
       </View>
       <ThemedView>
         <FlashList
+          ref={listRef}
           data={movies}
-          initialScrollIndex={initialScrollIndex}
           renderItem={({ item, index }) => {
             return (
               <RenderItemWrapper index={index}>
