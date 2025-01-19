@@ -5,10 +5,10 @@ import { Section } from "@/components/section";
 import { FlashList } from "@shopify/flash-list";
 import { MediaType } from "@/types/multi-search";
 import { SecondaryMediaCard } from "@/components/secondary-media-card";
-import { Badge } from "@/components/badge";
 import { MediaBackdrop } from "@/components/media-backdrop";
 import { CastSection } from "@/components/cast-section";
 import { VideosSection } from "@/components/videos-section";
+import { AboutSection } from "@/components/about-section";
 
 interface MovieDetailsProps extends MovieDetailsResponse {
   mediaType: MediaType;
@@ -45,18 +45,7 @@ export function MovieDetails({
         />
       </View>
 
-      <Section title={"About"}>
-        <ThemedText className={"pt-3 text-accent-100/85 leading-[1.50rem]"}>
-          {overview || "No overview found"}
-        </ThemedText>
-        {genres.length > 0 && (
-          <View className={"mt-2 flex flex-row flex-wrap gap-2"}>
-            {genres.map((genre) => (
-              <Badge key={genre.id} text={genre.name} />
-            ))}
-          </View>
-        )}
-      </Section>
+      <AboutSection genres={genres} overview={overview} />
 
       <VideosSection videos={videos} />
 

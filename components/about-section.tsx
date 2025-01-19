@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { ThemedText } from "@/components/themed-text";
 import { Badge } from "@/components/badge";
 import { Section } from "@/components/section";
@@ -12,9 +12,14 @@ export function AboutSection({
   overview: string | undefined;
   genres: Genre[];
 }) {
+  const [lines, setLines] = useState<number | undefined>(5);
   return (
     <Section title={"About"}>
-      <ThemedText className={"pt-3 leading-[1.50rem]"} numberOfLines={5}>
+      <ThemedText
+        className={"pt-3 leading-[1.50rem]"}
+        numberOfLines={lines}
+        onPress={() => setLines(undefined)}
+      >
         {overview || "No overview found"}
       </ThemedText>
       {genres.length > 0 && (
