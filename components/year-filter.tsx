@@ -41,13 +41,13 @@ export function YearFilter({ onChange, initialYear }: YearFilterProps) {
     [onChange, handleCloseSheetPress],
   );
 
-  // Generate years from current year to 1900
+  // Generate years from current year to 1950
   const years = useMemo(() => {
     const currentYear = new Date().getFullYear();
     return [
       "all",
       ...Array.from(
-        { length: currentYear - 1900 + 1 },
+        { length: currentYear - 1950 + 1 },
         (_, i) => currentYear - i,
       ),
     ];
