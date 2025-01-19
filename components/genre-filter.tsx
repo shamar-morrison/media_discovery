@@ -78,6 +78,22 @@ export function GenreFilter({
           >
             Genres
           </ThemedText>
+          <Pressable
+            onPress={() => handleGenreUpdate(undefined, "All")}
+            className={"flex-1 py-4 flex-row items-center"}
+            key={"All"}
+          >
+            <ThemedText>All</ThemedText>
+            {selectedGenreName === "All" && (
+              <Ionicons
+                name={"checkmark-circle"}
+                size={22}
+                color={"#0061FF"}
+                className={"ml-3"}
+              />
+            )}
+          </Pressable>
+
           {Object.entries(MOVIE_GENRES).map(([_, obj]) => {
             return (
               <Pressable
