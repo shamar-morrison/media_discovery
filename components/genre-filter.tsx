@@ -10,15 +10,22 @@ import { MOVIE_GENRES } from "@/types/genres";
 
 interface FilterProps {
   onChange: (genreId: number | undefined) => void;
+  initialGenreId?: number;
 }
 
-export function GenreFilter({ onChange }: FilterProps) {
+export function GenreFilter({
+  onChange,
+  initialGenreId = MOVIE_GENRES.ACTION.id,
+}: FilterProps) {
   const [selectedGenreId, setSelectedGenreId] = useState<number | undefined>(
-    MOVIE_GENRES.ACTION.id,
+    initialGenreId,
   );
   const [selectedGenreName, setSelectedGenreName] = useState<
     string | undefined
-  >(MOVIE_GENRES.ACTION.name);
+  >(
+    Object.values(MOVIE_GENRES).find((genre) => genre.id === initialGenreId)
+      ?.name,
+  );
 
   const bottomSheetModalRef = useSheetRef();
 

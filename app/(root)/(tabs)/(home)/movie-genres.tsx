@@ -54,7 +54,7 @@ export default function MovieGenres() {
         <ScreenTitle className={"pb-0"}>Movie Genres</ScreenTitle>
       </View>
       <View className="flex-row gap-4 justify-between px-4">
-        <GenreFilter onChange={handleGenreUpdate} />
+        <GenreFilter onChange={handleGenreUpdate} initialGenreId={genreId} />
         <Pressable
           className={
             "flex-1 flex-row items-center justify-between py-3 px-4 rounded-lg bg-black-100"
