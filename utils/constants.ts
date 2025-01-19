@@ -19,3 +19,5 @@ export const NUM_COLUMNS = getNumColumns(
 export const MOVIES_STORAGE_KEY = "movies";
 export const TV_SHOW_STORAGE_KEY = "tv";
 export const WATCHED_EPISODES_STORAGE_KEY = "WATCHED_EPISODES_STORAGE_KEY";
+
+export const PRIMARY_BLUE = "#0061FF";

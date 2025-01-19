@@ -7,6 +7,7 @@ import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Sheet, useSheetRef } from "@/components/nativewindui/Sheet";
 import { useHandleSheetChanges } from "@/utils/handle-sheet-changes";
 import { MOVIE_GENRES } from "@/types/genres";
+import { PRIMARY_BLUE } from "@/utils/constants";
 
 interface FilterProps {
   onChange: (genreId: number | undefined) => void;
@@ -92,7 +93,7 @@ export function GenreFilter({
               <Ionicons
                 name={"checkmark-circle"}
                 size={22}
-                color={"#0061FF"}
+                color={PRIMARY_BLUE}
                 className={"ml-3"}
               />
             )}
@@ -110,7 +111,7 @@ export function GenreFilter({
                   <Ionicons
                     name={"checkmark-circle"}
                     size={22}
-                    color={"#0061FF"}
+                    color={PRIMARY_BLUE}
                     className={"ml-3"}
                   />
                 )}
