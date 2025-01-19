@@ -61,7 +61,7 @@ export function GenreFilter({
         hitSlop={hitSlop}
         className={"flex-row items-center justify-between"}
       >
-        <ThemedText numberOfLines={1}>
+        <ThemedText numberOfLines={1} style={{ width: 65 }}>
           {selectedGenreName || "Genre"}
         </ThemedText>
         <Ionicons name={"chevron-down"} size={12} color={"#fff"} />
@@ -72,7 +72,11 @@ export function GenreFilter({
         enableDynamicSizing={false}
         snapPoints={snapPoints}
       >
-        <BottomSheetScrollView className={"flex-1 px-6 py-4 max-h-[50vh] mb-8"}>
+        <BottomSheetScrollView
+          className={"flex-1 px-6 py-4 max-h-[50vh] mb-8"}
+          persistentScrollbar={true}
+          showsVerticalScrollIndicator={true}
+        >
           <ThemedText
             className={"text-2xl font-inter-semibold mb-4 sticky top-0 left-0"}
           >
