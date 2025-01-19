@@ -14,9 +14,9 @@ const Tab = createMaterialTopTabNavigator();
 export default function Index() {
   return (
     <>
-      <View className="flex flex-row px-4 pt-4 bg-black-200">
-        <DrawerMenuButton />
+      <View className="flex flex-row px-4 pt-4 bg-black-200 justify-between">
         <ScreenTitle>Discover</ScreenTitle>
+        <DrawerMenuButton />
       </View>
       <Tab.Navigator screenOptions={tabStyles} backBehavior={"none"}>
         <Tab.Screen
