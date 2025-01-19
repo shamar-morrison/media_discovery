@@ -3,21 +3,22 @@ import { axiosInstance } from "@/lib/api-client";
 import { DiscoverMovieResponse } from "@/types/discover-movie";
 import { useFocusNotifyOnChangeProps } from "./use-focus-notify-on-change-props";
 
-export const useDiscoverMovie = () => {
+export const useDiscoverMovie = (genreId?: number) => {
   const notifyOnChangeProps = useFocusNotifyOnChangeProps();
 
+  const url = genreId
+    ? `/discover/movie?with_genres=${genreId}`
+    : "/discover/movie";
+
   return useInfiniteQuery({
-    queryKey: ["discover-movie"],
+    queryKey: ["discover-movie", genreId],
     queryFn: async ({ pageParam }) => {
       try {
-        const res = await axiosInstance.get<DiscoverMovieResponse>(
-          "/discover/movie",
-          {
-            params: {
-              page: pageParam,
-            },
+        const res = await axiosInstance.get<DiscoverMovieResponse>(url, {
+          params: {
+            page: pageParam,
           },
-        );
+        });
         return res.data;
       } catch (error) {
         console.log(error);

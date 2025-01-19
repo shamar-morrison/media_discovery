@@ -6,6 +6,7 @@ import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import { ThemedText } from "@/components/themed-text";
 import { Sheet } from "@/components/nativewindui/Sheet";
 import { router } from "expo-router";
+import { useHandleSheetChanges } from "@/utils/handle-sheet-changes";
 
 type SheetItem = {
   name: string;
@@ -24,9 +25,7 @@ export function DrawerMenuButton() {
     bottomSheetModalRef.current?.close();
   }, []);
 
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log("handleSheetChanges", index);
-  }, []);
+  const handleSheetChanges = useHandleSheetChanges();
 
   const moviesSheetItems: SheetItem[] = useMemo(() => {
     return [

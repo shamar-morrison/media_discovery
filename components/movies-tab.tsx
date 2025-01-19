@@ -11,7 +11,7 @@ import { MediaType } from "@/types/multi-search";
 import { itemWidth } from "@/utils/get-item-width";
 import { NUM_COLUMNS } from "@/utils/constants";
 
-export function LatestMoviesTab() {
+export function MoviesTab({ genreId }: { genreId?: number }) {
   const {
     data,
     isLoading,
@@ -20,7 +20,7 @@ export function LatestMoviesTab() {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-  } = useDiscoverMovie();
+  } = useDiscoverMovie(genreId);
 
   if (isLoading) {
     return <Loading />;

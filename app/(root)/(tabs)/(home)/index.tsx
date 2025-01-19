@@ -1,5 +1,5 @@
 import { tabStyles } from "@/styles/tab-styles";
-import { LatestMoviesTab } from "@/components/latest-movies-tab";
+import { MoviesTab } from "@/components/movies-tab";
 import { TabBarLabel } from "@/components/tab-bar-label";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { LatestTvShowsTab } from "@/components/latest-tv-shows-tab";
@@ -21,7 +21,8 @@ export default function Index() {
       <Tab.Navigator screenOptions={tabStyles} backBehavior={"none"}>
         <Tab.Screen
           name="movies"
-          component={LatestMoviesTab}
+          children={() => <MoviesTab />}
+          component={undefined}
           options={{
             tabBarLabel: ({ focused }) => (
               <TabBarLabel focused={focused}>Latest Movies</TabBarLabel>
