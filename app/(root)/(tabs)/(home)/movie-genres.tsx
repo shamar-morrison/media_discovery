@@ -20,6 +20,7 @@ export default function MovieGenres() {
   const [genreId, setGenreId] = useState<number | undefined>(
     MOVIE_GENRES.ACTION.id,
   );
+  const [initialScrollIndex, setInitialScrollIndex] = useState(0);
 
   const {
     data,
@@ -44,6 +45,7 @@ export default function MovieGenres() {
 
   const handleGenreUpdate = (genreId: number | undefined) => {
     setGenreId(genreId);
+    setInitialScrollIndex(0);
   };
 
   return (
@@ -73,6 +75,7 @@ export default function MovieGenres() {
       <ThemedView>
         <FlashList
           data={movies}
+          initialScrollIndex={initialScrollIndex}
           renderItem={({ item, index }) => {
             return (
               <RenderItemWrapper index={index}>

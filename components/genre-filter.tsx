@@ -2,7 +2,7 @@ import { Pressable, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { hitSlop } from "@/utils/hit-slop";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Sheet, useSheetRef } from "@/components/nativewindui/Sheet";
 import { useHandleSheetChanges } from "@/utils/handle-sheet-changes";
@@ -38,16 +38,11 @@ export function GenreFilter({ onChange }: FilterProps) {
     (genreId: number | undefined, genreName: string | undefined) => {
       setSelectedGenreName(genreName);
       setSelectedGenreId(genreId);
-    },
-    [selectedGenreId, selectedGenreName],
-  );
-
-  useEffect(() => {
-    if (selectedGenreId) {
-      onChange(selectedGenreId);
+      onChange(genreId);
       handleCloseSheetPress();
-    }
-  }, [selectedGenreId]);
+    },
+    [onChange, handleCloseSheetPress],
+  );
 
   return (
     <View
@@ -69,7 +64,6 @@ export function GenreFilter({ onChange }: FilterProps) {
         onChange={handleSheetChanges}
         enableDynamicSizing={false}
         snapPoints={snapPoints}
-        index={1}
       >
         <BottomSheetScrollView className={"flex-1 px-6 py-4 max-h-[50vh] mb-8"}>
           <ThemedText
