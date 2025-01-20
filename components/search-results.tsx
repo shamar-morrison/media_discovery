@@ -1,8 +1,7 @@
 import { MediaType, MultiSearchResult } from "@/types/multi-search";
-import React, { useCallback, useState } from "react";
+import React from "react";
 import { Loading } from "@/components/loading";
 import { InitialSearchState } from "@/components/initial-search-state";
-import { SearchCategories } from "@/components/search-categories";
 import { ThemedText } from "@/components/themed-text";
 import { MediaCard } from "@/components/media-card";
 import { RenderItemWrapper } from "@/components/render-item-wrapper";
@@ -13,27 +12,22 @@ import { DiscoverTvShowResult } from "@/types/discover-tv-show";
 import { DiscoverMovieResult } from "@/types/discover-movie";
 import { PersonDetails } from "@/types/person-details";
 import { PersonCard } from "@/components/person-card";
+import { ThemedView } from "@/components/themed-view";
 
 export function SearchResults({
   results,
   query,
   isSearching,
+  mediaType,
 }: {
   results: MultiSearchResult[] | null;
   query: string;
   isSearching: boolean;
+  mediaType: MediaType;
 }) {
-  const [currentMediaType, setCurrentMediaType] = useState<MediaType>(
-    MediaType.Movie,
-  );
-
   const filteredResultsByMediaType = results?.filter(
-    (result) => result.media_type === currentMediaType,
+    (result) => result.media_type === mediaType,
   );
-
-  const updateMediaType = useCallback((mediaType: MediaType) => {
-    setCurrentMediaType(mediaType);
-  }, []);
 
   if (isSearching) {
     return <Loading />;
@@ -44,14 +38,10 @@ export function SearchResults({
   }
 
   return (
-    <>
-      <SearchCategories
-        handleUpdateMediaType={updateMediaType}
-        currentMediaType={currentMediaType}
-      />
+    <ThemedView>
       {filteredResultsByMediaType?.length === 0 ? (
         <ThemedText className="text-center mt-4">
-          No {currentMediaType}s found for "{query}"
+          No {mediaType}s found for "{query}"
         </ThemedText>
       ) : (
         <FlashList
@@ -59,9 +49,7 @@ export function SearchResults({
           numColumns={NUM_COLUMNS}
           data={filteredResultsByMediaType}
           renderItem={({ item, index }) => {
-            if (
-              filteredResultsByMediaType?.[0].media_type === MediaType.Movie
-            ) {
+            if (mediaType === MediaType.Movie) {
               const castedItem = item as unknown as DiscoverMovieResult;
               return (
                 <RenderItemWrapper index={index}>
@@ -78,7 +66,7 @@ export function SearchResults({
                 </RenderItemWrapper>
               );
             }
-            if (filteredResultsByMediaType?.[0].media_type === MediaType.Tv) {
+            if (mediaType === MediaType.Tv) {
               const castedItem = item as unknown as DiscoverTvShowResult;
               return (
                 <RenderItemWrapper index={index}>
@@ -104,6 +92,6 @@ export function SearchResults({
           }}
         />
       )}
-    </>
+    </ThemedView>
   );
 }

@@ -1,11 +1,19 @@
-import { TextInput } from "react-native";
+import { TextInput, View } from "react-native";
 import React, { useCallback } from "react";
-import { ThemedView } from "@/components/themed-view";
 import { debounce } from "@/utils/debounce";
 import { axiosInstance } from "@/lib/api-client";
-import { MultiSearchResponse, MultiSearchResult } from "@/types/multi-search";
+import {
+  MediaType,
+  MultiSearchResponse,
+  MultiSearchResult,
+} from "@/types/multi-search";
 import { Error } from "@/components/error";
 import { SearchResults } from "@/components/search-results";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { tabStyles } from "@/styles/tab-styles";
+import { TabBarLabel } from "@/components/tab-bar-label";
+
+const Tab = createMaterialTopTabNavigator();
 
 export default function Search() {
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -49,24 +57,75 @@ export default function Search() {
   };
 
   return (
-    <ThemedView>
-      <TextInput
-        value={searchQuery}
-        onChangeText={handleChangeText}
-        placeholder={"Search..."}
-        className={
-          "bg-black-100 px-3 text-white rounded-lg placeholder:text-accent-100"
-        }
-      />
+    <View className={"flex-1"}>
+      <View className={"px-4 pt-4 pb-0"}>
+        <TextInput
+          value={searchQuery}
+          onChangeText={handleChangeText}
+          placeholder={"Search..."}
+          className="bg-black-100 px-3 text-white rounded-lg placeholder:text-accent-100 mb-4"
+        />
+      </View>
       {error ? (
         <Error onRetry={retrySearch} />
       ) : (
-        <SearchResults
-          results={results}
-          query={searchQuery}
-          isSearching={isSearching}
-        />
+        <Tab.Navigator screenOptions={tabStyles} backBehavior="none">
+          <Tab.Screen
+            name="movies"
+            component={undefined}
+            options={{
+              tabBarLabel: ({ focused }) => (
+                <TabBarLabel focused={focused}>Movies</TabBarLabel>
+              ),
+            }}
+          >
+            {() => (
+              <SearchResults
+                results={results}
+                query={searchQuery}
+                isSearching={isSearching}
+                mediaType={MediaType.Movie}
+              />
+            )}
+          </Tab.Screen>
+          <Tab.Screen
+            name="tv"
+            component={undefined}
+            options={{
+              tabBarLabel: ({ focused }) => (
+                <TabBarLabel focused={focused}>TV Shows</TabBarLabel>
+              ),
+            }}
+          >
+            {() => (
+              <SearchResults
+                results={results}
+                query={searchQuery}
+                isSearching={isSearching}
+                mediaType={MediaType.Tv}
+              />
+            )}
+          </Tab.Screen>
+          <Tab.Screen
+            name="people"
+            component={undefined}
+            options={{
+              tabBarLabel: ({ focused }) => (
+                <TabBarLabel focused={focused}>People</TabBarLabel>
+              ),
+            }}
+          >
+            {() => (
+              <SearchResults
+                results={results}
+                query={searchQuery}
+                isSearching={isSearching}
+                mediaType={MediaType.Person}
+              />
+            )}
+          </Tab.Screen>
+        </Tab.Navigator>
       )}
-    </ThemedView>
+    </View>
   );
 }

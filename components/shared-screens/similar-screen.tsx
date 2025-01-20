@@ -8,7 +8,7 @@ import { Error } from "@/components/error";
 import { RenderItemWrapper } from "@/components/render-item-wrapper";
 import { MediaCard } from "@/components/media-card";
 import { itemWidth } from "@/utils/get-item-width";
-import { NUM_COLUMNS } from "@/utils/constants";
+import { NUM_COLUMNS, PRIMARY_BLUE } from "@/utils/constants";
 import { FlashList } from "@shopify/flash-list";
 
 export function SimilarScreen() {
@@ -40,7 +40,7 @@ export function SimilarScreen() {
     <ThemedView>
       <ScreenTitle>
         More like{" "}
-        <ScreenTitle style={{ color: "#0061FF" }}>{mediaTitle}</ScreenTitle>
+        <ScreenTitle style={{ color: PRIMARY_BLUE }}>{mediaTitle}</ScreenTitle>
       </ScreenTitle>
       <FlashList
         data={data}
