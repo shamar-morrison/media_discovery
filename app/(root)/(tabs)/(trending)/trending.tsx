@@ -4,7 +4,6 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import React from "react";
 import { ScreenTitle } from "@/components/screen-title";
 import { View } from "react-native";
-import { DrawerMenuButton } from "@/components/drawer-menu-button";
 import { TrendingMovies } from "@/app/(root)/(tabs)/(home)/trending-movies";
 import { TrendingTV } from "@/app/(root)/(tabs)/(home)/trending-tv";
 
@@ -15,7 +14,6 @@ export default function Trending() {
     <>
       <View className="flex flex-row px-4 pt-4 bg-black-200 justify-between">
         <ScreenTitle>Trending</ScreenTitle>
-        <DrawerMenuButton />
       </View>
       <Tab.Navigator screenOptions={tabStyles} backBehavior={"none"}>
         <Tab.Screen
