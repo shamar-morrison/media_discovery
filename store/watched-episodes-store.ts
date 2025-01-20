@@ -365,33 +365,52 @@ export const useWatchedEpisodesStore = create<WatchedEpisodesStore>(
       const show = get().shows[showId];
       if (!show || !show.lastWatchedEpisode) return null;
 
-      const { seasonNumber, episodeNumber } = show.lastWatchedEpisode;
-      const currentSeason = show.seasons.find(
-        (s) => s.seasonNumber === seasonNumber,
+      const watchedEpisodes = show.watchedEpisodes;
+
+      const isEpisodeWatched = (
+        seasonNumber: number,
+        episodeNumber: number,
+      ) => {
+        return watchedEpisodes.some(
+          (e) =>
+            e.seasonNumber === seasonNumber &&
+            e.episodeNumber === episodeNumber,
+        );
+      };
+
+      let currentSeason = show.seasons.find(
+        (s) => s.seasonNumber === show.lastWatchedEpisode!.seasonNumber,
       );
 
       if (!currentSeason) return null;
 
-      // If there are more episodes in the current season
-      if (episodeNumber < currentSeason.totalEpisodes) {
-        return {
-          seasonNumber,
-          episodeNumber: episodeNumber + 1,
-        };
+      // Check remaining episodes in current season
+      for (let epNum = 1; epNum <= currentSeason.totalEpisodes; epNum++) {
+        if (!isEpisodeWatched(currentSeason.seasonNumber, epNum)) {
+          return {
+            seasonNumber: currentSeason.seasonNumber,
+            episodeNumber: epNum,
+          };
+        }
       }
 
-      // Look for next season
-      const nextSeason = show.seasons.find(
-        (s) => s.seasonNumber === seasonNumber + 1,
-      );
-      if (nextSeason) {
-        return {
-          seasonNumber: nextSeason.seasonNumber,
-          episodeNumber: 1,
-        };
+      // If no unwatched episodes in current season, check next seasons
+      const remainingSeasons = show.seasons
+        .filter((s) => s.seasonNumber > currentSeason!.seasonNumber)
+        .sort((a, b) => a.seasonNumber - b.seasonNumber);
+
+      for (const season of remainingSeasons) {
+        for (let epNum = 1; epNum <= season.totalEpisodes; epNum++) {
+          if (!isEpisodeWatched(season.seasonNumber, epNum)) {
+            return {
+              seasonNumber: season.seasonNumber,
+              episodeNumber: epNum,
+            };
+          }
+        }
       }
 
-      // No more episodes to watch
+      // No unwatched episodes found
       return null;
     },
   }),

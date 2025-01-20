@@ -4,8 +4,8 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import React from "react";
 import { ScreenTitle } from "@/components/screen-title";
 import { View } from "react-native";
-import { TrendingMovies } from "@/app/(root)/(tabs)/(home)/trending-movies";
-import { TrendingTV } from "@/app/(root)/(tabs)/(home)/trending-tv";
+import TrendingMovies from "@/app/(root)/(tabs)/(home)/trending-movies";
+import TrendingTV from "@/app/(root)/(tabs)/(home)/trending-tv";
 
 const Tab = createMaterialTopTabNavigator();
 

@@ -11,7 +11,7 @@ import { itemWidth } from "@/utils/get-item-width";
 import { NUM_COLUMNS } from "@/utils/constants";
 import { ThemedView } from "@/components/themed-view";
 
-export function TrendingMovies() {
+export default function TrendingMovies() {
   const {
     data,
     isLoading,

@@ -11,7 +11,7 @@ import { NUM_COLUMNS } from "@/utils/constants";
 import React from "react";
 import { ThemedView } from "@/components/themed-view";
 
-export function TrendingTV() {
+export default function TrendingTV() {
   const {
     data,
     isLoading,
