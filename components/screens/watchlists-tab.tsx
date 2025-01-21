@@ -6,13 +6,33 @@ import { SecondaryMediaCard } from "@/components/secondary-media-card";
 import { MediaType } from "@/types/multi-search";
 import { useWatchlistStore } from "@/store/watchlist-store";
 import { ThemedScrollView } from "@/components/themed-scroll-view";
+import { TouchableOpacity } from "react-native";
+import { WatchlistExportImportSheet } from "@/components/watchlist-export-import-sheet";
+import { useRef, useCallback } from "react";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { ScreenTitle } from "@/components/screen-title";
 
 export function WatchlistsTab() {
   const movies = useWatchlistStore((state) => state.movies);
   const tvShows = useWatchlistStore((state) => state.tvShows);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetRef.current?.present();
+  }, []);
 
   return (
     <ThemedScrollView>
+      <View className="flex-row justify-between items-center px-4 mb-4">
+        <View className="flex-row items-center gap-2">
+          <ScreenTitle>Profile</ScreenTitle>
+          <TouchableOpacity onPress={handlePresentModalPress}>
+            <Ionicons name="ellipsis-horizontal" size={24} color="white" />
+          </TouchableOpacity>
+        </View>
+      </View>
+
       <Section title={"Movies"} className={"bg-black-200"}>
         {movies.length === 0 && (
           <ThemedText className={"mt-5"}>No movies in watchlist</ThemedText>
@@ -74,6 +94,8 @@ export function WatchlistsTab() {
           />
         )}
       </Section>
+
+      <WatchlistExportImportSheet ref={bottomSheetRef} />
     </ThemedScrollView>
   );
 }

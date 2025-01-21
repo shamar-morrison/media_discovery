@@ -15,6 +15,7 @@ type WatchlistStore = {
   addToWatchlist: (media: Media, mediaType: MediaType) => Promise<void>;
   removeFromWatchlist: (mediaId: number, mediaType: MediaType) => Promise<void>;
   isInWatchlist: (mediaId: number, mediaType: MediaType) => boolean;
+  importFromCSV: (csvContent: string) => Promise<void>;
 };
 
 export const useWatchlistStore = create<WatchlistStore>((set, get) => ({
@@ -88,5 +89,57 @@ export const useWatchlistStore = create<WatchlistStore>((set, get) => ({
   isInWatchlist: (mediaId: number, mediaType: MediaType) => {
     const list = mediaType === "movie" ? get().movies : get().tvShows;
     return list.some((media) => media.id === mediaId);
+  },
+
+  importFromCSV: async (csvContent: string) => {
+    try {
+      const sections = csvContent.split("\n\n").filter(Boolean);
+      const lists: Record<string, Media[]> = {
+        movies: [],
+        tvShows: [],
+      };
+
+      for (const section of sections) {
+        const [listName, header, ...rows] = section.split("\n").filter(Boolean);
+        if (!lists[listName]) continue;
+
+        const items = rows.map((row) => {
+          const [id, title, poster_path, release_date, vote_average] = row
+            .split(",")
+            .map((val) =>
+              val.startsWith('"') && val.endsWith('"') ? val.slice(1, -1) : val,
+            );
+
+          return {
+            id: parseInt(id),
+            title,
+            poster_path,
+            release_date: release_date ? new Date(release_date) : undefined,
+            vote_average: parseFloat(vote_average),
+            mediaType: listName === "movies" ? MediaType.Movie : MediaType.Tv,
+          };
+        });
+
+        lists[listName] = items;
+      }
+
+      await Promise.all([
+        AsyncStorage.setItem(MOVIES_STORAGE_KEY, JSON.stringify(lists.movies)),
+        AsyncStorage.setItem(
+          TV_SHOW_STORAGE_KEY,
+          JSON.stringify(lists.tvShows),
+        ),
+      ]);
+
+      set({
+        movies: lists.movies,
+        tvShows: lists.tvShows,
+      });
+
+      showToast("Watchlists imported successfully");
+    } catch (error) {
+      console.error("Error importing watchlists:", error);
+      showToast("Error importing watchlists");
+    }
   },
 }));
