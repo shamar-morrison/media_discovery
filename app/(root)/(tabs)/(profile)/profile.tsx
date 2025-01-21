@@ -6,14 +6,16 @@ import { ProgressTab } from "@/components/screens/progress-tab";
 import React from "react";
 import { ScreenTitle } from "@/components/screen-title";
 import { View } from "react-native";
+import { WatchlistExportImportSheet } from "@/components/watchlist-export-import-sheet";
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function Profile() {
   return (
     <>
-      <View className="p-4">
-        <ScreenTitle>Profile</ScreenTitle>
+      <View className="p-4 flex flex-row items-center justify-between">
+        <ScreenTitle className={"pb-0"}>Profile</ScreenTitle>
+        <WatchlistExportImportSheet />
       </View>
       <Tab.Navigator screenOptions={tabStyles} backBehavior={"none"}>
         <Tab.Screen
