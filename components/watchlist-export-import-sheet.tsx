@@ -1,14 +1,33 @@
-import React, { useCallback, useMemo } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { useCallback } from "react";
+import { TouchableOpacity, View } from "react-native";
 import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import { useWatchlistStore } from "@/store/watchlist-store";
+import { useWatchedEpisodesStore } from "@/store/watched-episodes-store";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
-import * as Sharing from "expo-sharing";
 import { ThemedText } from "@/components/themed-text";
 import { Sheet } from "@/components/nativewindui/Sheet";
 import { useHandleSheetChanges } from "@/utils/handle-sheet-changes";
 import { showToast } from "@/utils/toast";
+import { WATCHED_EPISODES_STORAGE_KEY } from "@/utils/constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+interface WatchedEpisodesData {
+  [key: string]: {
+    showId: number;
+    showName: string;
+    seasons: Array<{
+      seasonNumber: number;
+      totalEpisodes: number;
+    }>;
+    watchedEpisodes: Array<{
+      id: number;
+      seasonNumber: number;
+      episodeNumber: number;
+      watchedAt: string;
+    }>;
+  };
+}
 
 const isValidWatchlistCSV = (content: string): boolean => {
   try {
@@ -19,13 +38,21 @@ const isValidWatchlistCSV = (content: string): boolean => {
       const [listName, header, ...rows] = section.split("\n").filter(Boolean);
 
       // Validate list name
-      if (!["movies", "tvShows"].includes(listName)) return false;
-
-      // Validate header
-      if (header !== "id,title,poster_path,release_date,vote_average")
+      if (!["movies", "tvShows", "watchedEpisodes"].includes(listName))
         return false;
 
-      // Validate each row
+      // Validate header based on section
+      if (listName === "watchedEpisodes") {
+        if (header !== "showId,showName,seasons,watchedEpisodes") return false;
+      } else {
+        if (header !== "id,title,poster_path,release_date,vote_average")
+          return false;
+      }
+
+      // Skip row validation for watched episodes as it's a complex object
+      if (listName === "watchedEpisodes") continue;
+
+      // Validate each row for movies and tvShows
       for (const row of rows) {
         const parts = row.split(",");
         if (parts.length !== 5) return false;
@@ -47,6 +74,7 @@ const isValidWatchlistCSV = (content: string): boolean => {
 export const WatchlistExportImportSheet = React.forwardRef<BottomSheetModal>(
   (_, ref) => {
     const { movies, tvShows, importFromCSV } = useWatchlistStore();
+    const watchedEpisodesStore = useWatchedEpisodesStore();
     const handleSheetChanges = useHandleSheetChanges();
 
     const handleExport = useCallback(async () => {
@@ -64,7 +92,7 @@ export const WatchlistExportImportSheet = React.forwardRef<BottomSheetModal>(
         tvShows,
       };
 
-      const csvContent = Object.entries(lists)
+      let csvContent = Object.entries(lists)
         .map(([listName, items]) => {
           const header = "id,title,poster_path,release_date,vote_average";
           const rows = items
@@ -76,6 +104,16 @@ export const WatchlistExportImportSheet = React.forwardRef<BottomSheetModal>(
           return `${listName}\n${header}\n${rows}\n\n`;
         })
         .join("");
+
+      // Add watched episodes data
+      const watchedEpisodesData = watchedEpisodesStore.shows;
+      csvContent += "watchedEpisodes\n";
+      csvContent += "showId,showName,seasons,watchedEpisodes\n";
+      csvContent += Object.entries(watchedEpisodesData)
+        .map(([showId, show]) => {
+          return `${showId},"${show.showName}","${JSON.stringify(show.seasons).replace(/"/g, '""')}","${JSON.stringify(show.watchedEpisodes).replace(/"/g, '""')}"`;
+        })
+        .join("\n");
 
       const fileName = `watchlists_${new Date().toISOString().split("T")[0]}.csv`;
       const downloadsDir = FileSystem.documentDirectory + "Downloads/";
@@ -100,7 +138,7 @@ export const WatchlistExportImportSheet = React.forwardRef<BottomSheetModal>(
         console.error("Error exporting watchlists:", error);
         showToast("Error exporting watchlists");
       }
-    }, [movies, tvShows]);
+    }, [movies, tvShows, watchedEpisodesStore.shows]);
 
     const handleImport = useCallback(async () => {
       try {
@@ -122,7 +160,45 @@ export const WatchlistExportImportSheet = React.forwardRef<BottomSheetModal>(
           return;
         }
 
+        const sections = fileContent.split("\n\n").filter(Boolean);
+
+        // First import watchlists
         await importFromCSV(fileContent);
+
+        // Then import watched episodes if present
+        const watchedEpisodesSection = sections.find((section) =>
+          section.startsWith("watchedEpisodes"),
+        );
+        if (watchedEpisodesSection) {
+          const [_, header, ...rows] = watchedEpisodesSection
+            .split("\n")
+            .filter(Boolean);
+          const watchedEpisodesData: WatchedEpisodesData = {};
+
+          for (const row of rows) {
+            const [showId, showName, seasons, watchedEpisodes] = row
+              .split(",")
+              .map((val) =>
+                val.startsWith('"') && val.endsWith('"')
+                  ? val.slice(1, -1)
+                  : val,
+              );
+
+            watchedEpisodesData[showId] = {
+              showId: parseInt(showId),
+              showName,
+              seasons: JSON.parse(seasons.replace(/""/g, '"')),
+              watchedEpisodes: JSON.parse(watchedEpisodes.replace(/""/g, '"')),
+            };
+          }
+
+          await AsyncStorage.setItem(
+            WATCHED_EPISODES_STORAGE_KEY,
+            JSON.stringify(watchedEpisodesData),
+          );
+          watchedEpisodesStore.initialize();
+        }
+
         showToast("Watchlists imported successfully");
 
         if (ref && "current" in ref && ref.current) {
@@ -132,7 +208,7 @@ export const WatchlistExportImportSheet = React.forwardRef<BottomSheetModal>(
         console.error("Error importing watchlists:", error);
         showToast("Error importing watchlists");
       }
-    }, [importFromCSV]);
+    }, [importFromCSV, watchedEpisodesStore]);
 
     return (
       <Sheet ref={ref} onChange={handleSheetChanges}>
@@ -159,24 +235,3 @@ export const WatchlistExportImportSheet = React.forwardRef<BottomSheetModal>(
     );
   },
 );
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  option: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#333",
-  },
-  optionText: {
-    fontSize: 16,
-  },
-  bottomSheetBackground: {
-    backgroundColor: "#1d1d1d",
-  },
-  handleIndicator: {
-    backgroundColor: "#333",
-  },
-});
