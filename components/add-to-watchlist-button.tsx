@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/button";
 import { ThemedText } from "@/components/themed-text";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -12,6 +12,8 @@ import {
   RemoveTvShowSheet,
   useRemoveTvShowSheet,
 } from "@/components/remove-tv-show-sheet";
+import { useSettingsStore } from "@/store/settings-store";
+import { useWatchedEpisodesStore } from "@/store/watched-episodes-store";
 
 export function AddToWatchlistButton({
   poster_path,
@@ -28,6 +30,13 @@ export function AddToWatchlistButton({
   // Only select the specific functions we need from the store
   const isInWatchlist = useWatchlistStore((state) => state.isInWatchlist);
   const addToWatchlist = useWatchlistStore((state) => state.addToWatchlist);
+  const tvShowRemovalPreference = useSettingsStore(
+    (state) => state.tvShowRemovalPreference,
+  );
+
+  useEffect(() => {
+    useSettingsStore.getState().initialize();
+  }, []);
 
   // Force a re-render when the screen comes into focus
   useFocusEffect(
@@ -42,8 +51,23 @@ export function AddToWatchlistButton({
 
       if (isCurrentlyInWatchlist) {
         if (mediaType === MediaType.Tv) {
-          openSheet();
-          return;
+          // Check if we have a saved preference
+          if (tvShowRemovalPreference) {
+            setIsLoading(true);
+            await useWatchlistStore
+              .getState()
+              .removeFromWatchlist(
+                id,
+                mediaType,
+                tvShowRemovalPreference === "with_progress",
+              );
+            if (tvShowRemovalPreference === "with_progress") {
+              await useWatchedEpisodesStore.getState().initialize();
+            }
+          } else {
+            openSheet();
+            return;
+          }
         } else {
           setIsLoading(true);
           await useWatchlistStore.getState().removeFromWatchlist(id, mediaType);

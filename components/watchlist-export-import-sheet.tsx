@@ -11,9 +11,9 @@ import { useHandleSheetChanges } from "@/utils/handle-sheet-changes";
 import { showToast } from "@/utils/toast";
 import { WATCHED_EPISODES_STORAGE_KEY } from "@/utils/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { hitSlop } from "@/utils/hit-slop";
 import { isValidWatchlistCSV } from "@/utils/is-valid-watchlist-csv";
+import { MaterialIcons } from "@expo/vector-icons";
 
 interface WatchedEpisodesData {
   [key: string]: {
@@ -176,8 +176,7 @@ export function WatchlistExportImportSheet() {
         onPress={handlePresentModalPress}
         className="flex flex-row items-center gap-2"
       >
-        <Ionicons name="cloud-upload" size={20} color="#fff" />
-        <ThemedText>Import/Export</ThemedText>
+        <MaterialIcons name="file-upload" size={24} color="#fff" />
       </TouchableOpacity>
 
       <Sheet ref={sheetRef} onChange={handleSheetChanges}>

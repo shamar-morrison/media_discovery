@@ -5,8 +5,11 @@ import { tabStyles } from "@/styles/tab-styles";
 import { ProgressTab } from "@/components/screens/progress-tab";
 import React from "react";
 import { ScreenTitle } from "@/components/screen-title";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import { WatchlistExportImportSheet } from "@/components/watchlist-export-import-sheet";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { router } from "expo-router";
+import { hitSlop } from "@/utils/hit-slop";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -15,7 +18,12 @@ export default function Profile() {
     <>
       <View className="p-4 flex flex-row items-center justify-between">
         <ScreenTitle className={"pb-0"}>Profile</ScreenTitle>
-        <WatchlistExportImportSheet />
+        <View className="flex gap-5 flex-row items-center">
+          <WatchlistExportImportSheet />
+          <Pressable onPress={() => router.push("/settings")} hitSlop={hitSlop}>
+            <Ionicons name={"settings"} size={23} color={"#fff"} />
+          </Pressable>
+        </View>
       </View>
       <Tab.Navigator screenOptions={tabStyles} backBehavior={"none"}>
         <Tab.Screen
