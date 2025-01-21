@@ -15,7 +15,7 @@ const Sheet = React.forwardRef<
   ) => {
     const renderBackdrop = React.useCallback(
       (props: BottomSheetBackdropProps) => (
-        <BottomSheetBackdrop {...props} disappearsOnIndex={-1} />
+        <BottomSheetBackdrop {...props} disappearsOnIndex={-1} opacity={1} />
       ),
       [],
     );
