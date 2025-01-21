@@ -25,7 +25,7 @@ export function ProgressTab() {
     return (
       <View className={"flex items-center justify-center h-full px-4"}>
         <ThemedText className={"font-inter-semibold text-lg text-center"}>
-          You're not currently watching anything.
+          You're not currently tracking anything.
         </ThemedText>
       </View>
     );
