@@ -54,7 +54,7 @@ export function SimilarScreen() {
                 release_date={item.release_date}
                 title={item.title}
                 id={item.id}
-                mediaType={MediaType.Movie}
+                mediaType={mediaType}
                 containerWidth={itemWidth}
               />
             </RenderItemWrapper>

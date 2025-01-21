@@ -7,6 +7,11 @@ import { AddToWatchlistProps } from "@/types/add-to-watchlist";
 import { useWatchlistStore } from "@/store/watchlist-store";
 import { useFocusEffect } from "@react-navigation/native";
 import { ActivityIndicator } from "react-native";
+import { MediaType } from "@/types/multi-search";
+import {
+  RemoveTvShowSheet,
+  useRemoveTvShowSheet,
+} from "@/components/remove-tv-show-sheet";
 
 export function AddToWatchlistButton({
   poster_path,
@@ -18,13 +23,11 @@ export function AddToWatchlistButton({
 }: AddToWatchlistProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [_, setForceUpdate] = useState(0);
+  const { sheetRef, openSheet } = useRemoveTvShowSheet();
 
   // Only select the specific functions we need from the store
   const isInWatchlist = useWatchlistStore((state) => state.isInWatchlist);
   const addToWatchlist = useWatchlistStore((state) => state.addToWatchlist);
-  const removeFromWatchlist = useWatchlistStore(
-    (state) => state.removeFromWatchlist,
-  );
 
   // Force a re-render when the screen comes into focus
   useFocusEffect(
@@ -34,13 +37,19 @@ export function AddToWatchlistButton({
   );
 
   const handleAddToWatchlist = async () => {
-    setIsLoading(true);
     try {
       const isCurrentlyInWatchlist = isInWatchlist(id, mediaType);
 
       if (isCurrentlyInWatchlist) {
-        await removeFromWatchlist(id, mediaType);
+        if (mediaType === MediaType.Tv) {
+          openSheet();
+          return;
+        } else {
+          setIsLoading(true);
+          await useWatchlistStore.getState().removeFromWatchlist(id, mediaType);
+        }
       } else {
+        setIsLoading(true);
         const movieData: AddToWatchlistProps = {
           id,
           poster_path,
@@ -58,6 +67,10 @@ export function AddToWatchlistButton({
     }
   };
 
+  const handleRemoveComplete = useCallback(() => {
+    setForceUpdate((prev) => prev + 1);
+  }, []);
+
   const inWatchlist = isInWatchlist(id, mediaType);
   const icon = inWatchlist ? "close" : "add";
 
@@ -70,11 +83,21 @@ export function AddToWatchlistButton({
   }
 
   return (
-    <Button onPress={handleAddToWatchlist}>
-      <Ionicons name={icon} size={20} color={"#fff"} />
-      <ThemedText>
-        {inWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}
-      </ThemedText>
-    </Button>
+    <>
+      <Button onPress={handleAddToWatchlist}>
+        <Ionicons name={icon} size={20} color={"#fff"} />
+        <ThemedText>
+          {inWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}
+        </ThemedText>
+      </Button>
+      {mediaType === MediaType.Tv && (
+        <RemoveTvShowSheet
+          ref={sheetRef}
+          showId={id}
+          showName={title}
+          onRemoveComplete={handleRemoveComplete}
+        />
+      )}
+    </>
   );
 }

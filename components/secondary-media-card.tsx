@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { ThemedImage } from "@/components/themed-image";
 import { MediaType } from "@/types/multi-search";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -6,6 +6,7 @@ import { ThemedText } from "@/components/themed-text";
 import { Link } from "expo-router";
 import { getYear } from "date-fns";
 import { useAppropriateImage } from "@/utils/use-appropriate-image";
+import React from "react";
 
 type SecondaryMediaCardProps = {
   poster_path: string;
@@ -25,50 +26,55 @@ export function SecondaryMediaCard({
   release_date,
 }: SecondaryMediaCardProps) {
   return (
-    <Link
-      href={{
-        pathname: "/[mediaId]",
-        params: { mediaId: id, mediaType },
-      }}
-      asChild
-    >
-      <TouchableOpacity>
-        <View className={"flex gap-2 w-32"}>
-          <View className={`rounded-lg overflow-hidden w-32`}>
-            <ThemedImage
-              style={{
-                width: "100%",
-                height: 155,
-              }}
-              className={"w-full h-full"}
-              contentFit={"fill"}
-              source={useAppropriateImage(poster_path)}
-            />
-          </View>
-          <View className={"flex w-32"}>
-            <ThemedText
-              className={"font-inter-semibold w-full"}
-              numberOfLines={1}
-            >
-              {title}
-            </ThemedText>
-            <View className="flex flex-row items-center">
-              <ThemedText className={"text-sm opacity-50"}>
-                {release_date ? getYear(release_date) : "N/A"}
-              </ThemedText>
-              <ThemedText className={"text-sm opacity-50"}> • </ThemedText>
-              <View
-                style={{ flexDirection: "row", alignItems: "center", gap: 3 }}
+    <>
+      <Link
+        href={{
+          pathname: "/[mediaId]",
+          params: { mediaId: id, mediaType },
+        }}
+        asChild
+      >
+        <TouchableOpacity>
+          <View className={"flex gap-2 w-32"}>
+            <View className={`rounded-lg overflow-hidden w-32`}>
+              <ThemedImage
+                style={{
+                  width: "100%",
+                  height: 155,
+                }}
+                className={"w-full h-full"}
+                contentFit={"fill"}
+                source={useAppropriateImage(poster_path)}
+              />
+            </View>
+            <View className={"flex w-32"}>
+              <ThemedText
+                className={"font-inter-semibold w-full"}
+                numberOfLines={1}
               >
-                <Ionicons name={"star"} size={12} color={"#ffd500"} />
-                <ThemedText className={"text-sm"} style={{ color: "#ffd500" }}>
-                  {vote_average?.toFixed(1)}
+                {title}
+              </ThemedText>
+              <View className="flex flex-row items-center">
+                <ThemedText className={"text-sm opacity-50"}>
+                  {release_date ? getYear(release_date) : "N/A"}
                 </ThemedText>
+                <ThemedText className={"text-sm opacity-50"}> • </ThemedText>
+                <View
+                  style={{ flexDirection: "row", alignItems: "center", gap: 3 }}
+                >
+                  <Ionicons name={"star"} size={12} color={"#ffd500"} />
+                  <ThemedText
+                    className={"text-sm"}
+                    style={{ color: "#ffd500" }}
+                  >
+                    {vote_average?.toFixed(1)}
+                  </ThemedText>
+                </View>
               </View>
             </View>
           </View>
-        </View>
-      </TouchableOpacity>
-    </Link>
+        </TouchableOpacity>
+      </Link>
+    </>
   );
 }

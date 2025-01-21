@@ -1,7 +1,11 @@
 import { create } from "zustand";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AddToWatchlistProps } from "@/types/add-to-watchlist";
-import { MOVIES_STORAGE_KEY, TV_SHOW_STORAGE_KEY } from "@/utils/constants";
+import {
+  MOVIES_STORAGE_KEY,
+  TV_SHOW_STORAGE_KEY,
+  WATCHED_EPISODES_STORAGE_KEY,
+} from "@/utils/constants";
 import { showToast } from "@/utils/toast";
 import { MediaType } from "@/types/multi-search";
 
@@ -13,7 +17,11 @@ type WatchlistStore = {
   isLoading: boolean;
   initialize: () => Promise<void>;
   addToWatchlist: (media: Media, mediaType: MediaType) => Promise<void>;
-  removeFromWatchlist: (mediaId: number, mediaType: MediaType) => Promise<void>;
+  removeFromWatchlist: (
+    mediaId: number,
+    mediaType: MediaType,
+    deleteProgress?: boolean,
+  ) => Promise<void>;
   isInWatchlist: (mediaId: number, mediaType: MediaType) => boolean;
   importFromCSV: (csvContent: string) => Promise<void>;
 };
@@ -64,7 +72,11 @@ export const useWatchlistStore = create<WatchlistStore>((set, get) => ({
     }
   },
 
-  removeFromWatchlist: async (mediaId: number, mediaType: MediaType) => {
+  removeFromWatchlist: async (
+    mediaId: number,
+    mediaType: MediaType,
+    deleteProgress = false,
+  ) => {
     try {
       const listKey = mediaType === "movie" ? "movies" : "tvShows";
       const newList = get()[listKey].filter((media) => media.id !== mediaId);
@@ -75,6 +87,28 @@ export const useWatchlistStore = create<WatchlistStore>((set, get) => ({
           : TV_SHOW_STORAGE_KEY,
         JSON.stringify(newList),
       );
+
+      // If it's a TV show and deleteProgress is true, remove the progress data
+      if (mediaType === MediaType.Tv && deleteProgress) {
+        try {
+          const watchedEpisodesData = await AsyncStorage.getItem(
+            WATCHED_EPISODES_STORAGE_KEY,
+          );
+          if (watchedEpisodesData) {
+            const parsedData = JSON.parse(watchedEpisodesData);
+            if (parsedData[mediaId]) {
+              delete parsedData[mediaId];
+              await AsyncStorage.setItem(
+                WATCHED_EPISODES_STORAGE_KEY,
+                JSON.stringify(parsedData),
+              );
+            }
+          }
+        } catch (error) {
+          console.error("Error deleting progress:", error);
+          showToast("Error deleting progress");
+        }
+      }
 
       set({ [listKey]: newList });
       showToast(
