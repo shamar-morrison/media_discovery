@@ -180,22 +180,26 @@ export function WatchlistExportImportSheet() {
       </TouchableOpacity>
 
       <Sheet ref={sheetRef} onChange={handleSheetChanges}>
-        <BottomSheetView className="flex-1 px-6 py-4">
+        <BottomSheetView className="flex-1 px-6 py-4 text-center items-center">
           <ThemedText className="text-2xl font-inter-semibold mb-4">
             Watchlist Options
           </ThemedText>
-          <View className="flex gap-4">
+          <View className="flex gap-4 w-full">
             <TouchableOpacity
               className="bg-primary-200/50 rounded-lg p-4"
               onPress={handleImport}
             >
-              <ThemedText>Import List from CSV</ThemedText>
+              <ThemedText className={"text-center"}>
+                Import List from CSV
+              </ThemedText>
             </TouchableOpacity>
             <TouchableOpacity
               className="bg-primary-200/50 rounded-lg p-4"
               onPress={handleExport}
             >
-              <ThemedText>Export Lists to CSV</ThemedText>
+              <ThemedText className={"text-center"}>
+                Export Lists to CSV
+              </ThemedText>
             </TouchableOpacity>
           </View>
         </BottomSheetView>

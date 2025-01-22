@@ -114,9 +114,9 @@ export function AddToWatchlistButton({
           {inWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}
         </ThemedText>
       </Button>
-      {mediaType === MediaType.Tv && (
+      {mediaType === MediaType.Tv && inWatchlist && (
         <RemoveTvShowSheet
-          ref={sheetRef}
+          sheetRef={sheetRef}
           showId={id}
           showName={title}
           onRemoveComplete={handleRemoveComplete}

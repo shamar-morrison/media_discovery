@@ -1,26 +1,29 @@
-import React, { forwardRef, useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
-import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
+import { BottomSheetView } from "@gorhom/bottom-sheet";
 import { useWatchlistStore } from "@/store/watchlist-store";
 import { useWatchedEpisodesStore } from "@/store/watched-episodes-store";
 import { ThemedText } from "@/components/themed-text";
-import { Sheet } from "@/components/nativewindui/Sheet";
+import { Sheet, useSheetRef } from "@/components/nativewindui/Sheet";
 import { useHandleSheetChanges } from "@/utils/handle-sheet-changes";
 import { showToast } from "@/utils/toast";
 import { MediaType } from "@/types/multi-search";
 import { useSettingsStore } from "@/store/settings-store";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-interface RemoveTvShowSheetProps {
+interface Props {
   showId: number;
   showName: string;
   onRemoveComplete?: () => void;
+  sheetRef: ReturnType<typeof useSheetRef>;
 }
 
-export const RemoveTvShowSheet = forwardRef<
-  BottomSheetModal,
-  RemoveTvShowSheetProps
->(({ showId, showName, onRemoveComplete }, ref) => {
+export function RemoveTvShowSheet({
+  showId,
+  showName,
+  onRemoveComplete,
+  sheetRef,
+}: Props) {
   const [rememberChoice, setRememberChoice] = useState(false);
   const handleSheetChanges = useHandleSheetChanges();
   const removeFromWatchlist = useWatchlistStore(
@@ -32,10 +35,8 @@ export const RemoveTvShowSheet = forwardRef<
   );
 
   const handleClose = useCallback(() => {
-    if (ref && "current" in ref) {
-      ref.current?.close();
-    }
-  }, [ref]);
+    sheetRef.current?.close();
+  }, [sheetRef]);
 
   const handleRemoveWithProgress = useCallback(async () => {
     try {
@@ -83,7 +84,7 @@ export const RemoveTvShowSheet = forwardRef<
 
   return (
     <Sheet
-      ref={ref}
+      ref={sheetRef}
       snapPoints={["45%"]}
       onChange={handleSheetChanges}
       enablePanDownToClose
@@ -137,10 +138,10 @@ export const RemoveTvShowSheet = forwardRef<
       </BottomSheetView>
     </Sheet>
   );
-});
+}
 
 export function useRemoveTvShowSheet() {
-  const sheetRef = React.useRef<BottomSheetModal>(null);
+  const sheetRef = useSheetRef();
 
   const openSheet = useCallback(() => {
     sheetRef.current?.present();
