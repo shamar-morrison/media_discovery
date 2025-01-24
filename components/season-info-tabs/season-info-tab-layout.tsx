@@ -16,9 +16,6 @@ export function SeasonInfoTabLayout({
   episodes,
   overview,
 }: SeasonInfoTabLayoutProps) {
-  const OverviewWrapper = () => <OverviewTab overview={overview} />;
-  const EpisodesTabWrapper = () => <EpisodesTab episodes={episodes} />;
-
   return (
     <Tab.Navigator
       screenOptions={tabStyles}
@@ -27,7 +24,8 @@ export function SeasonInfoTabLayout({
     >
       <Tab.Screen
         name="overview"
-        component={OverviewWrapper}
+        component={undefined}
+        children={() => <OverviewTab overview={overview} />}
         options={{
           tabBarLabel: ({ focused }) => (
             <TabBarLabel focused={focused}>Overview</TabBarLabel>
@@ -36,7 +34,8 @@ export function SeasonInfoTabLayout({
       />
       <Tab.Screen
         name="episodes"
-        component={EpisodesTabWrapper}
+        component={undefined}
+        children={() => <EpisodesTab episodes={episodes} />}
         options={{
           tabBarLabel: ({ focused }) => (
             <TabBarLabel focused={focused}>Episodes</TabBarLabel>
