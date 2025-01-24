@@ -29,12 +29,32 @@ yarn-error.*
 .DS_Store
 *.pem
 
-# local env files
-.env*.local
-
 # typescript
 *.tsbuildinfo
 
 app-example
 /ios/
 /android/
+
+# Environment variables
+.env
+.env*.local
+.env.local
+
+# Android/IntelliJ
+build/
+.idea
+.gradle
+local.properties
+*.iml
+*.hprof
+.cxx/
+*.keystore
+!debug.keystore
+
+# Node
+npm-debug.log
+yarn-error.log
+
+# Bundle artifact
+*.jsbundle
