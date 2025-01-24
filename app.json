@@ -5,17 +5,14 @@
     "slug": "media-tracker",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/splash-icon.png",
+    "icon": "./assets/images/app-icon.png",
     "scheme": "media-discovery",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "LSApplicationQueriesSchemes": [
-          "youtube",
-          "youtube"
-        ]
+        "LSApplicationQueriesSchemes": ["youtube", "youtube"]
       },
       "bundleIdentifier": "com.shamar2000.mediatracker"
     },
@@ -26,7 +23,7 @@
     "android": {
       "backgroundColor": "#1D1D1D",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/splash-icon.png",
+        "foregroundImage": "./assets/images/android/adaptive-icon.png",
         "backgroundColor": "#1D1D1D"
       },
       "package": "com.shamar2000.mediatracker"
@@ -41,7 +38,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/splash.png",
           "resizeMode": "contain",
           "backgroundColor": "#1D1D1D",
           "dark": {
@@ -62,6 +59,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "4cac671c-5263-44de-ba14-1bb2fb3961c6"
+      }
     }
   }
 }
