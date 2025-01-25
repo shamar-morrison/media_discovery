@@ -1,17 +1,22 @@
-import { Pressable, TouchableOpacity, View } from "react-native";
-import React, { useCallback, useMemo, useRef } from "react";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { hitSlop } from "@/utils/hit-slop";
-import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
-import { ThemedText } from "@/components/themed-text";
 import { Sheet } from "@/components/nativewindui/Sheet";
-import { router } from "expo-router";
+import { ThemedText } from "@/components/themed-text";
 import { useHandleSheetChanges } from "@/utils/handle-sheet-changes";
+import { hitSlop } from "@/utils/hit-slop";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import {
+  BottomSheetFlatList,
+  BottomSheetModal,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
+import { router } from "expo-router";
+import React, { useCallback, useMemo, useRef } from "react";
+import { Pressable, TouchableOpacity, View } from "react-native";
 
 type SheetItem = {
   name: string;
   icon: React.ComponentProps<typeof Ionicons>["name"];
   route: string;
+  section: "movies" | "tv";
 };
 
 export function DrawerMenuButton() {
@@ -27,55 +32,68 @@ export function DrawerMenuButton() {
 
   const handleSheetChanges = useHandleSheetChanges();
 
-  const moviesSheetItems: SheetItem[] = useMemo(() => {
-    return [
+  const allItems: SheetItem[] = useMemo(() => {
+    const movies = [
       {
         name: "Popular",
         icon: "sparkles",
         route: "/popular-movies",
+        section: "movies",
       },
       {
         name: "Top Rated",
         icon: "arrow-up-circle",
         route: "/top-rated-movies",
+        section: "movies",
       },
       {
         name: "Genres",
         icon: "list",
         route: "/movie-genres",
+        section: "movies",
       },
       {
         name: "Now Playing",
         icon: "play",
         route: "/now-playing",
+        section: "movies",
       },
-    ];
-  }, []);
+    ] as const;
 
-  const tvShowsSheetItems: SheetItem[] = useMemo(() => {
-    return [
-      // {
-      //   name: "Airing Today",
-      //   icon: "tv",
-      //   route: "/airing-today",
-      // },
-      // {
-      //   name: "Popular",
-      //   icon: "star",
-      //   route: "/popular-tv-shows",
-      // },
+    const tvShows = [
       {
         name: "Genres",
         icon: "list",
         route: "/tv-genres",
+        section: "tv",
       },
-      // {
-      //   name: "On The Air",
-      //   icon: "videocam",
-      //   route: "/on-the-air",
-      // },
-    ];
+    ] as const;
+
+    return [...movies, ...tvShows];
   }, []);
+
+  const renderSectionHeader = useCallback(
+    ({ section }: { section: "movies" | "tv" }) => (
+      <ThemedText className={"text-2xl font-inter-semibold mb-4"}>
+        {section === "movies" ? "Movies" : "TV Shows"}
+      </ThemedText>
+    ),
+    [],
+  );
+
+  const renderItem = useCallback(
+    ({ item }: { item: SheetItem }) => (
+      <MemoizedSheetItem
+        key={item.route}
+        closeSheet={handleCloseSheetPress}
+        name={item.name}
+        icon={item.icon}
+        route={item.route}
+        style={item.section === "tv" ? { width: "100%" } : { width: "47%" }}
+      />
+    ),
+    [handleCloseSheetPress],
+  );
 
   return (
     <View>
@@ -86,37 +104,34 @@ export function DrawerMenuButton() {
       >
         <Ionicons name="menu" size={27} color="#fff" className={"mr-2"} />
       </TouchableOpacity>
-      <Sheet ref={bottomSheetModalRef} onChange={handleSheetChanges}>
+      <Sheet
+        ref={bottomSheetModalRef}
+        onChange={handleSheetChanges}
+        enableDynamicSizing
+      >
         <BottomSheetView className={"flex-1 px-6 py-4"}>
-          <ThemedText className={"text-2xl font-inter-semibold mb-4"}>
-            Movies
-          </ThemedText>
-          <View className={"flex flex-row flex-wrap gap-4"}>
-            {moviesSheetItems.map((item, i) => (
-              <SheetItem
-                key={i}
-                closeSheet={handleCloseSheetPress}
-                name={item.name}
-                icon={item.icon}
-                route={item.route}
-              />
-            ))}
-          </View>
-          <ThemedText className={"text-2xl font-inter-semibold mb-4 mt-8"}>
-            TV Shows
-          </ThemedText>
-          <View className={"flex flex-row flex-wrap gap-4"}>
-            {tvShowsSheetItems.map((item, i) => (
-              <SheetItem
-                key={i}
-                closeSheet={handleCloseSheetPress}
-                name={item.name}
-                icon={item.icon}
-                route={item.route}
-                style={{ width: "100%" }}
-              />
-            ))}
-          </View>
+          <BottomSheetFlatList
+            data={allItems.filter((item) => item.section === "movies")}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.route}
+            contentContainerStyle={{
+              paddingBottom: 40,
+            }}
+            ListHeaderComponent={renderSectionHeader({ section: "movies" })}
+            ListFooterComponent={
+              <>
+                {renderSectionHeader({ section: "tv" })}
+                {allItems
+                  .filter((item) => item.section === "tv")
+                  .map((item) => renderItem({ item }))}
+              </>
+            }
+            numColumns={2}
+            columnWrapperStyle={{
+              gap: 16,
+              marginBottom: 16,
+            }}
+          />
         </BottomSheetView>
       </Sheet>
     </View>
@@ -136,15 +151,15 @@ function SheetItem({
   closeSheet: () => void;
   style?: React.ComponentProps<typeof Pressable>["style"];
 }) {
-  const handleNavigation = () => {
+  const handleNavigation = useCallback(() => {
     router.push(route as any);
     closeSheet();
-  };
+  }, [route, closeSheet]);
 
   return (
     <Pressable
       hitSlop={{ top: 10, left: 10, bottom: 10, right: 10 }}
-      className="bg-primary-200/50 rounded-lg p-3 w-[47%]"
+      className="bg-primary-200/50 rounded-lg p-3"
       onPress={handleNavigation}
       style={style}
     >
@@ -155,3 +170,5 @@ function SheetItem({
     </Pressable>
   );
 }
+
+const MemoizedSheetItem = React.memo(SheetItem);

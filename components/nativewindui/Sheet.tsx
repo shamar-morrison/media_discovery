@@ -15,14 +15,20 @@ const Sheet = React.forwardRef<
   ) => {
     const renderBackdrop = React.useCallback(
       (props: BottomSheetBackdropProps) => (
-        <BottomSheetBackdrop {...props} disappearsOnIndex={-1} opacity={1} />
+        <BottomSheetBackdrop {...props} disappearsOnIndex={-1} opacity={0.5} />
       ),
       [],
     );
+
     return (
       <BottomSheetModal
         ref={ref}
         index={0}
+        enablePanDownToClose
+        enableContentPanningGesture={false}
+        animationConfigs={{
+          duration: 250,
+        }}
         backgroundStyle={
           backgroundStyle ?? {
             backgroundColor: "#242426",
@@ -47,6 +53,8 @@ const Sheet = React.forwardRef<
     );
   },
 );
+
+Sheet.displayName = "Sheet";
 
 function useSheetRef() {
   return React.useRef<BottomSheetModal>(null);
