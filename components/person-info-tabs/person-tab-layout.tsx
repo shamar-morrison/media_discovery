@@ -19,10 +19,6 @@ export function PersonTabLayout({
   movies,
   tvShows,
 }: PersonTabLayoutProps) {
-  const DetailsWrapper = () => <PersonDetailsTab details={details} />;
-  const MoviesWrapper = () => <FilmographyMovies movies={movies} />;
-  const TvShowsWrapper = () => <FilmographyTvShows tv={tvShows} />;
-
   return (
     <Tab.Navigator
       screenOptions={tabStyles}
@@ -32,7 +28,8 @@ export function PersonTabLayout({
     >
       <Tab.Screen
         name={"details"}
-        component={DetailsWrapper}
+        children={() => <PersonDetailsTab details={details} />}
+        component={undefined}
         options={{
           tabBarLabel: ({ focused }) => (
             <TabBarLabel focused={focused}>Details</TabBarLabel>
@@ -41,7 +38,8 @@ export function PersonTabLayout({
       />
       <Tab.Screen
         name={"movies"}
-        component={MoviesWrapper}
+        children={() => <FilmographyMovies movies={movies} />}
+        component={undefined}
         options={{
           tabBarLabel: ({ focused }) => (
             <TabBarLabel focused={focused}>Movies</TabBarLabel>
@@ -50,7 +48,8 @@ export function PersonTabLayout({
       />
       <Tab.Screen
         name={"tv"}
-        component={TvShowsWrapper}
+        children={() => <FilmographyTvShows tv={tvShows} />}
+        component={undefined}
         options={{
           tabBarLabel: ({ focused }) => (
             <TabBarLabel focused={focused}>TV Shows</TabBarLabel>
