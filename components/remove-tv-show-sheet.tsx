@@ -1,15 +1,15 @@
-import React, { useCallback, useState } from "react";
-import { TouchableOpacity, View } from "react-native";
-import { BottomSheetView } from "@gorhom/bottom-sheet";
-import { useWatchlistStore } from "@/store/watchlist-store";
-import { useWatchedEpisodesStore } from "@/store/watched-episodes-store";
-import { ThemedText } from "@/components/themed-text";
 import { Sheet, useSheetRef } from "@/components/nativewindui/Sheet";
+import { ThemedText } from "@/components/themed-text";
+import { useSettingsStore } from "@/store/settings-store";
+import { useWatchedEpisodesStore } from "@/store/watched-episodes-store";
+import { useWatchlistStore } from "@/store/watchlist-store";
+import { MediaType } from "@/types/multi-search";
 import { useHandleSheetChanges } from "@/utils/handle-sheet-changes";
 import { showToast } from "@/utils/toast";
-import { MediaType } from "@/types/multi-search";
-import { useSettingsStore } from "@/store/settings-store";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { BottomSheetView } from "@gorhom/bottom-sheet";
+import React, { useCallback, useState } from "react";
+import { TouchableOpacity, View } from "react-native";
 
 interface Props {
   showId: number;
@@ -17,6 +17,24 @@ interface Props {
   onRemoveComplete?: () => void;
   sheetRef: ReturnType<typeof useSheetRef>;
 }
+
+const SheetButton = React.memo(
+  ({
+    onPress,
+    className,
+    children,
+  }: {
+    onPress: () => void;
+    className: string;
+    children: React.ReactNode;
+  }) => (
+    <TouchableOpacity onPress={onPress} className={className}>
+      <ThemedText className="text-center font-inter-medium">
+        {children}
+      </ThemedText>
+    </TouchableOpacity>
+  ),
+);
 
 export function RemoveTvShowSheet({
   showId,
@@ -82,14 +100,13 @@ export function RemoveTvShowSheet({
     setTvShowRemovalPreference,
   ]);
 
+  const toggleRememberChoice = useCallback(() => {
+    setRememberChoice((prev) => !prev);
+  }, []);
+
   return (
-    <Sheet
-      ref={sheetRef}
-      snapPoints={["45%"]}
-      onChange={handleSheetChanges}
-      enablePanDownToClose
-    >
-      <BottomSheetView className="p-4 flex-1">
+    <Sheet ref={sheetRef} onChange={handleSheetChanges} enableDynamicSizing>
+      <BottomSheetView className="p-4">
         <View className="items-center mb-6">
           <ThemedText className="text-lg font-inter-semibold text-center mb-2">
             Remove {showName}
@@ -101,26 +118,22 @@ export function RemoveTvShowSheet({
         </View>
 
         <View className="gap-4">
-          <TouchableOpacity
+          <SheetButton
             onPress={handleRemoveWithProgress}
             className="bg-red-500 p-4 rounded-lg"
           >
-            <ThemedText className="text-center font-inter-medium">
-              Remove and Delete Progress
-            </ThemedText>
-          </TouchableOpacity>
+            Remove and Delete Progress
+          </SheetButton>
 
-          <TouchableOpacity
+          <SheetButton
             onPress={handleRemoveWatchlistOnly}
             className="bg-gray-700 p-4 rounded-lg"
           >
-            <ThemedText className="text-center font-inter-medium">
-              Remove only from Watchlist
-            </ThemedText>
-          </TouchableOpacity>
+            Remove only from Watchlist
+          </SheetButton>
 
           <TouchableOpacity
-            onPress={() => setRememberChoice(!rememberChoice)}
+            onPress={toggleRememberChoice}
             className="flex-row items-center justify-center mt-2"
           >
             <View className="w-5 h-5 border border-gray-500 rounded mr-2 items-center justify-center">
@@ -131,9 +144,9 @@ export function RemoveTvShowSheet({
             <ThemedText className="opacity-70">Remember my choice</ThemedText>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={handleClose} className="p-4">
-            <ThemedText className="text-center opacity-70">Cancel</ThemedText>
-          </TouchableOpacity>
+          <SheetButton onPress={handleClose} className="p-4">
+            Cancel
+          </SheetButton>
         </View>
       </BottomSheetView>
     </Sheet>
