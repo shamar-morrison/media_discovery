@@ -1,19 +1,46 @@
-import { Pressable, View } from "react-native";
-import { ThemedText } from "@/components/themed-text";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { hitSlop } from "@/utils/hit-slop";
-import { useCallback, useMemo, useState } from "react";
-import { BottomSheetVirtualizedList } from "@gorhom/bottom-sheet";
 import { Sheet, useSheetRef } from "@/components/nativewindui/Sheet";
+import { ThemedText } from "@/components/themed-text";
 import { MOVIE_GENRES, TV_GENRES } from "@/types/genres";
-import { PRIMARY_BLUE } from "@/utils/constants";
 import { MediaType } from "@/types/multi-search";
+import { PRIMARY_BLUE } from "@/utils/constants";
+import { hitSlop } from "@/utils/hit-slop";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { BottomSheetVirtualizedList } from "@gorhom/bottom-sheet";
+import React, { useCallback, useMemo, useState } from "react";
+import { Pressable, View } from "react-native";
 
 interface FilterProps {
   onChange: (genreId: number | undefined) => void;
   initialGenreId?: number;
   type: MediaType.Movie | MediaType.Tv;
 }
+
+const GenreItem = React.memo(
+  ({
+    item,
+    isSelected,
+    onPress,
+  }: {
+    item: { id: number | undefined; name: string };
+    isSelected: boolean;
+    onPress: () => void;
+  }) => (
+    <Pressable
+      onPress={onPress}
+      className={"flex-1 py-4 flex-row items-center"}
+    >
+      <ThemedText>{item.name}</ThemedText>
+      {isSelected && (
+        <Ionicons
+          name={"checkmark-circle"}
+          size={22}
+          color={PRIMARY_BLUE}
+          className={"ml-3"}
+        />
+      )}
+    </Pressable>
+  ),
+);
 
 export function GenreFilter({ onChange, initialGenreId, type }: FilterProps) {
   const [selectedGenreId, setSelectedGenreId] = useState<number | undefined>(
@@ -42,11 +69,8 @@ export function GenreFilter({ onChange, initialGenreId, type }: FilterProps) {
     bottomSheetModalRef.current?.close();
   }, []);
 
-  const snapPoints = useMemo(() => ["50%"], []);
-
   const handleSheetChanges = useCallback((index: number) => {
     if (index === -1) {
-      // Sheet is fully closed
       setIsClosing(false);
     }
   }, []);
@@ -71,22 +95,12 @@ export function GenreFilter({ onChange, initialGenreId, type }: FilterProps) {
       const isSelected =
         item.id === selectedGenreId ||
         (item.id === undefined && !selectedGenreId);
-
       return (
-        <Pressable
+        <GenreItem
+          item={item}
+          isSelected={isSelected}
           onPress={() => handleGenreUpdate(item.id, item.name)}
-          className={"flex-1 py-4 flex-row items-center"}
-        >
-          <ThemedText>{item.name}</ThemedText>
-          {isSelected && (
-            <Ionicons
-              name={"checkmark-circle"}
-              size={22}
-              color={PRIMARY_BLUE}
-              className={"ml-3"}
-            />
-          )}
-        </Pressable>
+        />
       );
     },
     [handleGenreUpdate, selectedGenreId],
@@ -107,13 +121,11 @@ export function GenreFilter({ onChange, initialGenreId, type }: FilterProps) {
       <Sheet
         ref={bottomSheetModalRef}
         onChange={handleSheetChanges}
+        snapPoints={["80%"]}
         enableDynamicSizing={false}
-        snapPoints={snapPoints}
       >
         <View className={"px-6 py-4"}>
-          <ThemedText
-            className={"text-2xl font-inter-semibold sticky top-0 left-0"}
-          >
+          <ThemedText className={"text-2xl font-inter-semibold"}>
             Genres
           </ThemedText>
         </View>
@@ -123,7 +135,7 @@ export function GenreFilter({ onChange, initialGenreId, type }: FilterProps) {
           renderItem={renderItem}
           getItemCount={(data) => data.length}
           getItem={(data, index) => data[index]}
-          contentContainerStyle={{ paddingHorizontal: 24 }}
+          contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 20 }}
         />
       </Sheet>
     </Pressable>

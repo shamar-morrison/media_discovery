@@ -1,17 +1,45 @@
-import { Pressable, View } from "react-native";
-import { ThemedText } from "@/components/themed-text";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { hitSlop } from "@/utils/hit-slop";
-import { useCallback, useMemo, useState } from "react";
-import { BottomSheetVirtualizedList } from "@gorhom/bottom-sheet";
 import { Sheet, useSheetRef } from "@/components/nativewindui/Sheet";
-import { useHandleSheetChanges } from "@/utils/handle-sheet-changes";
+import { ThemedText } from "@/components/themed-text";
 import { PRIMARY_BLUE } from "@/utils/constants";
+import { hitSlop } from "@/utils/hit-slop";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { BottomSheetVirtualizedList } from "@gorhom/bottom-sheet";
+import React, { useCallback, useMemo, useState } from "react";
+import { Pressable, View } from "react-native";
 
 interface RatingFilterProps {
   onChange: (rating: number | undefined) => void;
   initialRating?: number;
 }
+
+const RatingItem = React.memo(
+  ({
+    item,
+    isSelected,
+    onPress,
+  }: {
+    item: string | number;
+    isSelected: boolean;
+    onPress: () => void;
+  }) => (
+    <Pressable
+      onPress={onPress}
+      className={"flex-1 py-4 flex-row items-center"}
+    >
+      <ThemedText>
+        {typeof item === "string" ? "All Ratings" : `${item}+`}
+      </ThemedText>
+      {isSelected && (
+        <Ionicons
+          name={"checkmark-circle"}
+          size={22}
+          color={PRIMARY_BLUE}
+          className={"ml-3"}
+        />
+      )}
+    </Pressable>
+  ),
+);
 
 export function RatingFilter({ onChange, initialRating }: RatingFilterProps) {
   const [selectedRating, setSelectedRating] = useState<number | undefined>(
@@ -31,9 +59,11 @@ export function RatingFilter({ onChange, initialRating }: RatingFilterProps) {
     bottomSheetModalRef.current?.close();
   }, []);
 
-  const snapPoints = useMemo(() => ["50%"], []);
-
-  const handleSheetChanges = useHandleSheetChanges();
+  const handleSheetChanges = useCallback((index: number) => {
+    if (index === -1) {
+      setIsClosing(false);
+    }
+  }, []);
 
   const handleRatingUpdate = useCallback(
     (rating: number | undefined) => {
@@ -55,22 +85,13 @@ export function RatingFilter({ onChange, initialRating }: RatingFilterProps) {
       const isSelected = isAll ? !selectedRating : selectedRating === item;
 
       return (
-        <Pressable
+        <RatingItem
+          item={item}
+          isSelected={isSelected}
           onPress={() =>
             handleRatingUpdate(isAll ? undefined : (item as number))
           }
-          className={"flex-1 py-4 flex-row items-center"}
-        >
-          <ThemedText>{isAll ? "All Ratings" : `${item}+`}</ThemedText>
-          {isSelected && (
-            <Ionicons
-              name={"checkmark-circle"}
-              size={22}
-              color={PRIMARY_BLUE}
-              className={"ml-3"}
-            />
-          )}
-        </Pressable>
+        />
       );
     },
     [handleRatingUpdate, selectedRating],
@@ -91,13 +112,10 @@ export function RatingFilter({ onChange, initialRating }: RatingFilterProps) {
       <Sheet
         ref={bottomSheetModalRef}
         onChange={handleSheetChanges}
-        enableDynamicSizing={false}
-        snapPoints={snapPoints}
+        enableDynamicSizing={true}
       >
         <View className={"px-6 py-4"}>
-          <ThemedText
-            className={"text-2xl font-inter-semibold sticky top-0 left-0"}
-          >
+          <ThemedText className={"text-2xl font-inter-semibold"}>
             Minimum Rating
           </ThemedText>
         </View>
@@ -107,7 +125,7 @@ export function RatingFilter({ onChange, initialRating }: RatingFilterProps) {
           renderItem={renderItem}
           getItemCount={(data) => data.length}
           getItem={(data, index) => data[index]}
-          contentContainerStyle={{ paddingHorizontal: 24 }}
+          contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 20 }}
         />
       </Sheet>
     </Pressable>
