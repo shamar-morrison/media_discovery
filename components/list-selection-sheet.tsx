@@ -6,7 +6,8 @@ import { useHandleSheetChanges } from "@/utils/handle-sheet-changes";
 import { showToast } from "@/utils/toast";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { BottomSheetView } from "@gorhom/bottom-sheet";
-import React, { useCallback, useRef, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, ScrollView, TextInput, View } from "react-native";
 import { Button } from "./button";
 import { Sheet, useSheetRef } from "./nativewindui/Sheet";
@@ -43,19 +44,30 @@ export function ListSelectionSheet({
     sheetRef.current?.close();
   }, [sheetRef]);
 
-  // Initialize selected state based on current lists
-  React.useEffect(() => {
-    const initialSelected = new Set<string>();
+  const updateSelectedLists = useCallback(() => {
+    const newSelected = new Set<string>();
     if (isInWatchlist(mediaItem.id, mediaItem.mediaType)) {
-      initialSelected.add("default");
+      newSelected.add("default");
     }
     lists.forEach((list) => {
       if (isInList(list.id, mediaItem.id)) {
-        initialSelected.add(list.id);
+        newSelected.add(list.id);
       }
     });
-    setSelectedLists(initialSelected);
-  }, []);
+    setSelectedLists(newSelected);
+  }, [lists, mediaItem, isInWatchlist, isInList]);
+
+  // Update selected lists when screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      updateSelectedLists();
+    }, [updateSelectedLists]),
+  );
+
+  // Initialize selected state
+  useEffect(() => {
+    updateSelectedLists();
+  }, [updateSelectedLists]);
 
   const handleCreateList = useCallback(() => {
     const newListName = newListNameRef.current.trim();
