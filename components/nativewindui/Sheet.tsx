@@ -4,6 +4,7 @@ import {
   BottomSheetModal,
 } from "@gorhom/bottom-sheet";
 import * as React from "react";
+import { ReduceMotion } from "react-native-reanimated";
 
 const Sheet = React.forwardRef<
   BottomSheetModal,
@@ -26,6 +27,7 @@ const Sheet = React.forwardRef<
         index={0}
         enablePanDownToClose
         enableContentPanningGesture={false}
+        overrideReduceMotion={ReduceMotion.Always}
         animationConfigs={{
           duration: 250,
         }}
