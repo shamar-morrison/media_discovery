@@ -1,19 +1,13 @@
-import React, { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/button";
+import { useSheetRef } from "@/components/nativewindui/Sheet";
 import { ThemedText } from "@/components/themed-text";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { showToast } from "@/utils/toast";
-import { AddToWatchlistProps } from "@/types/add-to-watchlist";
 import { useWatchlistStore } from "@/store/watchlist-store";
+import { AddToWatchlistProps } from "@/types/add-to-watchlist";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useFocusEffect } from "@react-navigation/native";
+import React, { useCallback, useState } from "react";
 import { ActivityIndicator } from "react-native";
-import { MediaType } from "@/types/multi-search";
-import {
-  RemoveTvShowSheet,
-  useRemoveTvShowSheet,
-} from "@/components/remove-tv-show-sheet";
-import { useSettingsStore } from "@/store/settings-store";
-import { useWatchedEpisodesStore } from "@/store/watched-episodes-store";
+import { ListSelectionSheet } from "./list-selection-sheet";
 
 export function AddToWatchlistButton({
   poster_path,
@@ -25,18 +19,10 @@ export function AddToWatchlistButton({
 }: AddToWatchlistProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [_, setForceUpdate] = useState(0);
-  const { sheetRef, openSheet } = useRemoveTvShowSheet();
+  const sheetRef = useSheetRef();
 
   // Only select the specific functions we need from the store
   const isInWatchlist = useWatchlistStore((state) => state.isInWatchlist);
-  const addToWatchlist = useWatchlistStore((state) => state.addToWatchlist);
-  const tvShowRemovalPreference = useSettingsStore(
-    (state) => state.tvShowRemovalPreference,
-  );
-
-  useEffect(() => {
-    useSettingsStore.getState().initialize();
-  }, []);
 
   // Force a re-render when the screen comes into focus
   useFocusEffect(
@@ -45,58 +31,9 @@ export function AddToWatchlistButton({
     }, []),
   );
 
-  const handleAddToWatchlist = async () => {
-    try {
-      const isCurrentlyInWatchlist = isInWatchlist(id, mediaType);
-
-      if (isCurrentlyInWatchlist) {
-        if (mediaType === MediaType.Tv) {
-          // Check if we have a saved preference
-          if (tvShowRemovalPreference) {
-            setIsLoading(true);
-            await useWatchlistStore
-              .getState()
-              .removeFromWatchlist(
-                id,
-                mediaType,
-                tvShowRemovalPreference === "with_progress",
-              );
-            if (tvShowRemovalPreference === "with_progress") {
-              await useWatchedEpisodesStore.getState().initialize();
-            }
-          } else {
-            openSheet();
-            return;
-          }
-        } else {
-          setIsLoading(true);
-          await useWatchlistStore.getState().removeFromWatchlist(id, mediaType);
-        }
-      } else {
-        setIsLoading(true);
-        const movieData: AddToWatchlistProps = {
-          id,
-          poster_path,
-          title,
-          vote_average,
-          release_date,
-          mediaType,
-        };
-        await addToWatchlist(movieData, mediaType);
-      }
-    } catch (error: any) {
-      showToast("Error updating movieWatchlist: " + error.message);
-    } finally {
-      setIsLoading(false);
-    }
+  const handlePress = () => {
+    sheetRef.current?.present();
   };
-
-  const handleRemoveComplete = useCallback(() => {
-    setForceUpdate((prev) => prev + 1);
-  }, []);
-
-  const inWatchlist = isInWatchlist(id, mediaType);
-  const icon = inWatchlist ? "close" : "add";
 
   if (isLoading) {
     return (
@@ -108,20 +45,21 @@ export function AddToWatchlistButton({
 
   return (
     <>
-      <Button onPress={handleAddToWatchlist}>
-        <Ionicons name={icon} size={20} color={"#fff"} />
-        <ThemedText>
-          {inWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}
-        </ThemedText>
+      <Button onPress={handlePress}>
+        <Ionicons name="add" size={20} color={"#fff"} />
+        <ThemedText>Save to List</ThemedText>
       </Button>
-      {mediaType === MediaType.Tv && inWatchlist && (
-        <RemoveTvShowSheet
-          sheetRef={sheetRef}
-          showId={id}
-          showName={title}
-          onRemoveComplete={handleRemoveComplete}
-        />
-      )}
+      <ListSelectionSheet
+        sheetRef={sheetRef}
+        mediaItem={{
+          id,
+          poster_path,
+          title,
+          vote_average,
+          release_date,
+          mediaType,
+        }}
+      />
     </>
   );
 }
