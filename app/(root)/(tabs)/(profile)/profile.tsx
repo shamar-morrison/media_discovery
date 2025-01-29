@@ -4,11 +4,9 @@ import { WatchlistsTab } from "@/components/screens/watchlists-tab";
 import { TabBarLabel } from "@/components/tab-bar-label";
 import { WatchlistExportImportSheet } from "@/components/watchlist-export-import-sheet";
 import { tabStyles } from "@/styles/tab-styles";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { router } from "expo-router";
 import React from "react";
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -19,9 +17,6 @@ export default function Profile() {
         <ScreenTitle className={"pb-0"}>Profile</ScreenTitle>
         <View className="flex gap-5 flex-row items-center">
           <WatchlistExportImportSheet />
-          <Pressable onPress={() => router.push("/settings")}>
-            <Ionicons name={"settings"} size={23} color={"#fff"} />
-          </Pressable>
         </View>
       </View>
       <Tab.Navigator
