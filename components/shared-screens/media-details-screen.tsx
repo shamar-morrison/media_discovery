@@ -8,6 +8,7 @@ import { MovieDetails } from "@/components/movie-details";
 import { TvShowDetails } from "@/components/tv-show-details";
 import { MovieDetailsResponse } from "@/types/movie-details";
 import { TvShowDetailsResponse } from "@/types/tv-show-details";
+import { ThemedText } from "@/components/themed-text";
 
 export function MediaDetails() {
   const { mediaId, mediaType } = useLocalSearchParams<{
@@ -31,6 +32,8 @@ export function MediaDetails() {
       />
     );
   }
+
+  if (!mediaType) return <ThemedText>No media type was passed</ThemedText>;
 
   return (
     <ThemedScrollView>
