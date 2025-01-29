@@ -1,10 +1,10 @@
-import { View } from "react-native";
-import React, { useCallback, useState } from "react";
+import { ThemedText } from "@/components/themed-text";
+import { TvShowProgressCard } from "@/components/tv-show-progress-card";
 import { useWatchedEpisodesStore } from "@/store/watched-episodes-store";
 import { useFocusEffect } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
-import { TvShowProgressCard } from "@/components/tv-show-progress-card";
-import { ThemedText } from "@/components/themed-text";
+import React, { useCallback, useState } from "react";
+import { View } from "react-native";
 
 export function ProgressTab() {
   const [_, setForceUpdate] = useState(0);
@@ -15,11 +15,11 @@ export function ProgressTab() {
 
   const startedShows = getStartedShows();
 
-  useFocusEffect(
-    useCallback(() => {
-      setForceUpdate((count) => count + 1);
-    }, []),
-  );
+  const handleRefresh = useCallback(() => {
+    setForceUpdate((count) => count + 1);
+  }, []);
+
+  useFocusEffect(handleRefresh);
 
   if (startedShows.length === 0) {
     return (
@@ -39,7 +39,9 @@ export function ProgressTab() {
         data={startedShows}
         className={"mt-4"}
         canCancelContentTouches={false}
-        renderItem={({ item }) => <TvShowProgressCard {...item} />}
+        renderItem={({ item }) => (
+          <TvShowProgressCard {...item} onComplete={handleRefresh} />
+        )}
       />
     </View>
   );
