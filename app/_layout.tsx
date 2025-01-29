@@ -11,8 +11,6 @@ import { useWatchedEpisodesStore } from "@/store/watched-episodes-store";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
-console.log("");
-
 export default function RootLayout() {
   useEffect(() => {
     useWatchlistStore.getState().initialize();
