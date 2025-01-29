@@ -63,7 +63,7 @@ export function TvShowOptionsSheet({
 
   const handleViewDetails = useCallback(() => {
     router.push({
-      pathname: "/(root)/(tabs)/(profile)/[mediaId]",
+      pathname: "/[mediaId]",
       params: { mediaId: showId, mediaType: MediaType.Tv },
     });
     handleClose();
