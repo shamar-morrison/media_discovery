@@ -33,7 +33,7 @@ const getSectionRoute = (
     case SectionType.Cast:
       return {
         pathname: "/credits/[creditsId]",
-        params: { id, mediaType },
+        params: { id, mediaType, mediaTitle },
       };
     case SectionType.Similar:
       return {

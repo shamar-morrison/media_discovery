@@ -110,6 +110,7 @@ export function TvShowDetails({
         mediaType={mediaType}
         id={seriesId}
         sectionType={SectionType.Cast}
+        mediaTitle={name}
       />
 
       <Section

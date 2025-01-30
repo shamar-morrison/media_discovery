@@ -57,6 +57,7 @@ export function MovieDetails({
         mediaType={mediaType}
         id={id}
         sectionType={SectionType.Cast}
+        mediaTitle={title}
       />
 
       <Section
