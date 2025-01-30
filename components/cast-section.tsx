@@ -4,11 +4,15 @@ import { Cast } from "@/types/movie-details";
 import { ThemedText } from "@/components/themed-text";
 import { FlashList } from "@shopify/flash-list";
 import { PersonCard } from "@/components/person-card";
-import { Section } from "@/components/section";
+import { Section, SectionProps } from "@/components/section";
 
-export function CastSection({ cast }: { cast: Cast[] }) {
+export function CastSection({
+  title,
+  cast,
+  ...props
+}: SectionProps & { cast: Cast[] }) {
   return (
-    <Section title={"Cast"}>
+    <Section title={title} {...props}>
       {cast.length === 0 && (
         <ThemedText className={"mt-4"}>No cast found</ThemedText>
       )}

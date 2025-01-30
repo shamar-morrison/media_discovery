@@ -4,7 +4,7 @@ import { useAppropriateImage } from "@/utils/use-appropriate-image";
 import { Cast } from "@/types/movie-details";
 import { Link } from "expo-router";
 
-export function PersonCard({ name, character, profile_path, id }: Cast) {
+export function PersonCard({ name, character, profile_path, id, job }: Cast) {
   return (
     <Link
       href={{
@@ -35,7 +35,7 @@ export function PersonCard({ name, character, profile_path, id }: Cast) {
               className={"text-white font-inter text-sm opacity-50"}
               numberOfLines={1}
             >
-              {character}
+              {character || job}
             </Text>
           </View>
         </View>

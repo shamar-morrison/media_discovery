@@ -1,14 +1,15 @@
-import { View } from "react-native";
-import { MovieDetailsResponse } from "@/types/movie-details";
-import { ThemedText } from "@/components/themed-text";
-import { Section } from "@/components/section";
-import { FlashList } from "@shopify/flash-list";
-import { MediaType } from "@/types/multi-search";
-import { SecondaryMediaCard } from "@/components/secondary-media-card";
-import { MediaBackdrop } from "@/components/media-backdrop";
-import { CastSection } from "@/components/cast-section";
-import { VideosSection } from "@/components/videos-section";
 import { AboutSection } from "@/components/about-section";
+import { MediaBackdrop } from "@/components/media-backdrop";
+import { SecondaryMediaCard } from "@/components/secondary-media-card";
+import { Section } from "@/components/section";
+import { ThemedText } from "@/components/themed-text";
+import { VideosSection } from "@/components/videos-section";
+import { MovieDetailsResponse } from "@/types/movie-details";
+import { MediaType } from "@/types/multi-search";
+import { SectionType } from "@/types/section";
+import { FlashList } from "@shopify/flash-list";
+import { View } from "react-native";
+import { CastSection } from "@/components/cast-section";
 
 interface MovieDetailsProps extends MovieDetailsResponse {
   mediaType: MediaType;
@@ -49,7 +50,14 @@ export function MovieDetails({
 
       <VideosSection videos={videos} />
 
-      <CastSection cast={credits.cast} />
+      <CastSection
+        title="Cast"
+        cast={credits.cast.slice(0, 10)}
+        showSeeAll={true}
+        mediaType={mediaType}
+        id={id}
+        sectionType={SectionType.Cast}
+      />
 
       <Section
         title={"More Like This"}
@@ -57,6 +65,7 @@ export function MovieDetails({
         mediaType={MediaType.Movie}
         showSeeAll={similar.results.length > 0}
         mediaTitle={title}
+        sectionType={SectionType.Similar}
       >
         {similar.results.length === 0 && (
           <ThemedText className={"mt-4"}>No similar movies found</ThemedText>

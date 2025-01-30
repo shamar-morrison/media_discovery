@@ -1,18 +1,19 @@
-import { View } from "react-native";
-import { TvShowDetailsResponse } from "@/types/tv-show-details";
+import { AboutSection } from "@/components/about-section";
 import { MediaBackdrop } from "@/components/media-backdrop";
+import { SeasonThumbnail } from "@/components/season-thumbnail";
+import { SecondaryMediaCard } from "@/components/secondary-media-card";
 import { Section } from "@/components/section";
 import { ThemedText } from "@/components/themed-text";
-import { FlashList } from "@shopify/flash-list";
-import { SeasonThumbnail } from "@/components/season-thumbnail";
-import { MediaType } from "@/types/multi-search";
-import { SecondaryMediaCard } from "@/components/secondary-media-card";
-import { useEffect } from "react";
-import { useWatchedEpisodesStore } from "@/store/watched-episodes-store";
-import { showToast } from "@/utils/toast";
-import { CastSection } from "@/components/cast-section";
 import { VideosSection } from "@/components/videos-section";
-import { AboutSection } from "@/components/about-section";
+import { useWatchedEpisodesStore } from "@/store/watched-episodes-store";
+import { MediaType } from "@/types/multi-search";
+import { SectionType } from "@/types/section";
+import { TvShowDetailsResponse } from "@/types/tv-show-details";
+import { showToast } from "@/utils/toast";
+import { FlashList } from "@shopify/flash-list";
+import { useEffect } from "react";
+import { View } from "react-native";
+import { CastSection } from "@/components/cast-section";
 
 interface TvShowDetailsProps extends TvShowDetailsResponse {
   mediaType: MediaType;
@@ -102,7 +103,14 @@ export function TvShowDetails({
 
       <VideosSection videos={videos} />
 
-      <CastSection cast={credits.cast} />
+      <CastSection
+        title="Cast"
+        cast={credits.cast.slice(0, 10)}
+        showSeeAll={true}
+        mediaType={mediaType}
+        id={seriesId}
+        sectionType={SectionType.Cast}
+      />
 
       <Section
         title={"More Like This"}
@@ -110,6 +118,7 @@ export function TvShowDetails({
         mediaTitle={name}
         id={seriesId}
         mediaType={MediaType.Tv}
+        sectionType={SectionType.Similar}
       >
         {similar.results.length === 0 && (
           <ThemedText className={"mt-4"}>No similar shows found</ThemedText>
