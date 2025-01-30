@@ -224,7 +224,7 @@ export function WatchlistExportImportSheet() {
       const sections = pendingImportContent.split("\n\n").filter(Boolean);
 
       // First import watchlists
-      await importFromCSV(pendingImportContent);
+      importFromCSV(pendingImportContent);
 
       // Import custom lists if present
       const customListsSection = sections.find((section) =>
