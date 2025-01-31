@@ -77,12 +77,13 @@ export function ListSelectionSheet({
     }
     const listId = createList(newListName);
     setSelectedLists((prev) => new Set(prev).add(listId));
+    addToList(listId, mediaItem);
     newListNameRef.current = "";
     if (inputRef.current) {
       inputRef.current.clear();
     }
     showToast("New list created");
-  }, [createList]);
+  }, [createList, addToList, mediaItem]);
 
   const handleTextChange = useCallback((text: string) => {
     newListNameRef.current = text;
