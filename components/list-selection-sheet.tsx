@@ -7,8 +7,16 @@ import { showToast } from "@/utils/toast";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { BottomSheetView } from "@gorhom/bottom-sheet";
 import { useFocusEffect } from "@react-navigation/native";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Pressable, ScrollView, TextInput, View } from "react-native";
+import { FlashList } from "@shopify/flash-list";
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { Pressable, TextInput, View } from "react-native";
 import { Button } from "./button";
 import { Sheet, useSheetRef } from "./nativewindui/Sheet";
 import { ThemedText } from "./themed-text";
@@ -18,6 +26,34 @@ interface ListSelectionSheetProps {
   onComplete?: () => void;
   sheetRef: ReturnType<typeof useSheetRef>;
 }
+
+interface ListItemData {
+  id: string;
+  name: string;
+}
+
+// Create a memoized list item component
+const ListItem = memo(
+  ({
+    name,
+    isSelected,
+    onPress,
+  }: {
+    name: string;
+    isSelected: boolean;
+    onPress: () => void;
+  }) => (
+    <Pressable
+      className="flex-row items-center justify-between p-4 bg-gray-800 rounded-lg mb-2"
+      onPress={onPress}
+    >
+      <ThemedText className="text-lg">{name}</ThemedText>
+      {isSelected && (
+        <Ionicons name="checkmark-circle" size={24} color="#10b981" />
+      )}
+    </Pressable>
+  ),
+);
 
 export function ListSelectionSheet({
   mediaItem,
@@ -133,9 +169,17 @@ export function ListSelectionSheet({
       // Wait for all operations to complete before closing
       await Promise.all(operations);
 
-      handleClose();
+      // Show success message before closing
       showToast("Lists updated successfully");
-      onComplete?.();
+
+      // Small delay to ensure state updates are processed and toast is visible
+      setTimeout(() => {
+        handleClose();
+        // Call onComplete after the sheet is closed
+        setTimeout(() => {
+          onComplete?.();
+        }, 100);
+      }, 100);
     } catch (error: any) {
       // If there's an error, revert the UI state to match the actual data state
       updateSelectedLists();
@@ -148,7 +192,42 @@ export function ListSelectionSheet({
     handleClose,
     onComplete,
     updateSelectedLists,
+    isInWatchlist,
+    isInList,
+    removeFromWatchlist,
+    addToWatchlist,
+    removeFromList,
+    addToList,
   ]);
+
+  const renderItem = useCallback(
+    ({ item }: { item: ListItemData }) => {
+      if (item.id === "default") {
+        return (
+          <ListItem
+            name={
+              mediaItem.mediaType === MediaType.Movie ? "Movies" : "TV Shows"
+            }
+            isSelected={selectedLists.has("default")}
+            onPress={() => toggleList("default")}
+          />
+        );
+      }
+      return (
+        <ListItem
+          name={item.name}
+          isSelected={selectedLists.has(item.id)}
+          onPress={() => toggleList(item.id)}
+        />
+      );
+    },
+    [selectedLists, toggleList, mediaItem],
+  );
+
+  // Prepare data for FlashList
+  const listData = useMemo(() => {
+    return [{ id: "default", name: "default" }, ...lists];
+  }, [lists]);
 
   return (
     <Sheet ref={sheetRef} onChange={handleSheetChanges} enableDynamicSizing>
@@ -175,40 +254,18 @@ export function ListSelectionSheet({
           </Pressable>
         </View>
 
-        <ScrollView
-          className="mb-4"
-          showsVerticalScrollIndicator
-          style={{ maxHeight: 300 }}
-        >
-          {/* Default List Option */}
-          <Pressable
-            className="flex-row items-center justify-between p-4 bg-gray-800 rounded-lg mb-2"
-            onPress={() => toggleList("default")}
-          >
-            <ThemedText className="text-lg">
-              {mediaItem.mediaType === MediaType.Movie ? "Movies" : "TV Shows"}
-            </ThemedText>
-            {selectedLists.has("default") && (
-              <Ionicons name="checkmark-circle" size={24} color="#10b981" />
-            )}
-          </Pressable>
+        <View style={{ height: 300 }}>
+          <FlashList
+            data={listData}
+            renderItem={renderItem}
+            estimatedItemSize={56}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={true}
+            extraData={selectedLists}
+          />
+        </View>
 
-          {/* Custom Lists */}
-          {lists.map((list) => (
-            <Pressable
-              key={list.id}
-              className="flex-row items-center justify-between p-4 bg-gray-800 rounded-lg mb-2"
-              onPress={() => toggleList(list.id)}
-            >
-              <ThemedText className="text-lg">{list.name}</ThemedText>
-              {selectedLists.has(list.id) && (
-                <Ionicons name="checkmark-circle" size={24} color="#10b981" />
-              )}
-            </Pressable>
-          ))}
-        </ScrollView>
-
-        <Button className="w-full" onPress={handleUpdateLists}>
+        <Button className="w-full mt-4" onPress={handleUpdateLists}>
           <ThemedText>Update Lists</ThemedText>
         </Button>
       </BottomSheetView>
