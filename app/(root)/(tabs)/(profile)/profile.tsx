@@ -1,4 +1,5 @@
 import { ScreenTitle } from "@/components/screen-title";
+import { FavoritesTab } from "@/components/screens/favorites-tab";
 import { ProgressTab } from "@/components/screens/progress-tab";
 import { WatchlistsTab } from "@/components/screens/watchlists-tab";
 import { TabBarLabel } from "@/components/tab-bar-label";
@@ -36,6 +37,15 @@ export default function Profile() {
             swipeEnabled: false,
             tabBarLabel: ({ focused }) => (
               <TabBarLabel focused={focused}>Lists</TabBarLabel>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="favorites"
+          component={FavoritesTab}
+          options={{
+            tabBarLabel: ({ focused }) => (
+              <TabBarLabel focused={focused}>Favorites</TabBarLabel>
             ),
           }}
         />

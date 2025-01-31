@@ -1,16 +1,17 @@
-import { View } from "react-native";
-import React from "react";
-import { ThemedImage } from "@/components/themed-image";
-import { createMediaImageLink } from "@/utils/create-media-image-link";
-import { ThemedText } from "@/components/themed-text";
-import { format } from "date-fns";
-import { formatMinutes } from "@/utils/format-minutes";
 import { AddToWatchlistButton } from "@/components/add-to-watchlist-button";
-import { MediaType } from "@/types/multi-search";
-import { PlayTrailerButton } from "@/components/play-trailer-button";
-import { Site, Videos, VideoType } from "@/types/movie-details";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { Badge } from "@/components/badge";
+import { PlayTrailerButton } from "@/components/play-trailer-button";
+import { ThemedImage } from "@/components/themed-image";
+import { ThemedText } from "@/components/themed-text";
+import { useFavoritesStore } from "@/store/favorites-store";
+import { Site, Videos, VideoType } from "@/types/movie-details";
+import { MediaType } from "@/types/multi-search";
+import { createMediaImageLink } from "@/utils/create-media-image-link";
+import { formatMinutes } from "@/utils/format-minutes";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { format } from "date-fns";
+import React from "react";
+import { TouchableOpacity, View } from "react-native";
 
 type BackdropProps = {
   backdrop_path: string;
@@ -37,6 +38,25 @@ export function MediaBackdrop({
   mediaType,
   status,
 }: BackdropProps) {
+  const { isInFavorites, addToFavorites, removeFromFavorites } =
+    useFavoritesStore();
+  const isFavorite = isInFavorites(id);
+
+  const handleFavoritePress = () => {
+    if (isFavorite) {
+      removeFromFavorites(id);
+    } else {
+      addToFavorites({
+        id,
+        title,
+        poster_path,
+        release_date,
+        vote_average,
+        mediaType,
+      });
+    }
+  };
+
   let time;
   if (Array.isArray(runtime)) {
     time = runtime.length > 0 ? `${runtime[0]} mins per episode` : "N/A";
@@ -58,12 +78,17 @@ export function MediaBackdrop({
         cachePolicy={"memory"}
       />
 
-      <Ionicons
-        name={"bookmark-outline"}
-        size={30}
-        color={"#fff"}
+      <TouchableOpacity
+        onPress={handleFavoritePress}
         className={"absolute right-5 top-5 z-30"}
-      />
+        hitSlop={10}
+      >
+        <Ionicons
+          name={isFavorite ? "heart" : "heart-outline"}
+          size={30}
+          color={"#fff"}
+        />
+      </TouchableOpacity>
 
       <View className="absolute bottom-[40px] w-full px-4 z-10">
         <View className="flex items-center">
