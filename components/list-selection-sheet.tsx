@@ -133,16 +133,22 @@ export function ListSelectionSheet({
       // Wait for all operations to complete before closing
       await Promise.all(operations);
 
-      // Small delay to ensure state updates are processed
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
       handleClose();
       showToast("Lists updated successfully");
       onComplete?.();
     } catch (error: any) {
+      // If there's an error, revert the UI state to match the actual data state
+      updateSelectedLists();
       showToast("Error updating lists: " + error.message);
     }
-  }, [selectedLists, lists, mediaItem, handleClose, onComplete]);
+  }, [
+    selectedLists,
+    lists,
+    mediaItem,
+    handleClose,
+    onComplete,
+    updateSelectedLists,
+  ]);
 
   return (
     <Sheet ref={sheetRef} onChange={handleSheetChanges} enableDynamicSizing>
@@ -172,7 +178,7 @@ export function ListSelectionSheet({
         <ScrollView
           className="mb-4"
           showsVerticalScrollIndicator
-          style={{ maxHeight: 300 }} // This will allow about 5 items before scrolling
+          style={{ maxHeight: 300 }}
         >
           {/* Default List Option */}
           <Pressable
