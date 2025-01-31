@@ -58,6 +58,13 @@ export function MediaBackdrop({
         cachePolicy={"memory"}
       />
 
+      <Ionicons
+        name={"bookmark-outline"}
+        size={30}
+        color={"#fff"}
+        className={"absolute right-5 top-5 z-30"}
+      />
+
       <View className="absolute bottom-[40px] w-full px-4 z-10">
         <View className="flex items-center">
           {vote_average && (
