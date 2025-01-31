@@ -11,8 +11,6 @@ interface Media extends AddToWatchlistProps {}
 type WatchlistStore = {
   movies: Media[];
   tvShows: Media[];
-  isLoading: boolean;
-  initialize: () => Promise<void>;
   addToWatchlist: (media: Media, mediaType: MediaType) => void;
   removeFromWatchlist: (
     mediaId: number,
@@ -28,11 +26,6 @@ export const useWatchlistStore = create<WatchlistStore>()(
     (set, get) => ({
       movies: [],
       tvShows: [],
-      isLoading: true,
-
-      initialize: async () => {
-        set({ isLoading: false });
-      },
 
       addToWatchlist: (media: Media, mediaType: MediaType) => {
         try {
