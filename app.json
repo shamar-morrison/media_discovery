@@ -12,7 +12,8 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "LSApplicationQueriesSchemes": ["youtube", "youtube"]
+        "LSApplicationQueriesSchemes": ["youtube", "youtube"],
+        "UIBackgroundModes": ["remote-notification"]
       },
       "bundleIdentifier": "com.shamar2000.mediatracker"
     },
@@ -27,7 +28,9 @@
         "foregroundImage": "./assets/images/android/adaptive-icon.png",
         "backgroundColor": "#1D1D1D"
       },
-      "package": "com.shamar2000.mediatracker"
+      "package": "com.shamar2000.mediatracker",
+      "useNextNotificationsApi": true,
+      "permissions": ["NOTIFICATIONS", "SCHEDULE_EXACT_ALARM"]
     },
     "web": {
       "bundler": "metro",
@@ -55,6 +58,14 @@
             "./assets/fonts/Inter-Regular.ttf",
             "./assets/fonts/inter-SemiBold.ttf"
           ]
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/notification-icon.png",
+          "color": "#0061FF",
+          "sounds": ["./assets/sounds/notification.wav"]
         }
       ]
     ],
