@@ -1,4 +1,5 @@
 import { AboutSection } from "@/components/about-section";
+import { CastSection } from "@/components/cast-section";
 import { MediaBackdrop } from "@/components/media-backdrop";
 import { SeasonThumbnail } from "@/components/season-thumbnail";
 import { SecondaryMediaCard } from "@/components/secondary-media-card";
@@ -13,7 +14,6 @@ import { showToast } from "@/utils/toast";
 import { FlashList } from "@shopify/flash-list";
 import { useEffect } from "react";
 import { View } from "react-native";
-import { CastSection } from "@/components/cast-section";
 
 interface TvShowDetailsProps extends TvShowDetailsResponse {
   mediaType: MediaType;
@@ -35,6 +35,7 @@ export function TvShowDetails({
   similar,
   mediaType,
   status,
+  next_episode_to_air,
 }: TvShowDetailsProps) {
   const initialiseShow = useWatchedEpisodesStore(
     (state) => state.initializeShow,
@@ -68,6 +69,23 @@ export function TvShowDetails({
           runtime={episode_run_time}
           videos={videos}
           mediaType={mediaType}
+          nextEpisode={
+            next_episode_to_air?.air_date
+              ? {
+                  episodeNumber: next_episode_to_air.episode_number,
+                  seasonNumber: next_episode_to_air.season_number,
+                  airDate: new Date(next_episode_to_air.air_date).toISOString(),
+                }
+              : undefined
+          }
+          nextSeason={
+            seasons.length > 0
+              ? {
+                  seasonNumber: seasons[seasons.length - 1].season_number + 1,
+                  airDate: new Date(first_air_date).toISOString(), // This is a placeholder, we'll need the actual next season air date
+                }
+              : undefined
+          }
         />
       </View>
 

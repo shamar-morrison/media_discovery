@@ -1,6 +1,7 @@
 import { AddToWatchlistButton } from "@/components/add-to-watchlist-button";
 import { Badge } from "@/components/badge";
 import { PlayTrailerButton } from "@/components/play-trailer-button";
+import { ReminderButton } from "@/components/reminder-button";
 import { ThemedImage } from "@/components/themed-image";
 import { ThemedText } from "@/components/themed-text";
 import { useFavoritesStore } from "@/store/favorites-store";
@@ -24,6 +25,15 @@ type BackdropProps = {
   videos: Videos;
   mediaType: MediaType;
   status?: string;
+  nextEpisode?: {
+    episodeNumber: number;
+    seasonNumber: number;
+    airDate: string;
+  };
+  nextSeason?: {
+    seasonNumber: number;
+    airDate: string;
+  };
 };
 
 export function MediaBackdrop({
@@ -37,6 +47,8 @@ export function MediaBackdrop({
   videos,
   mediaType,
   status,
+  nextEpisode,
+  nextSeason,
 }: BackdropProps) {
   const { isInFavorites, addToFavorites, removeFromFavorites } =
     useFavoritesStore();
@@ -67,8 +79,18 @@ export function MediaBackdrop({
     <>
       <View className="bg-black h-[400px] w-screen absolute z-10 opacity-70" />
       {status === "Ended" && (
-        <View className="absolute top-3 left-3 z-30 opacity-50">
+        <View className="absolute top-5 left-5 z-30 opacity-50">
           <Badge text={"Ended"} variant={"red"} />
+        </View>
+      )}
+      {(nextEpisode || nextSeason) && status !== "Ended" && (
+        <View className="absolute left-5 top-5 z-30">
+          <ReminderButton
+            showId={id}
+            showName={title}
+            nextEpisode={nextEpisode}
+            nextSeason={nextSeason}
+          />
         </View>
       )}
       <ThemedImage
