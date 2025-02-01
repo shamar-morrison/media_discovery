@@ -11,16 +11,23 @@ import { MediaType } from "@/types/multi-search";
 import { NUM_COLUMNS } from "@/utils/constants";
 import { itemWidth } from "@/utils/get-item-width";
 import { FlashList } from "@shopify/flash-list";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { View } from "react-native";
 
+interface FilterState {
+  genreId: number | undefined;
+  year: number | undefined;
+  rating: number | undefined;
+}
+
 export default function MovieGenres() {
-  const [genreId, setGenreId] = useState<number | undefined>(
-    MOVIE_GENRES.ACTION.id,
-  );
-  const [year, setYear] = useState<number | undefined>(undefined);
-  const [rating, setRating] = useState<number | undefined>(undefined);
+  const [filters, setFilters] = useState<FilterState>({
+    genreId: MOVIE_GENRES.ACTION.id,
+    year: undefined,
+    rating: undefined,
+  });
   const listRef = useRef<FlashList<any>>(null);
+  const scrollTimeout = useRef<NodeJS.Timeout>();
 
   const {
     data,
@@ -30,35 +37,35 @@ export default function MovieGenres() {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-  } = useDiscoverMovie({ genreId, year, rating });
+  } = useDiscoverMovie(filters);
 
-  const scrollList = useCallback(
-    () => listRef.current?.scrollToOffset({ offset: 0, animated: true }),
-    [],
+  const smoothScrollToTop = useCallback(() => {
+    if (scrollTimeout.current) {
+      clearTimeout(scrollTimeout.current);
+    }
+    scrollTimeout.current = setTimeout(() => {
+      listRef.current?.scrollToOffset({ offset: 0, animated: true });
+    }, 100);
+  }, []);
+
+  const handleFilterChange = useCallback(
+    (key: keyof FilterState, value: number | undefined) => {
+      setFilters((prev) => ({ ...prev, [key]: value }));
+      smoothScrollToTop();
+    },
+    [smoothScrollToTop],
   );
 
-  const handleGenreUpdate = useCallback(
-    (newGenreId: number | undefined) => {
-      setGenreId(newGenreId);
-      scrollList();
-    },
-    [scrollList],
-  );
-
-  const handleYearUpdate = useCallback(
-    (newYear: number | undefined) => {
-      setYear(newYear);
-      scrollList();
-    },
-    [scrollList],
-  );
-
-  const handleRatingUpdate = useCallback(
-    (newRating: number | undefined) => {
-      setRating(newRating);
-      scrollList();
-    },
-    [scrollList],
+  const filterHandlers = useMemo(
+    () => ({
+      onGenreChange: (value: number | undefined) =>
+        handleFilterChange("genreId", value),
+      onYearChange: (value: number | undefined) =>
+        handleFilterChange("year", value),
+      onRatingChange: (value: number | undefined) =>
+        handleFilterChange("rating", value),
+    }),
+    [handleFilterChange],
   );
 
   const renderContent = () => {
@@ -66,7 +73,6 @@ export default function MovieGenres() {
       return <Error onRetry={refetch} />;
     }
 
-    // Flatten all pages' results into a single array
     const movies = data.pages.flatMap((page) => page.results);
 
     return (
@@ -114,12 +120,10 @@ export default function MovieGenres() {
         <ScreenTitle className={"pb-0"}>Movie Genres</ScreenTitle>
       </View>
       <FilterBar
-        genreId={genreId}
-        year={year}
-        rating={rating}
-        onGenreChange={handleGenreUpdate}
-        onYearChange={handleYearUpdate}
-        onRatingChange={handleRatingUpdate}
+        genreId={filters.genreId}
+        year={filters.year}
+        rating={filters.rating}
+        {...filterHandlers}
         mediaType={MediaType.Movie}
       />
       <ThemedView>
