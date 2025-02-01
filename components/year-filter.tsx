@@ -1,7 +1,6 @@
 import { Sheet, useSheetRef } from "@/components/nativewindui/Sheet";
 import { ThemedText } from "@/components/themed-text";
 import { PRIMARY_BLUE } from "@/utils/constants";
-import { hitSlop } from "@/utils/hit-slop";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { BottomSheetVirtualizedList } from "@gorhom/bottom-sheet";
 import React, { useCallback, useMemo, useState } from "react";
@@ -103,7 +102,6 @@ export function YearFilter({ onChange, initialYear }: YearFilterProps) {
     <Pressable
       onPress={handlePresentModalPress}
       className={"flex-1 py-3 px-4 rounded-lg bg-black-100"}
-      hitSlop={hitSlop}
     >
       <View className={"flex-row items-center justify-between"}>
         <ThemedText numberOfLines={1} style={{ width: 65 }}>

@@ -1,15 +1,15 @@
-import { View } from "react-native";
-import React from "react";
-import { useDiscoverMovie } from "@/hooks/use-discover-movie";
-import { Loading } from "@/components/loading";
 import { Error } from "@/components/error";
-import { ThemedView } from "@/components/themed-view";
-import { FlashList } from "@shopify/flash-list";
-import { RenderItemWrapper } from "@/components/render-item-wrapper";
+import { Loading } from "@/components/loading";
 import { MediaCard } from "@/components/media-card";
+import { RenderItemWrapper } from "@/components/render-item-wrapper";
+import { ThemedView } from "@/components/themed-view";
+import { useDiscoverMovie } from "@/hooks/use-discover-movie";
 import { MediaType } from "@/types/multi-search";
-import { itemWidth } from "@/utils/get-item-width";
 import { NUM_COLUMNS } from "@/utils/constants";
+import { itemWidth } from "@/utils/get-item-width";
+import { FlashList } from "@shopify/flash-list";
+import React from "react";
+import { View } from "react-native";
 
 export function MoviesTab() {
   const {

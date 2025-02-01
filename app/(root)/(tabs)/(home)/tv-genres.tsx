@@ -1,20 +1,18 @@
-import React, { useRef, useState } from "react";
-import { ScreenTitle } from "@/components/screen-title";
-import { View } from "react-native";
-import { GenreFilter } from "@/components/genre-filter";
-import { Loading } from "@/components/loading";
 import { Error } from "@/components/error";
-import { TV_GENRES } from "@/types/genres";
-import { RenderItemWrapper } from "@/components/render-item-wrapper";
+import { FilterBar } from "@/components/filter-bar";
+import { Loading } from "@/components/loading";
 import { MediaCard } from "@/components/media-card";
-import { MediaType } from "@/types/multi-search";
-import { itemWidth } from "@/utils/get-item-width";
-import { NUM_COLUMNS } from "@/utils/constants";
-import { FlashList } from "@shopify/flash-list";
+import { RenderItemWrapper } from "@/components/render-item-wrapper";
+import { ScreenTitle } from "@/components/screen-title";
 import { ThemedView } from "@/components/themed-view";
-import { YearFilter } from "@/components/year-filter";
-import { RatingFilter } from "@/components/rating-filter";
 import { useDiscoverTvShows } from "@/hooks/use-discover-tv-shows";
+import { TV_GENRES } from "@/types/genres";
+import { MediaType } from "@/types/multi-search";
+import { NUM_COLUMNS } from "@/utils/constants";
+import { itemWidth } from "@/utils/get-item-width";
+import { FlashList } from "@shopify/flash-list";
+import React, { useCallback, useRef, useState } from "react";
+import { View } from "react-native";
 
 export default function TvGenres() {
   const [genreId, setGenreId] = useState<number | undefined>(
@@ -34,23 +32,80 @@ export default function TvGenres() {
     isFetchingNextPage,
   } = useDiscoverTvShows({ genreId, year, rating });
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  const scrollList = useCallback(
+    () => listRef.current?.scrollToOffset({ offset: 0, animated: true }),
+    [],
+  );
 
-  if (isError || !data) {
-    return <Error onRetry={refetch} />;
-  }
+  const handleGenreUpdate = useCallback(
+    (newGenreId: number | undefined) => {
+      setGenreId(newGenreId);
+      scrollList();
+    },
+    [scrollList],
+  );
 
-  const scrollList = () =>
-    listRef.current?.scrollToOffset({ offset: 0, animated: true });
+  const handleYearUpdate = useCallback(
+    (newYear: number | undefined) => {
+      setYear(newYear);
+      scrollList();
+    },
+    [scrollList],
+  );
 
-  // Flatten all pages' results into a single array
-  const shows = data.pages.flatMap((page) => page.results);
+  const handleRatingUpdate = useCallback(
+    (newRating: number | undefined) => {
+      setRating(newRating);
+      scrollList();
+    },
+    [scrollList],
+  );
 
-  const handleGenreUpdate = (genreId: number | undefined) => {
-    setGenreId(genreId);
-    scrollList();
+  const renderContent = () => {
+    if (isError || !data) {
+      return <Error onRetry={refetch} />;
+    }
+
+    // Flatten all pages' results into a single array
+    const shows = data.pages.flatMap((page) => page.results);
+
+    return (
+      <FlashList
+        ref={listRef}
+        data={shows}
+        renderItem={({ item, index }) => {
+          return (
+            <RenderItemWrapper index={index}>
+              <MediaCard
+                containerHeight={165}
+                posterPath={item.poster_path}
+                rating={item.vote_average}
+                release_date={item.first_air_date}
+                title={item.name}
+                id={item.id}
+                mediaType={MediaType.Tv}
+                containerWidth={itemWidth}
+              />
+            </RenderItemWrapper>
+          );
+        }}
+        numColumns={NUM_COLUMNS}
+        estimatedItemSize={160}
+        onEndReached={() => {
+          if (hasNextPage) {
+            fetchNextPage();
+          }
+        }}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={() =>
+          isFetchingNextPage ? (
+            <View className="py-4">
+              <Loading />
+            </View>
+          ) : null
+        }
+      />
+    );
   };
 
   return (
@@ -58,62 +113,23 @@ export default function TvGenres() {
       <View className={"p-4"}>
         <ScreenTitle className={"pb-0"}>TV Show Genres</ScreenTitle>
       </View>
-      <View className="flex-row gap-4 justify-between px-4">
-        <GenreFilter
-          onChange={handleGenreUpdate}
-          initialGenreId={genreId}
-          type={MediaType.Tv}
-        />
-        <YearFilter
-          onChange={(year) => {
-            setYear(year);
-            scrollList();
-          }}
-          initialYear={year}
-        />
-        <RatingFilter
-          onChange={(rating) => {
-            setRating(rating);
-            scrollList();
-          }}
-          initialRating={rating}
-        />
-      </View>
+      <FilterBar
+        genreId={genreId}
+        year={year}
+        rating={rating}
+        onGenreChange={handleGenreUpdate}
+        onYearChange={handleYearUpdate}
+        onRatingChange={handleRatingUpdate}
+        mediaType={MediaType.Tv}
+      />
       <ThemedView>
-        <FlashList
-          data={shows}
-          renderItem={({ item, index }) => {
-            return (
-              <RenderItemWrapper index={index}>
-                <MediaCard
-                  containerHeight={165}
-                  posterPath={item.poster_path}
-                  rating={item.vote_average}
-                  release_date={item.first_air_date}
-                  title={item.name}
-                  id={item.id}
-                  mediaType={MediaType.Tv}
-                  containerWidth={itemWidth}
-                />
-              </RenderItemWrapper>
-            );
-          }}
-          numColumns={NUM_COLUMNS}
-          estimatedItemSize={100}
-          onEndReached={() => {
-            if (hasNextPage) {
-              fetchNextPage();
-            }
-          }}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={() =>
-            isFetchingNextPage ? (
-              <View className="py-4">
-                <Loading />
-              </View>
-            ) : null
-          }
-        />
+        {isLoading ? (
+          <View className="flex-1 justify-center">
+            <Loading />
+          </View>
+        ) : (
+          renderContent()
+        )}
       </ThemedView>
     </View>
   );
