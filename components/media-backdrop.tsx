@@ -42,11 +42,11 @@ export function MediaBackdrop({
     useFavoritesStore();
   const isFavorite = isInFavorites(id);
 
-  const handleFavoritePress = () => {
+  const handleFavoritePress = async () => {
     if (isFavorite) {
-      removeFromFavorites(id);
+      await removeFromFavorites(id);
     } else {
-      addToFavorites({
+      await addToFavorites({
         id,
         title,
         poster_path,

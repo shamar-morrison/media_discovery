@@ -6,8 +6,8 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 type FavoritesStore = {
   favorites: AddToWatchlistProps[];
-  addToFavorites: (media: AddToWatchlistProps) => void;
-  removeFromFavorites: (mediaId: number) => void;
+  addToFavorites: (media: AddToWatchlistProps) => Promise<void>;
+  removeFromFavorites: (mediaId: number) => Promise<void>;
   isInFavorites: (mediaId: number) => boolean;
 };
 
@@ -16,7 +16,7 @@ export const useFavoritesStore = create<FavoritesStore>()(
     (set, get) => ({
       favorites: [],
 
-      addToFavorites: (media: AddToWatchlistProps) => {
+      addToFavorites: async (media: AddToWatchlistProps) => {
         try {
           const currentFavorites = get().favorites;
           set({ favorites: [...currentFavorites, media] });
@@ -27,7 +27,7 @@ export const useFavoritesStore = create<FavoritesStore>()(
         }
       },
 
-      removeFromFavorites: (mediaId: number) => {
+      removeFromFavorites: async (mediaId: number) => {
         try {
           const currentFavorites = get().favorites;
           set({
